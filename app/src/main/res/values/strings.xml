@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">monster_arena</string>
+    <string name="connexion_title" translatable="false">SIGN IN</string>
+    <string name="google_button" translatable="false">Connect</string>
+    <string name="facebook_button" translatable="false">Connect</string>
+    <string name="connexion_separation" translatable="false">OR</string>
+    <string name="connexion_email_label" translatable="false">Email</string>
+    <string name="connexion_password_label" translatable="false">Password</string>
+    <string name="connexion_button" translatable="false">Sign In</string>
+    <string name="connexion_to_inscription" translatable="false">Not already sign up ? click here</string>
+    <string name="sign_up_title" translatable="false">SIGN UP</string>
+    <string name="sign_in_button" translatable="false">Sign In</string>
+    <string name="sign_up_to_in" translatable="false">Already sign up ? click here</string>
+    <string name="sign_in_confirm_pass_label" translatable="false">Confirm password</string>
+</resources>
