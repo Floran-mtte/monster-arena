@@ -12,4 +12,8 @@
     <string name="sign_in_button" translatable="false">Sign In</string>
     <string name="sign_up_to_in" translatable="false">Already sign up ? click here</string>
     <string name="sign_in_confirm_pass_label" translatable="false">Confirm password</string>
+    <string name="play_button_text" translatable="false">Play</string>
+    <string name="settings_button_text">Setting</string>
+    <string name="edit_deck_button_text">My Deck</string>
+    <string name="store_button_text">Store</string>
 </resources>
