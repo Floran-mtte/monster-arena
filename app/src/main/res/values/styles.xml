@@ -8,4 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="errorInput" parent="Theme.AppCompat.Light">
+        <item name="android:textColor">#FF0000</item>
+        <item name="colorControlNormal">#FF0000</item>
+    </style>
+
 </resources>

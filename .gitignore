@@ -1,1 +1,4 @@
 monster_arena.iml
+.idea/
+.DS_store/
+.gradle/
