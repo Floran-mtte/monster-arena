@@ -11,7 +11,14 @@ public class splash_screen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        goToSignIn();
+
+        new android.os.Handler().postDelayed(
+                new Runnable() {
+                    public void run() {
+                        goToSignIn();
+                    }
+                },
+                3000);
     }
 
     final public void goToSignIn() {
