@@ -21,4 +21,5 @@
     <string name="sing_up_error_email" translatable="false">Please enter a valid email</string>
     <string name="sign_up_no_password" translatable="false">Please enter a password</string>
     <string name="sign_up_not_same" translatable="false">The password are different</string>
+    <string name="logo_title" translatable="false">Monster Arena</string>
 </resources>
