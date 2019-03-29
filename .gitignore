@@ -2,3 +2,6 @@ monster_arena.iml
 .idea/
 .DS_store/
 .gradle/
+local.properties
+monster-arena.iml
+app/app.iml

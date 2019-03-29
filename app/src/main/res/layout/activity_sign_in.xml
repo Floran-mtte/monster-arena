@@ -13,6 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="124dp"
+        android:layout_marginTop="45dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title"></com.google.android.gms.common.SignInButton>
 
@@ -37,15 +38,15 @@
     <ImageView
         android:id="@+id/login_container"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_height="452dp"
+        android:layout_marginTop="65dp"
         android:layout_marginBottom="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sign_in_button"
-        app:layout_constraintVertical_bias="0.61"
+        app:layout_constraintVertical_bias="0.472"
         app:srcCompat="@drawable/bg_box" />
 
     <EditText
@@ -53,7 +54,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
-        android:layout_marginTop="124dp"
+        android:layout_marginTop="48dp"
         android:layout_marginEnd="80dp"
         android:background="@drawable/input_bg"
         android:ems="10"
