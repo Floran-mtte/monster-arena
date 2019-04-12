@@ -1,6 +1,7 @@
 package fr.arena.monster.monster_arena;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,7 +34,15 @@ public class splash_screen extends AppCompatActivity {
         exec.schedule(new Runnable(){
             @Override
             public void run(){
-                goToSignIn();
+
+                SharedPreferences prefs = getSharedPreferences("App", MODE_PRIVATE);
+                Boolean connected = prefs.getBoolean("isLogged", false);
+                if (connected) {
+                    goToHome();
+                } else {
+                    goToSignIn();
+
+                }
             }
         }, 3, TimeUnit.SECONDS);
 
@@ -49,6 +58,12 @@ public class splash_screen extends AppCompatActivity {
     final public void goToSignIn() {
         finish();
         Intent intent = new Intent(this, SignInActivity.class);
+        startActivity(intent);
+    }
+
+    final public void goToHome() {
+        finish();
+        Intent intent = new Intent(this, homePageActivity.class);
         startActivity(intent);
     }
 

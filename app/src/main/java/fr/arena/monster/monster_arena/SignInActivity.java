@@ -1,15 +1,18 @@
 package fr.arena.monster.monster_arena;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewDebug;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -17,7 +20,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -25,6 +30,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     TextView sign_up;
     SignInButton googleSignIn;
     GoogleSignInClient mGoogleSignInClient;
+    EditText email;
+    EditText password;
+    Button login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +52,11 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         googleSignIn.setOnClickListener(this);
         customizeGooglePlusButton(googleSignIn);
 
+        email = (EditText) findViewById(R.id.email_input);
+        password = (EditText) findViewById(R.id.password_input);
+        login = (Button) findViewById(R.id.connect);
+        login.setOnClickListener(this);
+
         sign_up.setOnClickListener(this);
     }
 
@@ -61,6 +74,12 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         startActivity(intent);
     }
 
+    final public void goToHome() {
+        finish();
+        Intent intent = new Intent(this, homePageActivity.class);
+        startActivity(intent);
+    }
+
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.to_inscription:
@@ -69,7 +88,63 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             case  R.id.sign_in_button:
                 signIn();
                 break;
+            case R.id.connect:
+                if (verify_data()) {
+                    Helper.getInstance().mAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
+                            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) {
+                                        String uId = Helper.getInstance().mAuth.getCurrentUser().getUid();
+                                        SharedPreferences.Editor editor = getSharedPreferences("App", MODE_PRIVATE).edit();
+                                        editor.putString("Email", email.getText().toString());
+                                        editor.putString("idUser", uId);
+                                        editor.putBoolean("isLogged", true);
+                                        editor.apply();
+                                        goToHome();
+                                    } else {
+                                        Toast.makeText(SignInActivity.this, "Authentication failed.",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                }
+                break;
         }
+    }
+
+    public boolean verify_data() {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.error_toast,
+                (ViewGroup) findViewById(R.id.error_toast_container));
+
+        TextView text = (TextView) layout.findViewById(R.id.text);
+        if (email.getText().toString().equals("")) {
+            text.setText(R.string.sing_up_error_email);
+            Helper.getInstance().showErrorToast(getApplicationContext(), layout);
+            return false;
+        } else {
+            boolean email_valid = Helper.getInstance().getEmail(email.getText().toString());
+            if (!email_valid) {
+                text.setText(R.string.sing_up_error_email);
+                Helper.getInstance().showErrorToast(getApplicationContext(), layout);
+                return false;
+            }
+        }
+
+        if (password.getText().toString().equals("")) {
+            text.setText(R.string.sign_up_no_password);
+            Helper.getInstance().showErrorToast(getApplicationContext(), layout);
+            return false;
+        } else {
+            if (password.getText().toString().length() < 6) {
+                text.setText(R.string.sign_up_no_password);
+                Helper.getInstance().showErrorToast(getApplicationContext(), layout);
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public void signIn() {

@@ -59,20 +59,24 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         startActivity(intent);
     }
 
+    final public void goToHome() {
+        finish();
+        Intent intent = new Intent(this, homePageActivity.class);
+        startActivity(intent);
+    }
+
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.to_inscription:
                 goToSignUp();
                 break;
             case R.id.connect:
-                Log.i("------TAG---------", pass1.getText().toString() + " " + pass2.getText().toString());
                 LayoutInflater inflater = getLayoutInflater();
                 View layout = inflater.inflate(R.layout.error_toast,
                         (ViewGroup) findViewById(R.id.error_toast_container));
 
                 TextView text = (TextView) layout.findViewById(R.id.text);
                 boolean email_valid = Helper.getInstance().getEmail(email.getText().toString());
-                Log.i("after check", String.valueOf(email_valid));
                 if (username.getText().toString().equals("")) {
                     text.setText(R.string.sign_up_no_username);
                     Helper.getInstance().showErrorToast(getApplicationContext(), layout);
@@ -101,13 +105,15 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                         editor.putString("idUser", uId);
                                         editor.putBoolean("isLogged", true);
                                         editor.apply();
-                                        LayoutInflater inflater = getLayoutInflater();
+                                        goToHome();
+                                        //toast personnalisée
+                                        /*LayoutInflater inflater = getLayoutInflater();
                                         View layout = inflater.inflate(R.layout.error_toast,
                                                 (ViewGroup) findViewById(R.id.error_toast_container));
 
                                         TextView text = (TextView) layout.findViewById(R.id.text);
                                         text.setText("inscription reussit");
-                                        Helper.getInstance().showErrorToast(getApplicationContext(), layout);
+                                        Helper.getInstance().showErrorToast(getApplicationContext(), layout);*/
                                     } else {
                                     }
                                 }
