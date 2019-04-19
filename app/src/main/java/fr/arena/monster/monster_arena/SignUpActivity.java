@@ -1,6 +1,5 @@
 package fr.arena.monster.monster_arena;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
@@ -13,16 +12,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 
 import static android.app.PendingIntent.getActivity;
-import static android.graphics.Color.BLUE;
-import static android.graphics.Color.RED;
-import static android.graphics.Color.YELLOW;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -49,7 +44,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         email = (EditText) findViewById(R.id.email_input);
         pass1 = (EditText) findViewById(R.id.password_input);
         pass2 = (EditText) findViewById(R.id.password_confirm_input);
-        login = (Button) findViewById(R.id.connect);
+        login = (Button) findViewById(R.id.edit_deck_button);
         login.setOnClickListener(this);
     }
 
@@ -64,7 +59,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.to_inscription:
                 goToSignUp();
                 break;
-            case R.id.connect:
+            case R.id.edit_deck_button:
                 Log.i("------TAG---------", pass1.getText().toString() + " " + pass2.getText().toString());
                 LayoutInflater inflater = getLayoutInflater();
                 View layout = inflater.inflate(R.layout.error_toast,

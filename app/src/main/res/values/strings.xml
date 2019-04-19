@@ -15,7 +15,7 @@
     <string name="play_button_text" translatable="false">Play</string>
     <string name="settings_button_text">Setting</string>
     <string name="edit_deck_button_text">My Deck</string>
-    <string name="store_button_text">Store</string>
+    <string name="store_button_text">Shop</string>
     <string name="sign_up_username" translatable="false">Username</string>
     <string name="sign_up_no_username" translatable="false">Please enter an username</string>
     <string name="sing_up_error_email" translatable="false">Please enter a valid email</string>

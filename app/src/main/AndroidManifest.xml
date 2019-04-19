@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="fr.arena.monster.monster_arena">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
+        <activity android:name=".EditDeckActivity"></activity>
         <activity android:name=".splash_screen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,8 +21,7 @@
         </activity>
         <activity android:name=".SignInActivity" />
         <activity android:name=".SignUpActivity" />
-        <activity android:name=".homePageActivity"></activity>
+        <activity android:name=".homePageActivity" />
     </application>
-    <uses-permission android:name="android.permission.INTERNET"/>
 
 </manifest>
