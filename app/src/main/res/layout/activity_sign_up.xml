@@ -10,9 +10,12 @@
 
 
     <LinearLayout
+        android:id="@+id/signup_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@drawable/rome_1"
         android:orientation="vertical"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -69,7 +72,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:background="@drawable/bg_box"
             android:gravity="top"
             android:orientation="vertical"
             android:paddingLeft="50dp"
@@ -84,7 +86,14 @@
                 android:id="@+id/username_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/input_bg"
+                android:ems="10"
+                android:fontFamily="@font/book_antiqua"
+                android:hint="@string/sign_up_username"
+                android:inputType="textEmailAddress"
+                android:paddingLeft="10dp"
+                android:textColor="@color/login_text_input" />
 
 
             <EditText

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/home"
+    android:background="@drawable/egypte_1"
+    android:id="@+id/signin_container"
     tools:context=".SignInActivity">
 
 
@@ -46,8 +47,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sign_in_button"
-        app:layout_constraintVertical_bias="0.472"
-        app:srcCompat="@drawable/bg_box" />
+        app:layout_constraintVertical_bias="0.472" />
 
     <EditText
         android:id="@+id/email_input"
@@ -89,7 +89,7 @@
         app:layout_constraintTop_toBottomOf="@+id/email_input" />
 
     <Button
-        android:id="@+id/edit_deck_button"
+        android:id="@+id/connect"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginStart="50dp"
@@ -126,7 +126,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="75dp"
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/roboto_condensed"
@@ -138,7 +138,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.47"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_deck_button"
+        app:layout_constraintTop_toBottomOf="@+id/connect"
         app:layout_constraintVertical_bias="0.06999999" />
 
     <TextView
@@ -146,7 +146,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="75dp"
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/roboto_condensed"
@@ -157,7 +157,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.03"
         app:layout_constraintStart_toEndOf="@+id/signup_phrase"
-        app:layout_constraintTop_toBottomOf="@+id/edit_deck_button"
+        app:layout_constraintTop_toBottomOf="@+id/connect"
         app:layout_constraintVertical_bias="0.06999999" />
 
 </android.support.constraint.ConstraintLayout>

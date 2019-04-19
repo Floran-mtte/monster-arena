@@ -2,7 +2,9 @@ package fr.arena.monster.monster_arena;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,6 +35,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     EditText email;
     EditText password;
     Button login;
+    ConstraintLayout signin_container;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,12 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         } catch (NullPointerException e){}
 
         setContentView(R.layout.activity_sign_in);
+
+        signin_container = (ConstraintLayout) findViewById(R.id.signin_container);
+        String[] BgArray = getResources().getStringArray(R.array.login_bg);
+        int i = Helper.getLoginBg(BgArray);
+        Drawable d = getDrawable(i);
+        signin_container.setBackground(d);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);

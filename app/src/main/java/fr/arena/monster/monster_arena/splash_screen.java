@@ -37,6 +37,8 @@ public class splash_screen extends AppCompatActivity {
 
                 SharedPreferences prefs = getSharedPreferences("App", MODE_PRIVATE);
                 Boolean connected = prefs.getBoolean("isLogged", false);
+
+                Log.i("goToSignIn: ", connected.toString());
                 if (connected) {
                     goToHome();
                 } else {
@@ -57,6 +59,7 @@ public class splash_screen extends AppCompatActivity {
 
     final public void goToSignIn() {
         finish();
+        Log.i("goToSignIn: ", "pas logger");
         Intent intent = new Intent(this, SignInActivity.class);
         startActivity(intent);
     }

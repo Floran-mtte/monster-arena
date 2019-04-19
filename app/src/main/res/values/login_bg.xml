@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="login_bg">
+        <item>@drawable/yggdrasil</item>
+        <item>@drawable/rome_1</item>
+        <item>@drawable/egypte_1</item>
+    </array>
+</resources>

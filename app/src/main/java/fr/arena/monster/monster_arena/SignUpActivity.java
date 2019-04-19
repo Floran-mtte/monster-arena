@@ -2,6 +2,9 @@ package fr.arena.monster.monster_arena;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,11 +14,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
+
+import java.util.Random;
 
 import static android.app.PendingIntent.getActivity;
 
@@ -27,6 +33,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     EditText    pass1;
     EditText    pass2;
     Button      login;
+    LinearLayout signup_container;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +44,13 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         } catch (NullPointerException e){}
 
         setContentView(R.layout.activity_sign_up);
+
+        signup_container = (LinearLayout) findViewById(R.id.signup_container);
+        String[] BgArray = getResources().getStringArray(R.array.login_bg);
+        int i = Helper.getLoginBg(BgArray);
+        Drawable d = getDrawable(i);
+        signup_container.setBackground(d);
+
         sign_in = (TextView) findViewById(R.id.to_inscription);
         sign_in.setOnClickListener(this);
 
@@ -44,7 +58,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         email = (EditText) findViewById(R.id.email_input);
         pass1 = (EditText) findViewById(R.id.password_input);
         pass2 = (EditText) findViewById(R.id.password_confirm_input);
-        login = (Button) findViewById(R.id.edit_deck_button);
+        login = (Button) findViewById(R.id.connect);
         login.setOnClickListener(this);
     }
 
