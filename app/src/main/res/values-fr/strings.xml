@@ -13,9 +13,9 @@
     <string name="sign_up_to_in" translatable="false">Déjà inscrit ? clique ici</string>
     <string name="sign_in_confirm_pass_label" translatable="false">Confirmation de mot de passe</string>
     <string name="play_button_text" translatable="false">Jouer</string>
-    <string name="settings_button_text">Paramètres</string>
-    <string name="edit_deck_button_text">Mon deck</string>
-    <string name="store_button_text">Magasin</string>
+    <string name="settings_button_text" translatable="false">Paramètres</string>
+    <string name="edit_deck_button_text" translatable="false">Mon deck</string>
+    <string name="store_button_text" >Magasin</string>
     <string name="sign_up_username" translatable="false">Pseudo</string>
     <string name="sign_up_no_username" translatable="false">Entre un pseudo</string>
     <string name="sing_up_error_email" translatable="false">Entre un email valide</string>
