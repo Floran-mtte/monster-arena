@@ -29,4 +29,5 @@
     <string name="connect_signup_click" translatable="false">Click here.</string>
     <string name="connect_signup_phrase" translatable="false">Not already sign up ?</string>
     <string name="sign_in_google">Sign in with google</string>
+    <string name="sign_up_button" translatable="false">Sign up</string>
 </resources>

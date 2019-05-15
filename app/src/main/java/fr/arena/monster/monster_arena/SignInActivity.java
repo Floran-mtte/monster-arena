@@ -2,12 +2,13 @@ package fr.arena.monster.monster_arena;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
+import android.graphics.Point;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,28 +46,38 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             this.getSupportActionBar().hide();
         } catch (NullPointerException e){}
 
-        setContentView(R.layout.activity_sign_in);
-
-        signin_container = (ConstraintLayout) findViewById(R.id.signin_container);
-        String[] BgArray = getResources().getStringArray(R.array.login_bg);
-        int i = Helper.getLoginBg(BgArray);
-        Drawable d = getDrawable(i);
-        signin_container.setBackground(d);
+        getHeightForLayout();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        sign_up = (TextView) findViewById(R.id.to_inscription);
         googleSignIn = (SignInButton) findViewById(R.id.sign_in_button);
         googleSignIn.setPadding(0,0,0,0);
         googleSignIn.setOnClickListener(this);
-        customizeGooglePlusButton(googleSignIn);
+        //customizeGooglePlusButton(googleSignIn);
 
         email = (EditText) findViewById(R.id.email_input);
         password = (EditText) findViewById(R.id.password_input);
         login = (Button) findViewById(R.id.connect);
         login.setOnClickListener(this);
 
+        sign_up = (TextView) findViewById(R.id.to_inscription);
         sign_up.setOnClickListener(this);
+    }
+
+    protected void getHeightForLayout() {
+        Display display = getWindowManager(). getDefaultDisplay();
+        Point size = new Point();
+        display. getSize(size);
+        int width = size. x;
+        int height = size. y;
+
+        if (height <= 800) {
+            setContentView(R.layout.activity_sign_in_height_800);
+        } else if (height > 800 && height <= 1280) {
+            setContentView(R.layout.activity_sign_in_height_1280);
+        } else {
+            setContentView(R.layout.activity_sign_in);
+        }
     }
 
     protected void onStart() {
@@ -198,7 +209,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             {
                 TextView tv = (TextView) v;
                 tv.setText(R.string.sign_in_google);
-                tv.setBackgroundResource(R.color.white);
+                tv.setBackgroundResource(R.color.colorPrimary);
                 tv.setPadding(5,5,5,5);
                 return;
             }

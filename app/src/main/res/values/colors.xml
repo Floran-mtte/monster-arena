@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
-    <color name="white">#FFFFFF</color>
-    <color name="red_btn">#6d1c0e</color>
-    <color name="bg_connect_input">#928675</color>
-    <color name="login_text_input">#6a6054</color>
-    <color name="black_bg">#000000</color>
-    <color name="btn_connect_text">#e2be88</color>
-    <color name="forgot_password_text">#b54f22</color>
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#943123</color>
+    <color name="argent">#9a999b</color>
+    <color name="darkBlue">#151719</color>
+    <color name="gold">#d3b074</color>
 </resources>

@@ -45,11 +45,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
         setContentView(R.layout.activity_sign_up);
 
-        signup_container = (LinearLayout) findViewById(R.id.signup_container);
-        String[] BgArray = getResources().getStringArray(R.array.login_bg);
-        int i = Helper.getLoginBg(BgArray);
-        Drawable d = getDrawable(i);
-        signup_container.setBackground(d);
+
 
         sign_in = (TextView) findViewById(R.id.to_inscription);
         sign_in.setOnClickListener(this);

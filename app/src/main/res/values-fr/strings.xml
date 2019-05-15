@@ -26,4 +26,5 @@
     <string name="connect_signup_click">Clique ici.</string>
     <string name="connect_signup_phrase" translatable="false">Pas encore inscrit ?</string>
     <string name="sign_in_google">Connexion avec google</string>
+    <string name="sign_up_button" translatable="false">Inscription</string>
 </resources>

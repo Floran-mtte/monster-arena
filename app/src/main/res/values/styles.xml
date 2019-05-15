@@ -20,4 +20,17 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+    <style name="HintText" parent="TextAppearance.AppCompat.Body2">
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="TextInputLayoutAppearance" parent="Widget.Design.TextInputLayout">
+        <!-- reference our hint & error styles -->
+        <item name="android:textColor">@color/argent</item>
+        <item name="android:textColorHint">@color/argent</item>
+        <item name="colorControlNormal">@color/argent</item>
+        <item name="colorControlActivated">@color/colorAccent</item>
+        <item name="colorControlHighlight">@color/colorAccent</item>
+    </style>
+
 </resources>
