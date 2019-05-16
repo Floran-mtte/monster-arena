@@ -4,200 +4,198 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/darkBlue"
     android:layout_gravity="center"
+    android:paddingLeft="30dp"
+    android:paddingTop="20dp"
+    android:paddingRight="30dp"
+    android:paddingBottom="20dp"
     tools:context=".SignInActivity">
 
 
-    <LinearLayout
-        android:id="@+id/signup_container"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/darkBlue"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="257dp"
+        android:layout_height="74dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_logo" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="28dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.516"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView4">
 
         <LinearLayout
-            android:id="@+id/linearLayout3"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title"
-            tools:ignore="MissingConstraints">
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
             <com.google.android.gms.common.SignInButton
                 android:id="@+id/sign_in_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/title"></com.google.android.gms.common.SignInButton>
+                tools:layout_editor_absoluteY="149dp"></com.google.android.gms.common.SignInButton>
 
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Button" />
         </LinearLayout>
 
-        <LinearLayout
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/username_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:gravity="top"
-            android:orientation="vertical"
-            android:paddingTop="40dp"
+            android:layout_marginTop="10dp"
+            android:inputType="textEmailAddress"
+            android:textColorHint="@color/argent"
+            android:theme="@style/TextInputLayoutAppearance"
+            app:hintTextAppearance="@style/HintText"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.6"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+            app:layout_constraintTop_toBottomOf="@+id/sign_in_button">
 
-            <EditText
+            <android.support.design.widget.TextInputEditText
                 android:id="@+id/username_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:ems="10"
-                android:fontFamily="@font/book_antiqua"
+                android:backgroundTint="@color/argent"
                 android:hint="@string/sign_up_username"
-                android:inputType="text"
-                android:paddingLeft="10dp"
-                android:textColor="@color/colorPrimary"
-                android:textColorHint="@color/colorPrimary" />
+                android:inputType="textEmailAddress"
+                android:singleLine="true"
+                android:textColor="@color/argent" />
+        </android.support.design.widget.TextInputLayout>
 
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/email_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:inputType="text"
+            android:textColorHint="@color/argent"
+            android:theme="@style/TextInputLayoutAppearance"
+            app:hintTextAppearance="@style/HintText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/username_input_layout">
 
-            <EditText
+            <android.support.design.widget.TextInputEditText
                 android:id="@+id/email_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:ems="10"
-                android:fontFamily="@font/book_antiqua"
+                android:backgroundTint="@color/argent"
                 android:hint="@string/connexion_email_label"
-                android:textColorHint="@color/colorPrimary"
                 android:inputType="textEmailAddress"
-                android:paddingLeft="10dp"
-                android:textColor="@color/colorPrimary" />
+                android:singleLine="true"
+                android:textColor="@color/argent" />
+        </android.support.design.widget.TextInputLayout>
 
-            <EditText
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/password_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:inputType="textPassword"
+            android:textColorHint="@color/argent"
+            android:theme="@style/TextInputLayoutAppearance"
+            app:hintTextAppearance="@style/HintText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/email_input_layout">
+
+            <android.support.design.widget.TextInputEditText
                 android:id="@+id/password_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:ems="10"
-                android:fontFamily="@font/book_antiqua"
+                android:backgroundTint="@color/argent"
                 android:hint="@string/connexion_password_label"
-                android:textColorHint="@color/colorPrimary"
                 android:inputType="textPassword"
-                android:paddingLeft="10dp"
-                android:textColor="@color/colorPrimary" />
+                android:singleLine="true"
+                android:textColor="@color/argent" />
+        </android.support.design.widget.TextInputLayout>
 
-            <EditText
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/password_confirm_input_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:inputType="textPassword"
+            android:textColorHint="@color/argent"
+            android:theme="@style/TextInputLayoutAppearance"
+            app:hintTextAppearance="@style/HintText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/password_input_layout">
+
+            <android.support.design.widget.TextInputEditText
                 android:id="@+id/password_confirm_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:ems="10"
-                android:fontFamily="@font/book_antiqua"
+                android:backgroundTint="@color/argent"
                 android:hint="@string/sign_in_confirm_pass_label"
-                android:textColorHint="@color/colorPrimary"
                 android:inputType="textPassword"
-                android:paddingLeft="10dp"
-                android:textColor="@color/colorPrimary" />
+                android:singleLine="true"
+                android:textColor="@color/argent" />
+        </android.support.design.widget.TextInputLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
+        <Button
+            android:id="@+id/connect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button_shape"
+            android:paddingLeft="20dp"
+            android:paddingTop="15dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="15dp"
+            android:text="@string/sign_up_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/password_input_layout" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/connect">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp">
+                android:text="@string/connect_signin_phrase"
+                android:textColor="@color/argent" />
 
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+            <Space
+                android:layout_width="7sp"
+                android:layout_height="match_parent" />
 
-                <Button
-                    android:id="@+id/connect"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@color/colorAccent"
-                    android:fontFamily="@font/roboto_condensed"
-                    android:text="@string/sign_up_button"
-                    android:textColor="@color/colorPrimary"/>
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/to_inscription"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:id="@+id/signup_phrase"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto_condensed"
-                    android:text="@string/connect_signup_phrase"
-                    android:textAlignment="center"
-                    android:textColor="@color/colorPrimary"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.47"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/connect"
-                    app:layout_constraintVertical_bias="0.06999999" />
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight=".1" />
-
-                <TextView
-                    android:id="@+id/to_inscription"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto_condensed"
-                    android:text="@string/connect_signup_click"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/colorAccent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.03"
-                    app:layout_constraintStart_toEndOf="@+id/signup_phrase"
-                    app:layout_constraintTop_toBottomOf="@+id/connect"
-                    app:layout_constraintVertical_bias="0.06999999" />
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-            </LinearLayout>
-
+                android:text="@string/connect_signup_click"
+                android:textColor="@color/colorAccent" />
         </LinearLayout>
+
     </LinearLayout>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.50093806" />
+
 </android.support.constraint.ConstraintLayout>

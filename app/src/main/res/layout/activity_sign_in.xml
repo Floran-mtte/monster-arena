@@ -6,29 +6,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/darkBlue"
-    android:minHeight="1921dp"
+    android:maxHeight="1280dp"
     android:paddingLeft="30dp"
     android:paddingTop="20dp"
     android:paddingRight="30dp"
-    android:paddingBottom="20dp"
     tools:context=".SignInActivity">
 
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_width="257dp"
+        android:layout_height="74dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_logo" />
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="110dp"
+        android:layout_marginTop="61dp"
+        android:layout_marginBottom="40dp"
         android:gravity="center_horizontal|center_vertical"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView">
@@ -65,6 +66,8 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/argent"
                 android:hint="@string/connexion_email_label"
+                android:inputType="textEmailAddress"
+                android:singleLine="true"
                 android:textColor="@color/argent"
                 tools:ignore="InvalidId" />
         </android.support.design.widget.TextInputLayout>
@@ -88,6 +91,8 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/argent"
                 android:hint="@string/connexion_password_label"
+                android:inputType="textPassword"
+                android:singleLine="true"
                 android:textColor="@color/argent" />
         </android.support.design.widget.TextInputLayout>
 
@@ -139,7 +144,7 @@
     </LinearLayout>
 
     <android.support.constraint.Guideline
-        android:id="@+id/guideline2"
+        android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

@@ -46,14 +46,14 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             this.getSupportActionBar().hide();
         } catch (NullPointerException e){}
 
-        getHeightForLayout();
+        setContentView(R.layout.activity_sign_in);
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        /*GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         googleSignIn = (SignInButton) findViewById(R.id.sign_in_button);
         googleSignIn.setPadding(0,0,0,0);
         googleSignIn.setOnClickListener(this);
-        //customizeGooglePlusButton(googleSignIn);
+        customizeGooglePlusButton(googleSignIn);*/
 
         email = (EditText) findViewById(R.id.email_input);
         password = (EditText) findViewById(R.id.password_input);
@@ -62,22 +62,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
         sign_up = (TextView) findViewById(R.id.to_inscription);
         sign_up.setOnClickListener(this);
-    }
-
-    protected void getHeightForLayout() {
-        Display display = getWindowManager(). getDefaultDisplay();
-        Point size = new Point();
-        display. getSize(size);
-        int width = size. x;
-        int height = size. y;
-
-        if (height <= 800) {
-            setContentView(R.layout.activity_sign_in_height_800);
-        } else if (height > 800 && height <= 1280) {
-            setContentView(R.layout.activity_sign_in_height_1280);
-        } else {
-            setContentView(R.layout.activity_sign_in);
-        }
     }
 
     protected void onStart() {
