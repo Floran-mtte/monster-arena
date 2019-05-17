@@ -2,13 +2,11 @@ package fr.arena.monster.monster_arena;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Point;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +19,6 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -75,31 +71,31 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         googleSignIn.setOnClickListener(this);
         customizeGooglePlusButton(googleSignIn);
 
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        AppEventsLogger.activateApp(this);
+        LoginButton loginButton = findViewById(R.id.login_button);
+        loginButton.setReadPermissions("email", "public_profile", "user_friends");
 
         callbackManager = CallbackManager.Factory.create();
-        LoginButton loginButton = findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email", "public_profile");
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                Log.d("fb-success", "facebook:onSuccess:" + loginResult);
-                handleFacebookAccessToken(loginResult.getAccessToken());
-            }
 
-            @Override
-            public void onCancel() {
-                Log.d("fb-cancel", "facebook:onCancel");
-                // ...
-            }
+        LoginManager.getInstance().registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        // App code
+                        handleFacebookAccessToken(loginResult.getAccessToken());
+                    }
 
-            @Override
-            public void onError(FacebookException error) {
-                Log.d("fb-error", "facebook:onError", error);
-                // ...
-            }
-        });
+                    @Override
+                    public void onCancel() {
+                        // App code
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        // App code
+                        Log.e("fb-error", exception.getMessage());
+
+                    }
+                });
 
         email = (EditText) findViewById(R.id.email_input);
         password = (EditText) findViewById(R.id.password_input);
@@ -204,10 +200,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-
         callbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -229,9 +223,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = Helper.getInstance().mAuth.getCurrentUser();
-                            goToHome();
-                        } else {
                             String uId = Helper.getInstance().mAuth.getCurrentUser().getUid();
                             String email = Helper.getInstance().mAuth.getCurrentUser().getEmail();
                             SharedPreferences.Editor editor = getSharedPreferences("App", MODE_PRIVATE).edit();
@@ -239,6 +230,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                             editor.putString("idUser", uId);
                             editor.putBoolean("isLogged", true);
                             editor.apply();
+                            goToHome();
+                        } else {
+
                         }
                     }
                 });
@@ -273,8 +267,14 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d("fb-connect-success", "signInWithCredential:success");
-                            FirebaseUser user = Helper.getInstance().mAuth.getCurrentUser();
+                            String uId = Helper.getInstance().mAuth.getCurrentUser().getUid();
+                            String email = Helper.getInstance().mAuth.getCurrentUser().getEmail();
+                            SharedPreferences.Editor editor = getSharedPreferences("App", MODE_PRIVATE).edit();
+                            editor.putString("Email", email);
+                            editor.putString("idUser", uId);
+                            editor.putBoolean("isLogged", true);
+                            editor.apply();
+                            goToHome();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("fb-connect-error", "signInWithCredential:failure", task.getException());

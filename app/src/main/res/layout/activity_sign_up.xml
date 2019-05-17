@@ -47,6 +47,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 tools:layout_editor_absoluteY="149dp"></com.google.android.gms.common.SignInButton>
 
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/login_button"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="45dp" />
+
         </LinearLayout>
 
         <android.support.design.widget.TextInputLayout
