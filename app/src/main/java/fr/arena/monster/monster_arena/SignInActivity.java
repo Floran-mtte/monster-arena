@@ -25,7 +25,10 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -48,12 +51,16 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
         setContentView(R.layout.activity_sign_in);
 
-        /*GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        GoogleSignInOptions gso = new GoogleSignInOptions
+                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         googleSignIn = (SignInButton) findViewById(R.id.sign_in_button);
         googleSignIn.setPadding(0,0,0,0);
         googleSignIn.setOnClickListener(this);
-        customizeGooglePlusButton(googleSignIn);*/
+        customizeGooglePlusButton(googleSignIn);
 
         email = (EditText) findViewById(R.id.email_input);
         password = (EditText) findViewById(R.id.password_input);
@@ -162,24 +169,38 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
          String debug =  Integer.toString(requestCode);
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task);
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account);
+            } catch (ApiException e) {
+            }
         }
     }
 
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
-        try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
 
-            Log.i("Login","Success");
-        } catch (ApiException e) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w("Google signIn error", "signInResult:failed code=" + e.getStatusCode());
-
-        }
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        Helper.getInstance().mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            FirebaseUser user = Helper.getInstance().mAuth.getCurrentUser();
+                            goToHome();
+                        } else {
+                            String uId = Helper.getInstance().mAuth.getCurrentUser().getUid();
+                            String email = Helper.getInstance().mAuth.getCurrentUser().getEmail();
+                            SharedPreferences.Editor editor = getSharedPreferences("App", MODE_PRIVATE).edit();
+                            editor.putString("Email", email);
+                            editor.putString("idUser", uId);
+                            editor.putBoolean("isLogged", true);
+                            editor.apply();
+                        }
+                    }
+                });
     }
 
     public static void customizeGooglePlusButton(SignInButton signInButton) {
