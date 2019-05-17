@@ -8,6 +8,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -24,6 +27,8 @@ public class splash_screen extends AppCompatActivity {
         try {
             this.getSupportActionBar().hide();
         } catch (NullPointerException e){}
+
+
 
         setContentView(R.layout.activity_splash_screen);
         hideSystemUI();

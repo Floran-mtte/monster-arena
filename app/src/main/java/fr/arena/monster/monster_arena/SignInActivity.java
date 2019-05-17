@@ -17,6 +17,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -27,8 +36,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -40,6 +51,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     EditText password;
     Button login;
     ConstraintLayout signin_container;
+    CallbackManager callbackManager;
+    LoginButton loginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +74,32 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         googleSignIn.setPadding(0,0,0,0);
         googleSignIn.setOnClickListener(this);
         customizeGooglePlusButton(googleSignIn);
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
+
+        callbackManager = CallbackManager.Factory.create();
+        LoginButton loginButton = findViewById(R.id.login_button);
+        loginButton.setReadPermissions("email", "public_profile");
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                Log.d("fb-success", "facebook:onSuccess:" + loginResult);
+                handleFacebookAccessToken(loginResult.getAccessToken());
+            }
+
+            @Override
+            public void onCancel() {
+                Log.d("fb-cancel", "facebook:onCancel");
+                // ...
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.d("fb-error", "facebook:onError", error);
+                // ...
+            }
+        });
 
         email = (EditText) findViewById(R.id.email_input);
         password = (EditText) findViewById(R.id.password_input);
@@ -166,7 +205,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-         String debug =  Integer.toString(requestCode);
+
+
+        callbackManager.onActivityResult(requestCode, resultCode, data);
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -220,6 +261,30 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             }
 
         }
+    }
+
+    private void handleFacebookAccessToken(AccessToken token) {
+        Log.d("fb-connect", "handleFacebookAccessToken:" + token);
+
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        Helper.getInstance().mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("fb-connect-success", "signInWithCredential:success");
+                            FirebaseUser user = Helper.getInstance().mAuth.getCurrentUser();
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("fb-connect-error", "signInWithCredential:failure", task.getException());
+                            Toast.makeText(SignInActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                        // ...
+                    }
+                });
     }
 
 }
