@@ -28,8 +28,7 @@ public class splash_screen extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
         hideSystemUI();
 
-        loader = findViewById(R.id.loader);
-        final ScheduledExecutorService exec = Executors.newScheduledThreadPool(1);
+         final ScheduledExecutorService exec = Executors.newScheduledThreadPool(1);
 
         exec.schedule(new Runnable(){
             @Override
