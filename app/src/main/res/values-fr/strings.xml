@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">monster_arena</string>
     <string name="connexion_title" translatable="false">CONNEXION</string>
     <string name="google_button" translatable="false">Connect</string>
     <string name="facebook_button" translatable="false">Connect</string>
@@ -28,4 +27,6 @@
     <string name="sign_in_google">Connexion avec google</string>
     <string name="sign_up_button" translatable="false">Inscription</string>
     <string name="connect_signin_phrase" translatable="false">Déjà inscrit ?</string>
+    <string name="facebook_app_id" translatable="false">671589919954366</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb671589919954366</string>
 </resources>

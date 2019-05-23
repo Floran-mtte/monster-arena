@@ -21,6 +21,7 @@ public class splash_screen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         try {
             this.getSupportActionBar().hide();
         } catch (NullPointerException e){}
