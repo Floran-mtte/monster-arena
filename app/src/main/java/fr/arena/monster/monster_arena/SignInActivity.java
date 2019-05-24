@@ -59,6 +59,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             this.getSupportActionBar().hide();
         } catch (NullPointerException e){}
 
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
         setContentView(R.layout.activity_sign_in);
 
         ImageView imageView = (ImageView) findViewById(R.id.imageView);
@@ -121,13 +123,11 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     public void goToSignUp() {
         Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     final public void goToHome() {
         Intent intent = new Intent(this, homePageActivity.class);
         startActivity(intent);
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         finish();
     }
 

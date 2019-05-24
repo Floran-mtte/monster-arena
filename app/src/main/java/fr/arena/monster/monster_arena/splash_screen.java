@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +22,7 @@ public class splash_screen extends AppCompatActivity {
 
     int progress = 0;
     int max = 100;
+    int DELAY = 2000;
     ProgressBar loader;
     ImageView imageView;
     AnimatorSet topSmall;
@@ -37,11 +39,7 @@ public class splash_screen extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
         //hideSystemUI();
 
-        imageView = (ImageView) findViewById(R.id.imageView2);
-        Log.i("height 0", imageView.toString());
-        logoAnim(); //ici ça marche
-
-        final ScheduledExecutorService exec = Executors.newScheduledThreadPool(1);
+        /*final ScheduledExecutorService exec = Executors.newScheduledThreadPool(1);
 
         exec.schedule(new Runnable(){
             @Override
@@ -50,10 +48,6 @@ public class splash_screen extends AppCompatActivity {
                 SharedPreferences prefs = getSharedPreferences("App", MODE_PRIVATE);
                 Boolean connected = prefs.getBoolean("isLogged", false);
 
-                Log.i("height 1", imageView.toString());
-
-                logoAnim();//ici ça marche pas
-
                 if (connected) {
                     goToHome();
                 } else {
@@ -61,8 +55,24 @@ public class splash_screen extends AppCompatActivity {
 
                 }
             }
-        }, 3, TimeUnit.SECONDS);
+        }, DELAY, TimeUnit.SECONDS);*/
 
+        imageView = (ImageView) findViewById(R.id.imageView2);
+        Log.i("height 0", imageView.toString());
+        logoAnim(); //ici ça marche
+        (new Handler()).postDelayed(this::whoRedirect, DELAY);
+    }
+
+    public void whoRedirect() {
+        SharedPreferences prefs = getSharedPreferences("App", MODE_PRIVATE);
+        Boolean connected = prefs.getBoolean("isLogged", false);
+
+        if (connected) {
+            goToHome();
+        } else {
+            goToSignIn();
+
+        }
     }
 
     public void logoAnim() {
@@ -82,9 +92,9 @@ public class splash_screen extends AppCompatActivity {
             }
         });
         Log.i("height", imageView.toString());
-        toSmall.setDuration(2000);
+        toSmall.setDuration(DELAY);
         ValueAnimator toTop = ObjectAnimator.ofFloat(imageView, "translationY", -930f);
-        toTop.setDuration(2000);
+        toTop.setDuration(DELAY);
         topSmall.play(toSmall).with(toTop);
         topSmall.start();
         Log.i("height", "bye");
@@ -104,10 +114,11 @@ public class splash_screen extends AppCompatActivity {
         finish();
     }
 
-    final public void goToHome() {
-        finish();
+    public void goToHome() {
         Intent intent = new Intent(this, homePageActivity.class);
         startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        finish();
     }
 
     private void hideSystemUI() {

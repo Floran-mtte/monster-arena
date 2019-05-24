@@ -17,6 +17,8 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
             this.getSupportActionBar().hide();
         } catch (NullPointerException e){}
 
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
         setContentView(R.layout.activity_home_page);
 
         editDeck = (Button) findViewById(R.id.edit_deck_button);
