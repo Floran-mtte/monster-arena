@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,7 +59,12 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             this.getSupportActionBar().hide();
         } catch (NullPointerException e){}
 
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
         setContentView(R.layout.activity_sign_in);
+
+        ImageView imageView = (ImageView) findViewById(R.id.imageView);
+        Log.i("height small", Integer.toString(imageView.getHeight()));
 
         GoogleSignInOptions gso = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -114,16 +120,15 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
-    final public void goToSignUp() {
-        finish();
+    public void goToSignUp() {
         Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
     }
 
     final public void goToHome() {
-        finish();
         Intent intent = new Intent(this, homePageActivity.class);
         startActivity(intent);
+        finish();
     }
 
     public void onClick(View v) {

@@ -65,6 +65,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             this.getSupportActionBar().hide();
         } catch (NullPointerException e){}
 
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
         setContentView(R.layout.activity_sign_up);
 
         GoogleSignInOptions gso = new GoogleSignInOptions
@@ -115,16 +117,15 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         login.setOnClickListener(this);
     }
 
-    final public void goToSignUp() {
-        finish();
+    public void goToSignUp() {
         Intent intent = new Intent(this, SignInActivity.class);
         startActivity(intent);
     }
 
     final public void goToHome() {
-        finish();
         Intent intent = new Intent(this, homePageActivity.class);
         startActivity(intent);
+        finish();
     }
 
     public void onClick(View v) {
