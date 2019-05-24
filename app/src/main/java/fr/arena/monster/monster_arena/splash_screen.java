@@ -22,7 +22,7 @@ public class splash_screen extends AppCompatActivity {
 
     int progress = 0;
     int max = 100;
-    int DELAY = 2000;
+    int DELAY = 2500;
     ProgressBar loader;
     ImageView imageView;
     AnimatorSet topSmall;
