@@ -115,16 +115,17 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         login.setOnClickListener(this);
     }
 
-    final public void goToSignUp() {
-        finish();
+    public void goToSignUp() {
         Intent intent = new Intent(this, SignInActivity.class);
         startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     final public void goToHome() {
-        finish();
         Intent intent = new Intent(this, homePageActivity.class);
         startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        finish();
     }
 
     public void onClick(View v) {
