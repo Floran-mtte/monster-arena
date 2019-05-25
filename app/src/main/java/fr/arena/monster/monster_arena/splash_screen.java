@@ -13,6 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -37,6 +41,9 @@ public class splash_screen extends AppCompatActivity {
 
 
         setContentView(R.layout.activity_splash_screen);
+
+        Helper.playTheme(this, "intro");
+
         //hideSystemUI();
 
         /*final ScheduledExecutorService exec = Executors.newScheduledThreadPool(1);
@@ -63,6 +70,35 @@ public class splash_screen extends AppCompatActivity {
         (new Handler()).postDelayed(this::whoRedirect, DELAY);
     }
 
+    public static boolean isAppWentToBg = false;
+
+    public static boolean isWindowFocused = false;
+
+    protected void onStart() {
+        applicationWillEnterForeground();
+        super.onStart();
+    }
+
+    private void applicationWillEnterForeground() {
+        if (isAppWentToBg) {
+            isAppWentToBg = false;
+            Helper.getInstance().mp.start();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        applicationdidenterbackground();
+    }
+
+    public void applicationdidenterbackground() {
+        if (!isWindowFocused) {
+            isAppWentToBg = true;
+            Helper.getInstance().mp.pause();
+        }
+    }
+
     public void whoRedirect() {
         SharedPreferences prefs = getSharedPreferences("App", MODE_PRIVATE);
         Boolean connected = prefs.getBoolean("isLogged", false);
@@ -76,38 +112,27 @@ public class splash_screen extends AppCompatActivity {
     }
 
     public void logoAnim() {
-        Log.i("height", imageView.toString());
         topSmall = new AnimatorSet();
         ValueAnimator toSmall = ObjectAnimator.ofInt(imageView.getMeasuredHeight(), -600);
-        Log.i("height", imageView.toString());
+
         toSmall.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 int val = (Integer) animation.getAnimatedValue();
                 ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) imageView.getLayoutParams();
-                Log.i("height", Integer.toString(imageView.getHeight()));
-                Log.i("height - 1", Integer.toString(imageView.getHeight() - 1));
                 params.height = 794 + val;
                 imageView.setLayoutParams(params);
             }
         });
-        Log.i("height", imageView.toString());
         toSmall.setDuration(DELAY);
         ValueAnimator toTop = ObjectAnimator.ofFloat(imageView, "translationY", -930f);
         toTop.setDuration(DELAY);
         topSmall.play(toSmall).with(toTop);
         topSmall.start();
-        Log.i("height", "bye");
-    }
-    public void onWindowFocusChanged(Boolean hasFocus)
-    {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            hideSystemUI();
-        }
     }
 
     public void goToSignIn() {
+        isWindowFocused = true;
         Intent intent = new Intent(this, SignInActivity.class);
         startActivity(intent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -115,6 +140,7 @@ public class splash_screen extends AppCompatActivity {
     }
 
     public void goToHome() {
+        isWindowFocused = true;
         Intent intent = new Intent(this, homePageActivity.class);
         startActivity(intent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

@@ -1,7 +1,13 @@
 package fr.arena.monster.monster_arena;
 
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleObserver;
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -55,11 +61,15 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         try {
             this.getSupportActionBar().hide();
         } catch (NullPointerException e){}
 
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
+        Helper.playTheme(this, "lobby");
 
         setContentView(R.layout.activity_sign_in);
 
@@ -112,23 +122,50 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         sign_up.setOnClickListener(this);
     }
 
-    protected void onStart() {
-        super.onStart();
+    public static boolean isAppWentToBg = false;
 
+    public static boolean isWindowFocused = false;
+
+    protected void onStart() {
+        applicationWillEnterForeground();
+        super.onStart();
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         Log.i("login","already logged");
 
     }
 
+    private void applicationWillEnterForeground() {
+        if (isAppWentToBg) {
+            isAppWentToBg = false;
+            Helper.getInstance().mp.start();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        applicationdidenterbackground();
+    }
+
+    public void applicationdidenterbackground() {
+        if (!isWindowFocused) {
+            isAppWentToBg = true;
+            Helper.getInstance().mp.pause();
+        }
+    }
+
     public void goToSignUp() {
+        isWindowFocused = true;
         Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
     }
 
     final public void goToHome() {
+        finish();
+        isWindowFocused = true;
         Intent intent = new Intent(this, homePageActivity.class);
         startActivity(intent);
-        finish();
     }
 
     public void onClick(View v) {

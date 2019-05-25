@@ -1,7 +1,9 @@
 package fr.arena.monster.monster_arena;
 
+import android.arch.lifecycle.LifecycleObserver;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.Gravity;
@@ -19,6 +21,8 @@ import java.util.regex.Pattern;
 public class Helper {
 
     FirebaseAuth mAuth  = FirebaseAuth.getInstance();
+    MediaPlayer mp;
+    String lastSound = "";
 
     public static boolean getEmail(String email) {
         Log.i("check email", email);
@@ -35,19 +39,35 @@ public class Helper {
         toast.show();
     }
 
-    public static int getLoginBg(String[] ressourcesArray) {
-        Random r = new Random();
-        int i = r.nextInt(ressourcesArray.length);
-
-        switch (i) {
-            case 0:
-                return R.drawable.yggdrasil;
-            case 1:
-                return R.drawable.rome_1;
-            case 2:
-                return R.drawable.egypte_1;
+    public static void playTheme(Context context, String sound) {
+        if (Helper.getInstance().mp != null) {
+            if (sound == Helper.getInstance().lastSound)
+                return;
+            Helper.getInstance().mp.stop();
         }
-        return 0;
+
+        Helper.getInstance().lastSound = sound;
+
+        if (sound == "lobby") {
+            Helper.getInstance().mp = MediaPlayer.create(context, R.raw.lobby);
+            Helper.getInstance().mp.setLooping(true);
+        } else if (sound == "fight") {
+            Helper.getInstance().mp = MediaPlayer.create(context, R.raw.fight);
+            Helper.getInstance().mp.setLooping(true);
+        } else if (sound == "victory") {
+            Helper.getInstance().mp = MediaPlayer.create(context, R.raw.victory);
+            Helper.getInstance().mp.setLooping(true);
+        } else if (sound == "lose") {
+            Helper.getInstance().mp = MediaPlayer.create(context, R.raw.lose);
+            Helper.getInstance().mp.setLooping(true);
+        } else if (sound == "intro") {
+            Helper.getInstance().mp = MediaPlayer.create(context, R.raw.intro);
+        }
+        Helper.getInstance().mp.start();
+    }
+
+    public static void replayTheme() {
+        Helper.getInstance().mp.start();
     }
 
     private static final Helper ourInstance = new Helper();
