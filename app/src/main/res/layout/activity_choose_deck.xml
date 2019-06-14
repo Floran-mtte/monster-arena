@@ -22,7 +22,7 @@
         android:paddingTop="15dp"
         android:paddingRight="20dp"
         android:paddingBottom="15dp"
-        android:text="@string/sign_up_button"
+        android:text="@string/validate_deck_btn"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -70,7 +70,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2"
-        android:background="@drawable/deck_border"
         app:srcCompat="@drawable/deck_olympie" />
 
     <ImageView

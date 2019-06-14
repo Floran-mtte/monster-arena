@@ -35,6 +35,7 @@ public class ChooseDeckActivity extends AppCompatActivity implements View.OnClic
         olympie.setOnClickListener(this);
         ragnarok.setOnClickListener(this);
         armana.setOnClickListener(this);
+        validate.setOnClickListener(this);
     }
 
     @Override
@@ -57,6 +58,9 @@ public class ChooseDeckActivity extends AppCompatActivity implements View.OnClic
                 ragnarok.setBackground(null);
                 olympie.setBackground(null);
                 validate.setVisibility(View.VISIBLE);
+                break;
+            case R.id.validate :
+                //Todo : attribute the wrigth deck to current user
                 break;
         }
     }
