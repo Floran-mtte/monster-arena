@@ -2,6 +2,7 @@ package fr.arena.monster.monster_arena;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
@@ -65,6 +66,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             this.getSupportActionBar().hide();
         } catch (NullPointerException e){}
 
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
         setContentView(R.layout.activity_sign_up);
 
         GoogleSignInOptions gso = new GoogleSignInOptions
@@ -115,14 +120,48 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         login.setOnClickListener(this);
     }
 
-    final public void goToSignUp() {
-        finish();
+    public static boolean isAppWentToBg = false;
+
+    public static boolean isWindowFocused = false;
+
+    protected void onStart() {
+        applicationWillEnterForeground();
+        super.onStart();
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        Log.i("login","already logged");
+
+    }
+
+    private void applicationWillEnterForeground() {
+        if (isAppWentToBg) {
+            isAppWentToBg = false;
+            Helper.getInstance().mp.start();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        applicationdidenterbackground();
+    }
+
+    public void applicationdidenterbackground() {
+        if (!isWindowFocused) {
+            isAppWentToBg = true;
+            Helper.getInstance().mp.pause();
+        }
+    }
+
+    public void goToSignUp() {
+        isWindowFocused = true;
         Intent intent = new Intent(this, SignInActivity.class);
         startActivity(intent);
     }
 
     final public void goToHome() {
         finish();
+        isWindowFocused = true;
         Intent intent = new Intent(this, homePageActivity.class);
         startActivity(intent);
     }

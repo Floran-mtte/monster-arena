@@ -1,13 +1,22 @@
 package fr.arena.monster.monster_arena;
 
 import android.content.Intent;
+<<<<<<< HEAD
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+=======
+import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
+>>>>>>> 9e25f6c1e10dd249cd8fd2791a5fc97067f69c68
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -50,6 +59,12 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
 
         }
 
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        Helper.playTheme(this, "lobby");
+
         setContentView(R.layout.activity_home_page);
 
         editDeck = (Button) findViewById(R.id.edit_deck_button);
@@ -59,6 +74,37 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
 
         // Access a Cloud Firestore instance from your Activity
         db = FirebaseFirestore.getInstance();
+    }
+
+    public static boolean isAppWentToBg = false;
+
+    public static boolean isWindowFocused = false;
+
+    protected void onStart() {
+        applicationWillEnterForeground();
+        super.onStart();
+
+    }
+
+    private void applicationWillEnterForeground() {
+        if (isAppWentToBg) {
+            isAppWentToBg = false;
+            Helper.getInstance().mp.start();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        applicationdidenterbackground();
+    }
+
+    public void applicationdidenterbackground() {
+        if (!isWindowFocused) {
+            isAppWentToBg = true;
+            Helper.getInstance().mp.pause();
+        }
     }
 
     @Override

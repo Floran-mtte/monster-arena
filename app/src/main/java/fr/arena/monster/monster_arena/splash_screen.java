@@ -1,12 +1,22 @@
 package fr.arena.monster.monster_arena;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -16,7 +26,10 @@ public class splash_screen extends AppCompatActivity {
 
     int progress = 0;
     int max = 100;
+    int DELAY = 2500;
     ProgressBar loader;
+    ImageView imageView;
+    AnimatorSet topSmall;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,10 +39,14 @@ public class splash_screen extends AppCompatActivity {
             this.getSupportActionBar().hide();
         } catch (NullPointerException e){}
 
-        setContentView(R.layout.activity_splash_screen);
-        hideSystemUI();
 
-         final ScheduledExecutorService exec = Executors.newScheduledThreadPool(1);
+        setContentView(R.layout.activity_splash_screen);
+
+        Helper.playTheme(this, "intro");
+
+        //hideSystemUI();
+
+        /*final ScheduledExecutorService exec = Executors.newScheduledThreadPool(1);
 
         exec.schedule(new Runnable(){
             @Override
@@ -38,7 +55,6 @@ public class splash_screen extends AppCompatActivity {
                 SharedPreferences prefs = getSharedPreferences("App", MODE_PRIVATE);
                 Boolean connected = prefs.getBoolean("isLogged", false);
 
-                Log.i("goToSignIn: ", connected.toString());
                 if (connected) {
                     goToHome();
                 } else {
@@ -46,28 +62,89 @@ public class splash_screen extends AppCompatActivity {
 
                 }
             }
-        }, 3, TimeUnit.SECONDS);
+        }, DELAY, TimeUnit.SECONDS);*/
 
+        imageView = (ImageView) findViewById(R.id.imageView2);
+        Log.i("height 0", imageView.toString());
+        logoAnim(); //ici ça marche
+        (new Handler()).postDelayed(this::whoRedirect, DELAY);
     }
-    public void onWindowFocusChanged(Boolean hasFocus)
-    {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            hideSystemUI();
+
+    public static boolean isAppWentToBg = false;
+
+    public static boolean isWindowFocused = false;
+
+    protected void onStart() {
+        applicationWillEnterForeground();
+        super.onStart();
+    }
+
+    private void applicationWillEnterForeground() {
+        if (isAppWentToBg) {
+            isAppWentToBg = false;
+            Helper.getInstance().mp.start();
         }
     }
 
-    final public void goToSignIn() {
-        finish();
-        Log.i("goToSignIn: ", "pas logger");
-        Intent intent = new Intent(this, SignInActivity.class);
-        startActivity(intent);
+    @Override
+    protected void onStop() {
+        super.onStop();
+        applicationdidenterbackground();
     }
 
-    final public void goToHome() {
+    public void applicationdidenterbackground() {
+        if (!isWindowFocused) {
+            isAppWentToBg = true;
+            Helper.getInstance().mp.pause();
+        }
+    }
+
+    public void whoRedirect() {
+        SharedPreferences prefs = getSharedPreferences("App", MODE_PRIVATE);
+        Boolean connected = prefs.getBoolean("isLogged", false);
+
+        if (connected) {
+            goToHome();
+        } else {
+            goToSignIn();
+
+        }
+    }
+
+    public void logoAnim() {
+        topSmall = new AnimatorSet();
+        ValueAnimator toSmall = ObjectAnimator.ofInt(imageView.getMeasuredHeight(), -600);
+
+        toSmall.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                int val = (Integer) animation.getAnimatedValue();
+                ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) imageView.getLayoutParams();
+                params.height = 794 + val;
+                imageView.setLayoutParams(params);
+            }
+        });
+        toSmall.setDuration(DELAY);
+        ValueAnimator toTop = ObjectAnimator.ofFloat(imageView, "translationY", -930f);
+        toTop.setDuration(DELAY);
+        topSmall.play(toSmall).with(toTop);
+        topSmall.start();
+    }
+
+    public void goToSignIn() {
+        isWindowFocused = true;
+        Intent intent = new Intent(this, SignInActivity.class);
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         finish();
+    }
+
+    public void goToHome() {
+        isWindowFocused = true;
         Intent intent = new Intent(this, homePageActivity.class);
         startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        finish();
     }
 
     private void hideSystemUI() {
