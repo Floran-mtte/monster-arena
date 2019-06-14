@@ -29,4 +29,6 @@
     <string name="connect_signin_phrase" translatable="false">Déjà inscrit ?</string>
     <string name="facebook_app_id" translatable="false">671589919954366</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb671589919954366</string>
+    <string name="choose_deck" translatable="false">Choisissez votre deck de départ</string>
+    <string name="validate_deck_btn" translatable="false">Valider</string>
 </resources>

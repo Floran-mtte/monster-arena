@@ -141,7 +141,8 @@ public class splash_screen extends AppCompatActivity {
 
     public void goToHome() {
         isWindowFocused = true;
-        Intent intent = new Intent(this, homePageActivity.class);
+        //Intent intent = new Intent(this, homePageActivity.class);
+        Intent intent = new Intent(this, ChooseDeckActivity.class);
         startActivity(intent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         finish();

@@ -6,7 +6,9 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -58,6 +60,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     GoogleSignInClient mGoogleSignInClient;
     CallbackManager callbackManager;
 
+    @RequiresApi(api = Build.VERSION_CODES.ECLAIR)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,10 +162,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         startActivity(intent);
     }
 
-    final public void goToHome() {
+    final public void goToFirstPath() {
         finish();
         isWindowFocused = true;
-        Intent intent = new Intent(this, homePageActivity.class);
+        Intent intent = new Intent(this, ChooseDeckActivity.class);
         startActivity(intent);
     }
 
@@ -209,7 +212,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                         editor.putString("idUser", uId);
                                         editor.putBoolean("isLogged", true);
                                         editor.apply();
-                                        goToHome();
+                                        goToFirstPath();
                                         //toast personnalisée
                                         /*LayoutInflater inflater = getLayoutInflater();
                                         View layout = inflater.inflate(R.layout.error_toast,
@@ -260,7 +263,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = Helper.getInstance().mAuth.getCurrentUser();
-                            goToHome();
+                            goToFirstPath();
                         } else {
                             String uId = Helper.getInstance().mAuth.getCurrentUser().getUid();
                             String email = Helper.getInstance().mAuth.getCurrentUser().getEmail();
@@ -310,7 +313,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                             editor.putString("idUser", uId);
                             editor.putBoolean("isLogged", true);
                             editor.apply();
-                            goToHome();
+                            goToFirstPath();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("fb-connect-error", "signInWithCredential:failure", task.getException());

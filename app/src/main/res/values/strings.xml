@@ -23,12 +23,14 @@
     <string name="sign_up_not_same" translatable="false">The password are different</string>
     <string name="logo_title" translatable="false">Monster Arena</string>
     <string name="facebook_button_title">Connect</string>
-    <string name="facebook_app_id" translatable="false">[APP_ID]</string>
-    <string name="fb_login_protocol_scheme" translatable="false">fb[APP_ID]</string>
+    <string name="facebook_app_id" translatable="false">671589919954366</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb671589919954366</string>
     <string name="password_forgot_text" translatable="false">Forgot password ?</string>
     <string name="connect_signup_click" translatable="false">Click here.</string>
     <string name="connect_signup_phrase" translatable="false">Not already sign up ?</string>
     <string name="sign_in_google">Sign in with google</string>
     <string name="sign_up_button" translatable="false">Sign up</string>
     <string name="connect_signin_phrase" translatable="false">Already sign up ?</string>
+    <string name="choose_deck" translatable="false">Choose your first deck</string>
+    <string name="validate_deck_btn" translatable="false">Validate</string>
 </resources>
