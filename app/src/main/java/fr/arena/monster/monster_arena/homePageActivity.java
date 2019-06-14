@@ -1,13 +1,10 @@
 package fr.arena.monster.monster_arena;
 
 import android.content.Intent;
-<<<<<<< HEAD
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-=======
 import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
->>>>>>> 9e25f6c1e10dd249cd8fd2791a5fc97067f69c68
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,11 +19,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
