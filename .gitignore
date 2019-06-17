@@ -1,0 +1,4 @@
+.gradle/
+.idea
+monster-arena.iml
+local.properties
