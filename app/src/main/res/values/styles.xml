@@ -33,4 +33,11 @@
         <item name="colorControlHighlight">@color/colorAccent</item>
     </style>
 
+    <style name="TransparentBackground" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@color/colorBackgroundPromotions</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="colorPrimaryDark">@color/colorBackgroundPromotions</item>
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
 </resources>
