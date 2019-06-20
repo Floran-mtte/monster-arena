@@ -1,34 +1,18 @@
 package fr.arena.monster.monster_arena;
 
-import android.animation.ObjectAnimator;
-import android.content.Context;
+
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.content.pm.ActivityInfo;
-import android.media.MediaPlayer;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -246,6 +230,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         Log.d("Added doc", "added");
+                                        goToParty();
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
@@ -298,6 +283,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
                                                     Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                                                    goToParty();
                                                     //go to gameBoardActivity
                                                 }
                                             })
@@ -325,6 +311,12 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
                     }
                 });
         Log.d("testing app",documentId);
+    }
+
+    public void goToParty()
+    {
+        Intent intent = new Intent(this, gameBoardActivity.class);
+        startActivity(intent);
     }
 
 }
