@@ -110,7 +110,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
-            android:background="@drawable/button_shape"
+            android:background="@drawable/button_shape_gold"
             android:paddingLeft="20dp"
             android:paddingTop="15dp"
             android:paddingRight="20dp"

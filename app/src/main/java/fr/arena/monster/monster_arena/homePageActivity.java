@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -36,7 +37,7 @@ import java.util.Map;
 public class homePageActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button editDeck;
-    Button playButton;
+    ImageView playButton;
     Button shopButton;
     Button settingButton;
     FirebaseFirestore db;
@@ -69,7 +70,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
         shopButton = (Button) findViewById(R.id.shop_button);
         settingButton = (Button) findViewById(R.id.settings_button);
         editDeck = (Button) findViewById(R.id.edit_deck_button);
-        playButton = (Button) findViewById(R.id.play_button);
+        playButton = (ImageView) findViewById(R.id.play_button);
         playButton.setOnClickListener(this);
         editDeck.setOnClickListener(this);
         filter = findViewById(R.id.filter_layout);
@@ -315,6 +316,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
 
     public void goToParty()
     {
+        finish();
         Intent intent = new Intent(this, gameBoardActivity.class);
         startActivity(intent);
     }
