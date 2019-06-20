@@ -5,22 +5,14 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
-
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class splash_screen extends AppCompatActivity {
 
@@ -102,9 +94,20 @@ public class splash_screen extends AppCompatActivity {
     public void whoRedirect() {
         SharedPreferences prefs = getSharedPreferences("App", MODE_PRIVATE);
         Boolean connected = prefs.getBoolean("isLogged", false);
+        int tuto = prefs.getInt("tuto", 2);
 
         if (connected) {
-            goToHome();
+            switch (tuto) {
+                case 0:
+                    goToChoose();
+                    break;
+                case 1:
+                    goToTuto();
+                    break;
+                default:
+                    goToHome();
+                    break;
+            }
         } else {
             goToSignIn();
 
@@ -142,6 +145,24 @@ public class splash_screen extends AppCompatActivity {
     public void goToHome() {
         isWindowFocused = true;
         Intent intent = new Intent(this, homePageActivity.class);
+        //Intent intent = new Intent(this, ChooseDeckActivity.class);
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        finish();
+    }
+
+    public void goToChoose() {
+        isWindowFocused = true;
+        Intent intent = new Intent(this, ChooseDeckActivity.class);
+        //Intent intent = new Intent(this, ChooseDeckActivity.class);
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+        finish();
+    }
+
+    public void goToTuto() {
+        isWindowFocused = true;
+        Intent intent = new Intent(this, EditDeckActivity.class);
         //Intent intent = new Intent(this, ChooseDeckActivity.class);
         startActivity(intent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

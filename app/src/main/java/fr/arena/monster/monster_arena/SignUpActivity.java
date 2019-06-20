@@ -3,21 +3,17 @@ package fr.arena.monster.monster_arena;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.content.res.Resources;
-import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,11 +37,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-
-import java.util.Random;
-
-import static android.app.PendingIntent.getActivity;
-import static fr.arena.monster.monster_arena.SignInActivity.customizeGooglePlusButton;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -211,6 +202,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                         editor.putString("Email", email.getText().toString());
                                         editor.putString("idUser", uId);
                                         editor.putBoolean("isLogged", true);
+                                        editor.putInt("tuto", 0);
                                         editor.apply();
                                         goToFirstPath();
                                         //toast personnalisée
@@ -271,6 +263,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                             editor.putString("Email", email);
                             editor.putString("idUser", uId);
                             editor.putBoolean("isLogged", true);
+                            editor.putInt("tuto", 0);
                             editor.apply();
                         }
                     }
@@ -312,6 +305,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                             editor.putString("Email", email);
                             editor.putString("idUser", uId);
                             editor.putBoolean("isLogged", true);
+                            editor.putInt("tuto", 0);
                             editor.apply();
                             goToFirstPath();
                         } else {

@@ -1,12 +1,13 @@
 package fr.arena.monster.monster_arena;
 
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 public class ChooseDeckActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -46,21 +47,29 @@ public class ChooseDeckActivity extends AppCompatActivity implements View.OnClic
                 ragnarok.setBackground(null);
                 armana.setBackground(null);
                 validate.setVisibility(View.VISIBLE);
+                validate.setOnClickListener(this);
                 break;
             case R.id.ragnarok :
                 ragnarok.setBackground(getDrawable(R.drawable.deck_border));
                 olympie.setBackground(null);
                 armana.setBackground(null);
                 validate.setVisibility(View.VISIBLE);
+                validate.setOnClickListener(this);
                 break;
             case R.id.armana :
                 armana.setBackground(getDrawable(R.drawable.deck_border));
                 ragnarok.setBackground(null);
                 olympie.setBackground(null);
                 validate.setVisibility(View.VISIBLE);
+                validate.setOnClickListener(this);
                 break;
             case R.id.validate :
                 //Todo : attribute the wrigth deck to current user
+                Toast.makeText(ChooseDeckActivity.this, "tuto +1",
+                        Toast.LENGTH_SHORT).show();
+                SharedPreferences.Editor editor = getSharedPreferences("App", MODE_PRIVATE).edit();
+                editor.putInt("tuto", 1);
+                editor.apply();
                 break;
         }
     }
