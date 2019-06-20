@@ -1,33 +1,23 @@
 <resources>
-    <string name="connexion_title" translatable="false">CONNEXION</string>
-    <string name="google_button" translatable="false">Connect</string>
-    <string name="facebook_button" translatable="false">Connect</string>
-    <string name="connexion_separation" translatable="false">OU</string>
-    <string name="connexion_email_label" translatable="false">Email</string>
-    <string name="connexion_password_label" translatable="false">Mot de passe</string>
+    <string name="connexion_password_label" translatable="true">Mot de passe</string>
     <string name="connexion_button" translatable="false">Connexion</string>
-    <string name="connexion_to_inscription" translatable="false">Pas encore inscrit ? clique ici</string>
-    <string name="sign_up_title" translatable="false">INSCRIPTION</string>
     <string name="sign_in_button" translatable="false">Connexion</string>
-    <string name="sign_up_to_in" translatable="false">Déjà inscrit ? clique ici</string>
-    <string name="sign_in_confirm_pass_label" translatable="false">Confirmation de mot de passe</string>
-    <string name="play_button_text" translatable="false">Jouer</string>
-    <string name="settings_button_text" translatable="false">Paramètres</string>
-    <string name="edit_deck_button_text" translatable="false">Mon deck</string>
-    <string name="store_button_text" >Magasin</string>
-    <string name="sign_up_username" translatable="false">Pseudo</string>
-    <string name="sign_up_no_username" translatable="false">Entre un pseudo</string>
-    <string name="sing_up_error_email" translatable="false">Entre un email valide</string>
-    <string name="sign_up_no_password" translatable="false">Entre un mot de passe</string>
-    <string name="sign_up_not_same" translatable="false">Les mots de passe sont différent</string>
+    <string name="sign_in_confirm_pass_label" translatable="true">Confirmation de mot de passe</string>
+    <string name="play_button_text" translatable="true">Jouer</string>
+    <string name="settings_button_text" translatable="true">Paramètres</string>
+    <string name="edit_deck_button_text" translatable="true">Mon deck</string>
+    <string name="store_button_text" translatable="true">Magasin</string>
+    <string name="sign_up_username" translatable="true">Pseudo</string>
+    <string name="sign_up_no_username" translatable="true">Entre un pseudo</string>
+    <string name="sing_up_error_email" translatable="true">Entre un email valide</string>
+    <string name="sign_up_no_password" translatable="true">Entre un mot de passe</string>
+    <string name="sign_up_not_same" translatable="true">Les mots de passe sont différent</string>
     <string name="facebook_button_title">Connexion</string>
-    <string name="password_forgot_text">Mot de passe oublié ?</string>
-    <string name="connect_signup_click">Clique ici.</string>
-    <string name="connect_signup_phrase" translatable="false">Pas encore inscrit ?</string>
+    <string name="password_forgot_text" translatable="true">Mot de passe oublié ?</string>
+    <string name="connect_signup_click" translatable="true">Clique ici.</string>
+    <string name="connect_signup_phrase" translatable="true">Pas encore inscrit ?</string>
     <string name="sign_in_google">Connexion avec google</string>
     <string name="sign_up_button" translatable="false">Inscription</string>
-    <string name="connect_signin_phrase" translatable="false">Déjà inscrit ?</string>
-    <string name="facebook_app_id" translatable="false">671589919954366</string>
-    <string name="fb_login_protocol_scheme" translatable="false">fb671589919954366</string>
-    <string name="SEARCH_OPPONENT_LABEL">Recherche d\'un adversaire en cours</string>
+    <string name="connect_signin_phrase" translatable="true">Déjà inscrit ?</string>
+    <string name="SEARCH_OPPONENT_LABEL" translatable="true">Recherche d\'un adversaire en cours</string>
 </resources>
