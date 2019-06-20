@@ -8,4 +8,5 @@
     <color name="gold">#d3b074</color>
     <color name="colorBackgroundPromotions">#80000000</color>
     <color name="loaderCircle">#fc2000</color>
+    <color name="bg_board">#242628</color>
 </resources>
