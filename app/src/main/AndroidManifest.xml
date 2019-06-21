@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
-        <activity android:name=".gameBoardActivity"></activity>
+        <activity android:name=".ChooseDeckActivity"></activity>
+        <activity android:name=".gameBoardActivity" />
         <activity android:name=".EditDeckActivity" />
         <activity android:name=".splash_screen">
             <intent-filter>

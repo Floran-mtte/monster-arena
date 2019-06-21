@@ -2,8 +2,8 @@
     <string name="app_name" translatable="false">Shajira</string>
     <string name="connexion_email_label" translatable="false">Email</string>
     <string name="connexion_password_label" translatable="true">Password</string>
-    <string name="connexion_button">Sign In</string>
-    <string name="sign_in_button">Sign In</string>
+    <string name="connexion_button" translatable="true">Sign In</string>
+    <string name="sign_in_button" translatable="true">Sign In</string>
     <string name="sign_in_confirm_pass_label" translatable="true">Confirm password</string>
     <string name="play_button_text">Play</string>
     <string name="settings_button_text">Setting</string>
@@ -24,4 +24,6 @@
     <string name="sign_up_button">Sign up</string>
     <string name="connect_signin_phrase" translatable="true">Already sign up ?</string>
     <string name="SEARCH_OPPONENT_LABEL" translatable="true">Searching for opponent</string>
+    <string name="choose_deck_title">Choose your first deck</string>
+    <string name="validate_choice">validate</string>
 </resources>

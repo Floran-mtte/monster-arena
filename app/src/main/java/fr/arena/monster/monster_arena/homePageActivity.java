@@ -2,11 +2,11 @@ package fr.arena.monster.monster_arena;
 
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -25,7 +25,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -40,7 +39,6 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
     ImageView playButton;
     Button shopButton;
     Button settingButton;
-    FirebaseFirestore db;
     String TAG = "HomePageActivity";
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     FrameLayout filter;
@@ -77,8 +75,6 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
         textView = findViewById(R.id.textView2);
         loader = findViewById(R.id.loader);
 
-        // Access a Cloud Firestore instance from your Activity
-        db = FirebaseFirestore.getInstance();
     }
 
     public static boolean isAppWentToBg = false;
@@ -145,7 +141,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
 
     public void searchParty()
     {
-        final CollectionReference docRef = db.collection("SearchParty");
+        final CollectionReference docRef = Helper.getInstance().db.collection("SearchParty");
         docRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -162,7 +158,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
                         party.put("timestamp", ts);
                         party.put("id_opponent","");
 
-                        db.collection("SearchParty")
+                        Helper.getInstance().db.collection("SearchParty")
                                 .add(party).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(final DocumentReference documentReference)
@@ -197,7 +193,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
 
     public void waitForOpponent(String documentId)
     {
-        final DocumentReference docRef = db.collection("SearchParty").document(documentId);
+        final DocumentReference docRef = Helper.getInstance().db.collection("SearchParty").document(documentId);
         docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot snapshot,
@@ -225,7 +221,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
                         party.put("created_at", ts);
                         party.put("updated_at", ts);
 
-                        db.collection("Party").document(documentId)
+                        Helper.getInstance().db.collection("Party").document(documentId)
                                 .set(party, SetOptions.merge())
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
@@ -256,14 +252,14 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
     {
         Map<String, Object> party = new HashMap<>();
         party.put("id_opponent",user.getUid());
-        db.collection("SearchParty").document(documentId)
+        Helper.getInstance().db.collection("SearchParty").document(documentId)
                 .set(party, SetOptions.merge())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         String idParty = documentId;
 
-                        final DocumentReference docRef = db.collection("Party").document(idParty);
+                        final DocumentReference docRef = Helper.getInstance().db.collection("Party").document(idParty);
                         docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                             @Override
                             public void onEvent(@Nullable DocumentSnapshot snapshot,
@@ -278,7 +274,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
                                 {
                                     Log.d(TAG, "Current data: " + snapshot.getData());
 
-                                    db.collection("SearchParty").document(idParty)
+                                    Helper.getInstance().db.collection("SearchParty").document(idParty)
                                             .delete()
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
@@ -317,6 +313,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
     public void goToParty()
     {
         finish();
+        isWindowFocused = true;
         Intent intent = new Intent(this, gameBoardActivity.class);
         startActivity(intent);
     }
