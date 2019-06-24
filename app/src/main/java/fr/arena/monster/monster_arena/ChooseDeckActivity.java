@@ -1,6 +1,7 @@
 package fr.arena.monster.monster_arena;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,11 +12,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-import java.sql.Array;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ChooseDeckActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -71,21 +77,22 @@ public class ChooseDeckActivity extends AppCompatActivity implements View.OnClic
                 deck = "armana";
                 break;
             case R.id.validate:
-                /*SharedPreferences.Editor editor = getSharedPreferences("App", MODE_PRIVATE).edit();
-                editor.putInt("tuto", 1);
-                editor.apply();*/
-                saveDeck();
+
+                getDeck();
                 break;
         }
     }
 
     public void goToFight() {
+        SharedPreferences.Editor editor = getSharedPreferences("App", MODE_PRIVATE).edit();
+        editor.putInt("tuto", 1);
+        editor.apply();
         finish();
         Intent intent = new Intent(this, gameBoardActivity.class);
         startActivity(intent);
     }
 
-    public void saveDeck() {
+    public void getDeck() {
         DocumentReference fb_deck = null;
         Log.d("deck", deck);
         switch (deck) {
@@ -107,8 +114,17 @@ public class ChooseDeckActivity extends AppCompatActivity implements View.OnClic
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
                             Log.d("done", "DocumentSnapshot data: " + document.getData().get("cards"));
-                            Object cards = document.getData().get("cards");
-                            Log.d("card", "object: " + cards);
+                            List list = new ArrayList<String>();
+                            list = (List) document.getData().get("cards");
+                            //Object cards = document.getData().get("cards");
+                            Log.d("cards", ": " + list);
+                            Log.d("uid", Helper.getInstance().mAuth.getUid());
+                            if (list != null && list.size() > 0) {
+                                Map<String, Object> deck = new HashMap<>();
+                                deck.put("cards", list);
+                                Log.d("deck", ": "+ deck);
+                                addCard(deck);
+                            }
 
                         } else {
                             Log.d("clear", "No such document");
@@ -119,5 +135,39 @@ public class ChooseDeckActivity extends AppCompatActivity implements View.OnClic
                 }
             });
         }
+    }
+
+    public void addCard(Map cards) {
+        Helper.getInstance().db.collection("User_card")
+                .document(Helper.getInstance().mAuth.getUid())
+                .set(cards).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                setDeck(cards);
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("fail", "Error writing document", e);
+                    }
+                });
+    }
+
+    public void setDeck(Map deck) {
+        Helper.getInstance().db.collection("User_Deck")
+                .document(Helper.getInstance().mAuth.getUid())
+                .set(deck).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                goToFight();
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("fail", "Error writing document", e);
+                    }
+                });
     }
 }

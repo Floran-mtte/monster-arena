@@ -58,7 +58,7 @@ public class Helper {
         } else if (sound == "intro") {
             Helper.getInstance().mp = MediaPlayer.create(context, R.raw.intro);
         }
-        Helper.getInstance().mp.start();
+        //Helper.getInstance().mp.start();
     }
 
     public static void replayTheme() {
