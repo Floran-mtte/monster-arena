@@ -27,6 +27,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
@@ -46,6 +47,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
     FrameLayout filter;
     TextView textView;
     ProgressBar loader;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
 
         }
 
+        mAuth = FirebaseAuth.getInstance();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -88,7 +91,10 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
     protected void onStart() {
         applicationWillEnterForeground();
         super.onStart();
-
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(false)
+                .build();
+        db.setFirestoreSettings(settings);
     }
 
     private void applicationWillEnterForeground() {
@@ -146,6 +152,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
     public void searchParty()
     {
         final CollectionReference docRef = db.collection("SearchParty");
+
         docRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -154,6 +161,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
                     //if searchParty is empty we create line
                     if(task.getResult().isEmpty())
                     {
+                        Log.d(TAG,"Partie non existance");
                         Long tsLong = System.currentTimeMillis()/1000;
                         String ts = tsLong.toString();
 
@@ -174,15 +182,17 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
                                     @Override
                                     public void onFailure(@NonNull Exception e)
                                     {
-                                        Log.w(TAG, "Error writing document", e);
+                                        Log.d(TAG, "Error writing document", e);
                                     }
                                 });
 
                     }
                     else
                     {
+                        Log.d(TAG,"Partie existance");
                         for (final QueryDocumentSnapshot document : task.getResult())
                         {
+                            Log.d(TAG,document.getData().toString());
                             joinParty(document.getId());
                         }
                     }
@@ -190,6 +200,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
                 else
                 {
                     Log.d(TAG, "get failed with", task.getException());
+
                 }
             }
         });
@@ -204,15 +215,17 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
                                 @Nullable FirebaseFirestoreException e) {
                 if (e != null)
                 {
-                    Log.w(TAG, "Listen failed.", e);
+                    Log.d(TAG, "Listen failed.", e);
                     return;
                 }
 
+                Log.d("test","test");
                 if (snapshot != null && snapshot.exists())
                 {
-
+                    Log.d("test","test2");
                     Map<String, Object> search_party = snapshot.getData();
                     String id_opponent = search_party.get("id_opponent").toString();
+                    Log.d("id_opp",id_opponent);
                     if(id_opponent != "")
                     {
                         Map<String, Object> party = new HashMap<>();
@@ -254,13 +267,17 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
 
     public void joinParty(String documentId)
     {
+        Log.d(TAG,"passe la");
         Map<String, Object> party = new HashMap<>();
         party.put("id_opponent",user.getUid());
+        Log.d(TAG,"ici doc vvv");
+        Log.d(TAG, documentId);
         db.collection("SearchParty").document(documentId)
                 .set(party, SetOptions.merge())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        Log.d(TAG,"dans le onSuccess");
                         String idParty = documentId;
 
                         final DocumentReference docRef = db.collection("Party").document(idParty);
@@ -268,14 +285,17 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
                             @Override
                             public void onEvent(@Nullable DocumentSnapshot snapshot,
                                                 @Nullable FirebaseFirestoreException e) {
+                                Log.d("passe","la");
                                 if (e != null)
                                 {
                                     Log.w(TAG, "Listen failed.", e);
                                     return;
                                 }
 
+                                Log.d(TAG, "passe la.");
                                 if (snapshot != null && snapshot.exists())
                                 {
+                                    Log.d(TAG, "passe ici.");
                                     Log.d(TAG, "Current data: " + snapshot.getData());
 
                                     db.collection("SearchParty").document(idParty)
@@ -298,7 +318,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
                                 }
                                 else
                                 {
-                                    //RAS
+                                    Log.d("passe","else");
                                 }
                             }
                         });
@@ -308,7 +328,8 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error writing document", e);
+                        Log.d(TAG,"Dans le onFailure");
+                        Log.d(TAG, "Error writing document", e);
                     }
                 });
         Log.d("testing app",documentId);
@@ -317,6 +338,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
     public void goToParty()
     {
         finish();
+        isWindowFocused = true;
         Intent intent = new Intent(this, gameBoardActivity.class);
         startActivity(intent);
     }

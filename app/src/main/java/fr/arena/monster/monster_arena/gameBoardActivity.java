@@ -9,6 +9,13 @@ public class gameBoardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        Helper.playTheme(this, "fight");
+
         setContentView(R.layout.activity_game_board);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
