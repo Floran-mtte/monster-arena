@@ -40,9 +40,12 @@ public class Helper {
     }
 
     public static void playTheme(Context context, String sound) {
+        Log.i("sound", sound);
         if (Helper.getInstance().mp != null) {
+            Log.i("sound 2", sound);
             if (sound == Helper.getInstance().lastSound)
                 return;
+            Log.i("sound 3", sound);
             Helper.getInstance().mp.stop();
         }
 
@@ -50,19 +53,20 @@ public class Helper {
 
         if (sound == "lobby") {
             Helper.getInstance().mp = MediaPlayer.create(context, R.raw.lobby);
-            Helper.getInstance().mp.setLooping(true);
+
         } else if (sound == "fight") {
             Helper.getInstance().mp = MediaPlayer.create(context, R.raw.fight);
-            Helper.getInstance().mp.setLooping(true);
+            //Helper.getInstance().mp.setLooping(true);
         } else if (sound == "victory") {
             Helper.getInstance().mp = MediaPlayer.create(context, R.raw.victory);
-            Helper.getInstance().mp.setLooping(true);
+            //Helper.getInstance().mp.setLooping(true);
         } else if (sound == "lose") {
             Helper.getInstance().mp = MediaPlayer.create(context, R.raw.lose);
-            Helper.getInstance().mp.setLooping(true);
+            //Helper.getInstance().mp.setLooping(true);
         } else if (sound == "intro") {
             Helper.getInstance().mp = MediaPlayer.create(context, R.raw.intro);
         }
+        Helper.getInstance().mp.setLooping(true);
         Helper.getInstance().mp.start();
     }
 
