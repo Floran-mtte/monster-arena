@@ -13,13 +13,14 @@
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/game_board" />
+        app:srcCompat="@drawable/game_board_2" />
 
     <LinearLayout
         android:id="@+id/line_left"
@@ -120,19 +121,6 @@
         app:srcCompat="@drawable/card_section" />
 
     <ImageView
-        android:id="@+id/hand_user_1"
-        android:layout_width="70dp"
-        android:layout_height="95dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/left_card_user"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/card_section" />
-
-    <ImageView
         android:id="@+id/hand_opponent_1"
         android:layout_width="70dp"
         android:layout_height="95dp"
@@ -175,58 +163,6 @@
         android:layout_marginStart="186dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/card_section" />
-
-    <ImageView
-        android:id="@+id/hand_user_2"
-        android:layout_width="70dp"
-        android:layout_height="95dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/left_card_user"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/card_section" />
-
-    <ImageView
-        android:id="@+id/hand_user_3"
-        android:layout_width="70dp"
-        android:layout_height="95dp"
-        android:layout_marginStart="102dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/left_card_user"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/card_section" />
-
-    <ImageView
-        android:id="@+id/hand_user_4"
-        android:layout_width="70dp"
-        android:layout_height="95dp"
-        android:layout_marginStart="144dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/left_card_user"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/card_section" />
-
-    <ImageView
-        android:id="@+id/hand_user_5"
-        android:layout_width="70dp"
-        android:layout_height="95dp"
-        android:layout_marginStart="186dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/left_card_user"
-        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/card_section" />
 
     <ImageView
@@ -310,6 +246,118 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.127" />
+
+    <ImageView
+        android:id="@+id/board_background2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/shape_board" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="106dp"
+        android:layout_height="95dp"
+        android:layout_marginStart="-10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/avatar" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="127dp"
+        android:layout_height="94dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/avatar" />
+
+    <ImageView
+        android:id="@+id/board_background4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/new_band" />
+
+    <ImageView
+        android:id="@+id/hand_user_1"
+        android:layout_width="70dp"
+        android:layout_height="95dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/left_card_user"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/card_section" />
+
+    <ImageView
+        android:id="@+id/hand_user_2"
+        android:layout_width="70dp"
+        android:layout_height="95dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/left_card_user"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/card_section" />
+
+    <ImageView
+        android:id="@+id/hand_user_5"
+        android:layout_width="70dp"
+        android:layout_height="95dp"
+        android:layout_marginStart="186dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/left_card_user"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/card_section" />
+
+    <ImageView
+        android:id="@+id/hand_user_4"
+        android:layout_width="70dp"
+        android:layout_height="95dp"
+        android:layout_marginStart="144dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/left_card_user"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/card_section" />
+
+    <ImageView
+        android:id="@+id/hand_user_3"
+        android:layout_width="70dp"
+        android:layout_height="95dp"
+        android:layout_marginStart="102dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/left_card_user"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/card_section" />
 
 
 </android.support.constraint.ConstraintLayout>
