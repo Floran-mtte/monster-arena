@@ -88,7 +88,7 @@ public class ChooseDeckActivity extends AppCompatActivity implements View.OnClic
         editor.putInt("tuto", 1);
         editor.apply();
         finish();
-        Intent intent = new Intent(this, gameBoardActivity.class);
+        Intent intent = new Intent(this, tutoGameActivity.class);
         startActivity(intent);
     }
 
