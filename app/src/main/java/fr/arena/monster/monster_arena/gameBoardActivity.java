@@ -1,8 +1,8 @@
 package fr.arena.monster.monster_arena;
 
 import android.content.pm.ActivityInfo;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 public class gameBoardActivity extends AppCompatActivity {
 
@@ -17,7 +17,5 @@ public class gameBoardActivity extends AppCompatActivity {
         Helper.playTheme(this, "fight");
 
         setContentView(R.layout.activity_game_board);
-
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 }

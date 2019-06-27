@@ -9,4 +9,5 @@
     <color name="colorBackgroundPromotions">#80000000</color>
     <color name="loaderCircle">#fc2000</color>
     <color name="bg_board">#242628</color>
+    <color name="white">#ffffff</color>
 </resources>

@@ -1,26 +1,21 @@
 package fr.arena.monster.monster_arena;
 
-import android.arch.lifecycle.LifecycleObserver;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.Random;
 import java.util.regex.Pattern;
 
 public class Helper {
 
     FirebaseAuth mAuth  = FirebaseAuth.getInstance();
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     MediaPlayer mp;
     String lastSound = "";
 
@@ -53,21 +48,17 @@ public class Helper {
 
         if (sound == "lobby") {
             Helper.getInstance().mp = MediaPlayer.create(context, R.raw.lobby);
-
         } else if (sound == "fight") {
             Helper.getInstance().mp = MediaPlayer.create(context, R.raw.fight);
-            //Helper.getInstance().mp.setLooping(true);
         } else if (sound == "victory") {
             Helper.getInstance().mp = MediaPlayer.create(context, R.raw.victory);
-            //Helper.getInstance().mp.setLooping(true);
         } else if (sound == "lose") {
             Helper.getInstance().mp = MediaPlayer.create(context, R.raw.lose);
-            //Helper.getInstance().mp.setLooping(true);
         } else if (sound == "intro") {
             Helper.getInstance().mp = MediaPlayer.create(context, R.raw.intro);
         }
         Helper.getInstance().mp.setLooping(true);
-        Helper.getInstance().mp.start();
+        //Helper.getInstance().mp.start();
     }
 
     public static void replayTheme() {

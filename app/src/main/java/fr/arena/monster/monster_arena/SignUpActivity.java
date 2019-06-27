@@ -3,19 +3,15 @@ package fr.arena.monster.monster_arena;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.content.res.Resources;
-import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,11 +35,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-
-import java.util.Random;
-
-import static android.app.PendingIntent.getActivity;
-import static fr.arena.monster.monster_arena.SignInActivity.customizeGooglePlusButton;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -142,7 +133,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onStop() {
         super.onStop();
-
         applicationdidenterbackground();
     }
 
@@ -159,10 +149,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         startActivity(intent);
     }
 
-    final public void goToHome() {
+    final public void goToChoice() {
         finish();
         isWindowFocused = true;
-        Intent intent = new Intent(this, homePageActivity.class);
+        Intent intent = new Intent(this, ChooseDeckActivity.class);
         startActivity(intent);
     }
 
@@ -208,16 +198,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                         editor.putString("Email", email.getText().toString());
                                         editor.putString("idUser", uId);
                                         editor.putBoolean("isLogged", true);
+                                        editor.putInt("tuto", 0);
                                         editor.apply();
-                                        goToHome();
-                                        //toast personnalisée
-                                        /*LayoutInflater inflater = getLayoutInflater();
-                                        View layout = inflater.inflate(R.layout.error_toast,
-                                                (ViewGroup) findViewById(R.id.error_toast_container));
-
-                                        TextView text = (TextView) layout.findViewById(R.id.text);
-                                        text.setText("inscription reussit");
-                                        Helper.getInstance().showErrorToast(getApplicationContext(), layout);*/
+                                        goToChoice();
                                     } else {
                                     }
                                 }
@@ -260,7 +243,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = Helper.getInstance().mAuth.getCurrentUser();
-                            goToHome();
+                            goToChoice();
                         } else {
                             String uId = Helper.getInstance().mAuth.getCurrentUser().getUid();
                             String email = Helper.getInstance().mAuth.getCurrentUser().getEmail();
@@ -268,6 +251,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                             editor.putString("Email", email);
                             editor.putString("idUser", uId);
                             editor.putBoolean("isLogged", true);
+                            editor.putInt("tuto", 0);
                             editor.apply();
                         }
                     }
@@ -309,8 +293,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                             editor.putString("Email", email);
                             editor.putString("idUser", uId);
                             editor.putBoolean("isLogged", true);
+                            editor.putInt("tuto", 0);
                             editor.apply();
-                            goToHome();
+                            goToChoice();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("fb-connect-error", "signInWithCredential:failure", task.getException());
