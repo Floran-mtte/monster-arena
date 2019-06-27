@@ -17,5 +17,7 @@ public class gameBoardActivity extends AppCompatActivity {
         Helper.playTheme(this, "fight");
 
         setContentView(R.layout.activity_game_board);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 }

@@ -301,7 +301,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="8dp"
-        android:background="@drawable/button_shape"
+        android:background="@drawable/button_shape_gold"
         android:src="@drawable/menu"
         android:text=""
         app:layout_constraintBottom_toTopOf="@+id/end_tour_button"

@@ -1,35 +1,27 @@
 <resources>
-    <string name="app_name">Shajira</string>
-    <string name="connexion_title" translatable="false">SIGN IN</string>
-    <string name="google_button" translatable="false">Connect</string>
-    <string name="facebook_button">Connect</string>
-    <string name="connexion_separation">OR</string>
-    <string name="connexion_email_label">Email</string>
-    <string name="connexion_password_label" translatable="false">Password</string>
-    <string name="connexion_button" translatable="false">Sign In</string>
-    <string name="connexion_to_inscription" translatable="false">Not already sign up ? click here</string>
-    <string name="sign_up_title" translatable="false">SIGN UP</string>
-    <string name="sign_in_button" translatable="false">Sign In</string>
-    <string name="sign_up_to_in" translatable="false">Already sign up ? click here</string>
-    <string name="sign_in_confirm_pass_label" translatable="false">Confirm password</string>
-    <string name="play_button_text" translatable="false">Play</string>
-    <string name="settings_button_text" translatable="false">Setting</string>
-    <string name="edit_deck_button_text" translatable="false">My Deck</string>
-    <string name="store_button_text" translatable="false">Store</string>
-    <string name="sign_up_username" translatable="false">Username</string>
-    <string name="sign_up_no_username" translatable="false">Please enter an username</string>
-    <string name="sing_up_error_email" translatable="false">Please enter a valid email</string>
-    <string name="sign_up_no_password" translatable="false">Please enter a password</string>
-    <string name="sign_up_not_same" translatable="false">The password are different</string>
-    <string name="logo_title" translatable="false">Monster Arena</string>
+    <string name="app_name" translatable="false">Shajira</string>
+    <string name="connexion_email_label" translatable="false">Email</string>
+    <string name="connexion_password_label" translatable="true">Password</string>
+    <string name="connexion_button">Sign In</string>
+    <string name="sign_in_button">Sign In</string>
+    <string name="sign_in_confirm_pass_label" translatable="true">Confirm password</string>
+    <string name="play_button_text">Play</string>
+    <string name="settings_button_text">Setting</string>
+    <string name="edit_deck_button_text">My Deck</string>
+    <string name="store_button_text">Store</string>
+    <string name="sign_up_username">Username</string>
+    <string name="sign_up_no_username">Please enter an username</string>
+    <string name="sing_up_error_email">Please enter a valid email</string>
+    <string name="sign_up_no_password">Please enter a password</string>
+    <string name="sign_up_not_same">The password are different</string>
     <string name="facebook_button_title">Connect</string>
-    <string name="facebook_app_id" translatable="false">[APP_ID]</string>
-    <string name="fb_login_protocol_scheme" translatable="false">fb[APP_ID]</string>
-    <string name="password_forgot_text" translatable="false">Forgot password ?</string>
-    <string name="connect_signup_click" translatable="false">Click here.</string>
-    <string name="connect_signup_phrase" translatable="false">Not already sign up ?</string>
+    <string name="facebook_app_id" translatable="false">671589919954366</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb671589919954366</string>
+    <string name="password_forgot_text" translatable="true">Forgot password ?</string>
+    <string name="connect_signup_click" translatable="true">Click here.</string>
+    <string name="connect_signup_phrase" translatable="true">Not already sign up ?</string>
     <string name="sign_in_google">Sign in with google</string>
-    <string name="sign_up_button" translatable="false">Sign up</string>
-    <string name="connect_signin_phrase" translatable="false">Already sign up ?</string>
-    <string name="SEARCH_OPPONENT_LABEL">Searching for opponent</string>
+    <string name="sign_up_button">Sign up</string>
+    <string name="connect_signin_phrase" translatable="true">Already sign up ?</string>
+    <string name="SEARCH_OPPONENT_LABEL" translatable="true">Searching for opponent</string>
 </resources>
