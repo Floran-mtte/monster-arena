@@ -133,7 +133,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onStop() {
         super.onStop();
-
         applicationdidenterbackground();
     }
 
