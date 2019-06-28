@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 public class tutoGameActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener, View.OnDragListener {
 
-    ImageView hand_user_1, hand_user_2, hand_user_3, hand_user_4, hand_user_5, cardDetail, user_attack_left, user_attack_right, user_defense;
+    ImageView hand_user_1, hand_user_2, hand_user_3, hand_user_4, hand_user_5, cardDetail, user_attack_left, user_attack_right, user_defense, dropZone = null;
     FrameLayout filter;
     String label = null;
     @Override
@@ -49,6 +49,10 @@ public class tutoGameActivity extends AppCompatActivity implements View.OnClickL
         filter.setOnClickListener(this);
 
         hand_user_1.setOnLongClickListener(this);
+        hand_user_2.setOnLongClickListener(this);
+        hand_user_3.setOnLongClickListener(this);
+        hand_user_4.setOnLongClickListener(this);
+        hand_user_5.setOnLongClickListener(this);
 
         user_attack_left.setOnDragListener(this);
         user_attack_right.setOnDragListener(this);
@@ -110,17 +114,10 @@ public class tutoGameActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public boolean onDrag(View v, DragEvent event) {
         Log.d("onDrag: ", v.toString());
-        if (v.getId() == R.id.left_card_user) {
-            return dragNDropEvent(user_attack_left, event, v);
-        } else if (v.getId() == R.id.right_card_user) {
-            return dragNDropEvent(user_attack_right, event, v);
-        } else if (v.getId() == R.id.up_card_user) {
-            return dragNDropEvent(user_defense, event, v);
-        }
 
-        return false;
+        return dragNDropEvent(event, v);
     }
-    public boolean dragNDropEvent(ImageView dropZone, DragEvent event, View v) {
+    public boolean dragNDropEvent(DragEvent event, View v) {
         switch (event.getAction()) {
             case DragEvent.ACTION_DRAG_STARTED:
                 label = event.getClipDescription().getLabel().toString();
@@ -141,7 +138,9 @@ public class tutoGameActivity extends AppCompatActivity implements View.OnClickL
                 return true;
 
             case DragEvent.ACTION_DROP:
-
+                Log.d("dragNDropEvent: drop", event.toString());
+                Log.d("dragNDropEvent: drop", v.toString());
+                dropZone = (ImageView) v;
                 v.invalidate();
                 return true;
 
@@ -155,24 +154,28 @@ public class tutoGameActivity extends AppCompatActivity implements View.OnClickL
                     switch (label) {
                         case "hand_user_1":
                             source = hand_user_1.getDrawable();
-                            dropZone.setBackground(source);
+                            dropZone.setImageDrawable(source);
                             hand_user_1.setVisibility(View.INVISIBLE);
                             break;
                         case "hand_user_2":
                             source = hand_user_2.getDrawable();
-                            dropZone.setBackground(source);
+                            dropZone.setImageDrawable(source);
+                            hand_user_2.setVisibility(View.INVISIBLE);
                             break;
                         case "hand_user_3":
                             source = hand_user_3.getDrawable();
-                            dropZone.setBackground(source);
+                            dropZone.setImageDrawable(source);
+                            hand_user_3.setVisibility(View.INVISIBLE);
                             break;
                         case "hand_user_4":
                             source = hand_user_4.getDrawable();
-                            dropZone.setBackground(source);
+                            dropZone.setImageDrawable(source);
+                            hand_user_4.setVisibility(View.INVISIBLE);
                             break;
                         case "hand_user_5":
                             source = hand_user_5.getDrawable();
-                            dropZone.setBackground(source);
+                            dropZone.setImageDrawable(source);
+                            hand_user_5.setVisibility(View.INVISIBLE);
                             break;
                     }
 
