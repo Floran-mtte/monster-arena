@@ -3,23 +3,21 @@ package fr.arena.monster.monster_arena;
 public class Card {
 
     protected String assetPath;
-    protected int defend;
-    protected int attack;
     protected String id;
     protected int level;
     protected String name;
     protected int type_card;
+    protected String cardDetail;
 
 
-    public Card(String assetPath, int defend, int attack, String id, int level, String name, int type_card)
+    public Card(String assetPath, String id, int level, String name, int type_card, String cardDetail)
     {
         setAssetPath(assetPath);
-        setDefend(defend);
-        setAttack(attack);
         setId(id);
         setLevel(level);
         setName(name);
         setType_card(type_card);
+        setCardDetail(cardDetail);
     }
 
     public String getAssetPath() {
@@ -28,22 +26,6 @@ public class Card {
 
     public void setAssetPath(String assetPath) {
         this.assetPath = assetPath;
-    }
-
-    public int getDefend() {
-        return defend;
-    }
-
-    public void setDefend(int defend) {
-        this.defend = defend;
-    }
-
-    public int getAttack() {
-        return attack;
-    }
-
-    public void setAttack(int attack) {
-        this.attack = attack;
     }
 
     public String getId() {
@@ -77,4 +59,7 @@ public class Card {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String getCardDetail() { return cardDetail;}
+    public void setCardDetail(String cardDetail) { this.cardDetail = cardDetail; }
 }

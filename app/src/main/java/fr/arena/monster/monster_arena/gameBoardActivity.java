@@ -22,12 +22,17 @@ import java.util.Map;
 import java.util.Random;
 
 public class gameBoardActivity extends AppCompatActivity {
-    Party party;
-    Player player1;
-    Player player2;
-    ArrayList<Card> player_1 = new ArrayList<Card>();
-    ArrayList<Card> player_2 = new ArrayList<Card>();
-    ArrayList<Card> current_player_hand = new ArrayList<Card>();
+
+    Party   party;
+    Player  player1;
+    Player  player2;
+
+    ArrayList<Card>         player1Card = new ArrayList<>();
+    ArrayList<CardEntity>   player1CardEntity = new ArrayList<>();
+    ArrayList<Card>         player2Card = new ArrayList<>();
+    ArrayList<CardEntity>   player2CardEntity = new ArrayList<>();
+
+    ArrayList<Card> current_player_hand = new ArrayList<>();
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     String TAG = "gameBoardActivity";
@@ -61,11 +66,11 @@ public class gameBoardActivity extends AppCompatActivity {
             {
                 if(lastNumber != number)
                 {
-                    number = r.nextInt(0 - player_1.size());
+                    number = r.nextInt(0 - player1Card.size());
                 }
                 lastNumber = number;
 
-                current_player_hand.add(player_1.get(number));
+                current_player_hand.add(player1Card.get(number));
             }
 
         }
@@ -75,11 +80,11 @@ public class gameBoardActivity extends AppCompatActivity {
             {
                 if(lastNumber != number)
                 {
-                    number = r.nextInt(0 - player_2.size());
+                    number = r.nextInt(0 - player2Card.size());
                 }
                 lastNumber = number;
 
-                current_player_hand.add(player_2.get(number));
+                current_player_hand.add(player2Card.get(number));
             }
         }
 
@@ -109,7 +114,7 @@ public class gameBoardActivity extends AppCompatActivity {
                         List list = new ArrayList<String>();
                         list = (List) document.getData().get("cards");
 
-                        getDetailsCard(list, player_1);
+                        getDetailsCard(list, player1Card, player1CardEntity);
 
                     } else {
                         Log.d(TAG, "No such document");
@@ -134,7 +139,7 @@ public class gameBoardActivity extends AppCompatActivity {
                         List list = new ArrayList<String>();
                         list = (List) document.getData().get("cards");
 
-                        getDetailsCard(list, player_2);
+                        getDetailsCard(list, player2Card, player2CardEntity);
 
                     } else {
                         Log.d(TAG, "No such document");
@@ -146,9 +151,9 @@ public class gameBoardActivity extends AppCompatActivity {
         });
     }
 
-    public void getDetailsCard(List listDoc, ArrayList<Card> list)
+    public void getDetailsCard(List listDoc, ArrayList<Card> rawCard, ArrayList<CardEntity> entity)
     {
-        for (int i = 0; i < list.size(); i++) {
+        for (int i = 0; i < rawCard.size(); i++) {
             DocumentReference doc = (DocumentReference) listDoc.get(i);
             doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
@@ -160,17 +165,35 @@ public class gameBoardActivity extends AppCompatActivity {
 
                             Card card = new Card(
                                     obj.get("asset_path").toString(),
-                                    Integer.parseInt(obj.get("defend").toString()),
-                                    Integer.parseInt(obj.get("attack").toString()),
                                     obj.get("id").toString(),
                                     Integer.parseInt(obj.get("level").toString()),
                                     obj.get("name").toString(),
-                                    Integer.parseInt(obj.get("type_card").toString())
+                                    Integer.parseInt(obj.get("type_card").toString()),
+                                    obj.get("card_detail").toString()
                             );
 
-                            list.add(card);
+                            rawCard.add(card);
+
+                            if(card.getCardDetail().equals("entity"))
+                            {
+                                CardEntity e = new CardEntity(
+                                        obj.get("asset_path").toString(),
+                                        Integer.parseInt(obj.get("attack").toString()),
+                                        Integer.parseInt(obj.get("defend").toString()),
+                                        obj.get("id").toString(),
+                                        Integer.parseInt(obj.get("level").toString()),
+                                        obj.get("name").toString(),
+                                        Integer.parseInt(obj.get("type_card").toString()),
+                                        obj.get("card_detail").toString()
+                                );
+
+                                entity.add(e);
+                                addCardToPartyEntity(e);
+
+                            }
 
                             addCardToParty(card);
+
 
                         } else {
                             Log.d(TAG, "No such document");
@@ -188,11 +211,37 @@ public class gameBoardActivity extends AppCompatActivity {
         Map<String, Object> party_card = new HashMap<>();
         party_card.put("id", card.getId());
         party_card.put("id_party", party.getId());
+        party_card.put("active", true);
+        party_card.put("card_detail", card.getCardDetail());
+
+        db.collection("Party_Card").document()
+                .set(party_card)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Error writing document", e);
+                    }
+                });
+    }
+
+
+    public void addCardToPartyEntity(CardEntity card)
+    {
+
+        Map<String, Object> party_card = new HashMap<>();
+        party_card.put("id", card.getId());
+        party_card.put("id_party", party.getId());
         party_card.put("attack", card.getAttack());
         party_card.put("defend", card.getDefend());
         party_card.put("active", true);
 
-        db.collection("Party_Card").document()
+        db.collection("Party_Card_Entity").document()
                 .set(party_card)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -291,4 +340,8 @@ public class gameBoardActivity extends AppCompatActivity {
         });
     }
 
+    public boolean isInvokable(Card card, Player player)
+    {
+        return true;
+    }
 }
