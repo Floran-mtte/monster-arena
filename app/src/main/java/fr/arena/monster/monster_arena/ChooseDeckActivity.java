@@ -88,7 +88,7 @@ public class ChooseDeckActivity extends AppCompatActivity implements View.OnClic
         editor.putInt("tuto", 1);
         editor.apply();
         finish();
-        Intent intent = new Intent(this, gameBoardActivity.class);
+        Intent intent = new Intent(this, tutoGameActivity.class);
         startActivity(intent);
     }
 
@@ -116,7 +116,6 @@ public class ChooseDeckActivity extends AppCompatActivity implements View.OnClic
                             Log.d("done", "DocumentSnapshot data: " + document.getData().get("cards"));
                             List list = new ArrayList<String>();
                             list = (List) document.getData().get("cards");
-                            //Object cards = document.getData().get("cards");
                             Log.d("cards", ": " + list);
                             Log.d("uid", Helper.getInstance().mAuth.getUid());
                             if (list != null && list.size() > 0) {

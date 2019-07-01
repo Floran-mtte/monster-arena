@@ -142,7 +142,7 @@ public class splash_screen extends AppCompatActivity {
     }
 
     public void goToFight() {
-        Intent intent = new Intent(this, gameBoardActivity.class);
+        Intent intent = new Intent(this, tutoGameActivity.class);
         startActivity(intent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         finish();
