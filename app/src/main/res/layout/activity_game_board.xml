@@ -72,6 +72,18 @@
         app:layout_constraintVertical_bias="0.704"
         app:srcCompat="@drawable/card_section" />
 
+    <TextView
+        android:id="@+id/left_card_opponent_attack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="90dp"
+        android:layout_marginTop="5dp"
+        android:text="TextView"
+        android:textColor="@color/white"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/left_card_opponent" />
+
     <ImageView
         android:id="@+id/discard_user"
         android:layout_width="70dp"
@@ -120,50 +132,62 @@
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/card_section" />
 
+    <TextView
+        android:id="@+id/left_card_user_attack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="90dp"
+        android:layout_marginTop="5dp"
+        android:text="TextView"
+        android:textColor="@color/white"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/left_card_user" />
+
     <ImageView
         android:id="@+id/hand_opponent_1"
         android:layout_width="70dp"
         android:layout_height="95dp"
-        android:layout_marginStart="18dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginEnd="30dp"
+        app:layout_constraintEnd_toEndOf="@+id/hand_opponent_2"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/card_section" />
+        app:srcCompat="@drawable/verso" />
 
     <ImageView
         android:id="@+id/hand_opponent_2"
         android:layout_width="70dp"
         android:layout_height="95dp"
-        android:layout_marginStart="60dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginEnd="30dp"
+        app:layout_constraintEnd_toEndOf="@+id/hand_opponent_3"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/card_section" />
+        app:srcCompat="@drawable/verso" />
 
     <ImageView
         android:id="@+id/hand_opponent_3"
         android:layout_width="70dp"
         android:layout_height="95dp"
-        android:layout_marginStart="102dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginEnd="30dp"
+        app:layout_constraintEnd_toEndOf="@+id/hand_opponent_4"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/card_section" />
+        app:srcCompat="@drawable/verso" />
 
     <ImageView
         android:id="@+id/hand_opponent_4"
         android:layout_width="70dp"
         android:layout_height="95dp"
-        android:layout_marginStart="144dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginEnd="30dp"
+        app:layout_constraintEnd_toEndOf="@+id/hand_opponent_5"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/card_section" />
+        app:srcCompat="@drawable/verso" />
 
     <ImageView
         android:id="@+id/hand_opponent_5"
         android:layout_width="70dp"
         android:layout_height="95dp"
-        android:layout_marginStart="186dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toStartOf="@+id/match_settings"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/card_section" />
+        app:srcCompat="@drawable/verso" />
 
     <ImageView
         android:id="@+id/right_card_user"
@@ -179,6 +203,20 @@
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/card_section" />
 
+    <TextView
+        android:id="@+id/right_card_user_attack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="8dp"
+        android:text="TextView"
+        android:textColor="@color/white"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/left_card_user_attack"
+        app:layout_constraintTop_toBottomOf="@+id/right_card_user" />
+
     <ImageView
         android:id="@+id/right_card_opponent"
         android:layout_width="70dp"
@@ -193,28 +231,70 @@
         app:layout_constraintVertical_bias="0.704"
         app:srcCompat="@drawable/card_section" />
 
+    <TextView
+        android:id="@+id/right_card_opponent_attack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="8dp"
+        android:text="TextView"
+        android:textColor="@color/white"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/left_card_opponent_attack"
+        app:layout_constraintTop_toBottomOf="@+id/right_card_opponent" />
+
     <ImageView
         android:id="@+id/up_card_user"
-        android:layout_width="93dp"
-        android:layout_height="75dp"
+        android:layout_width="70dp"
+        android:layout_height="95dp"
+        android:rotation="90"
         android:layout_marginStart="8dp"
         android:layout_marginTop="64dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/timer_layout"
-        app:srcCompat="@drawable/card_section_h" />
+        app:srcCompat="@drawable/card_section" />
+
+    <TextView
+        android:id="@+id/up_card_user_defense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="TextView"
+        android:textColor="@color/white"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/up_card_user" />
 
     <ImageView
         android:id="@+id/up_card_opponent"
-        android:layout_width="93dp"
-        android:layout_height="75dp"
+        android:layout_width="70dp"
+        android:layout_height="95dp"
+        android:rotation="90"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toTopOf="@+id/timer_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/card_section_h" />
+        app:srcCompat="@drawable/card_section" />
+
+    <TextView
+        android:id="@+id/up_card_opponent_defense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="TextView"
+        android:textColor="@color/white"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/up_card_opponent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/end_tour_button"
@@ -264,8 +344,8 @@
 
     <ImageView
         android:id="@+id/imageView3"
-        android:layout_width="106dp"
-        android:layout_height="95dp"
+        android:layout_width="79dp"
+        android:layout_height="98dp"
         android:layout_marginStart="-10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -273,8 +353,8 @@
 
     <ImageView
         android:id="@+id/imageView5"
-        android:layout_width="127dp"
-        android:layout_height="94dp"
+        android:layout_width="103dp"
+        android:layout_height="86dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/avatar" />
@@ -294,70 +374,131 @@
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/new_band" />
 
+    <TextView
+        android:id="@+id/opponent_life"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="75dp"
+        android:rotation="-20"
+        android:text="LP: 2500"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/darkBlue"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/user_life"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="75dp"
+        android:rotation="-15"
+        android:text="LP: 2500"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/darkBlue"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <ImageView
         android:id="@+id/hand_user_1"
+        android:tag="hand_user_1"
         android:layout_width="70dp"
         android:layout_height="95dp"
-        android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/hand_user_2"
         app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/left_card_user"
         app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/card_section" />
+        app:srcCompat="@drawable/zeus" />
 
     <ImageView
         android:id="@+id/hand_user_2"
+        android:tag="hand_user_2"
         android:layout_width="70dp"
         android:layout_height="95dp"
-        android:layout_marginStart="60dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/hand_user_3"
         app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/left_card_user"
         app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/card_section" />
-
-    <ImageView
-        android:id="@+id/hand_user_5"
-        android:layout_width="70dp"
-        android:layout_height="95dp"
-        android:layout_marginStart="186dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/left_card_user"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/card_section" />
-
-    <ImageView
-        android:id="@+id/hand_user_4"
-        android:layout_width="70dp"
-        android:layout_height="95dp"
-        android:layout_marginStart="144dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/left_card_user"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/card_section" />
+        app:srcCompat="@drawable/cerbere" />
 
     <ImageView
         android:id="@+id/hand_user_3"
+        android:tag="hand_user_3"
         android:layout_width="70dp"
         android:layout_height="95dp"
-        android:layout_marginStart="102dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/hand_user_4"
         app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/left_card_user"
         app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/card_section" />
+        app:srcCompat="@drawable/cupidon" />
+
+    <ImageView
+        android:id="@+id/hand_user_4"
+        android:tag="hand_user_4"
+        android:layout_width="70dp"
+        android:layout_height="95dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/hand_user_5"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintTop_toBottomOf="@+id/left_card_user"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/cupidon" />
+
+    <ImageView
+        android:id="@+id/hand_user_5"
+        android:tag="hand_user_5"
+        android:layout_width="70dp"
+        android:layout_height="95dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageView5"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintTop_toBottomOf="@+id/left_card_user"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/ares" />
+
+    <FrameLayout
+        android:id="@+id/filter"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/filterDarkBlue"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="invisible">
+
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/cardDetail"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="invisible" />
 
 
 </android.support.constraint.ConstraintLayout>

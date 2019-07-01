@@ -5,6 +5,7 @@
     <color name="colorAccent">#943123</color>
     <color name="argent">#9a999b</color>
     <color name="darkBlue">#151719</color>
+    <color name="filterDarkBlue">#80151719</color>
     <color name="gold">#d3b074</color>
     <color name="colorBackgroundPromotions">#80000000</color>
     <color name="loaderCircle">#fc2000</color>
