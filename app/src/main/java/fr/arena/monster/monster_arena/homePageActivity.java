@@ -232,6 +232,10 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
                         party.put("number_round", 0);
                         party.put("created_at", ts);
                         party.put("updated_at", ts);
+                        party.put("player_1",id_opponent);
+                        party.put("player_2", user.getUid());
+                        party.put("life_point_player_1", 2500);
+                        party.put("life_point_player_2", 2500);
 
                         Helper.getInstance().db.collection("Party").document(documentId)
                                 .set(party, SetOptions.merge())
@@ -239,7 +243,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         Log.d("Added doc", "added");
-                                        goToParty();
+                                        goToParty(documentId);
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
@@ -297,7 +301,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
                                                     Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                                                    goToParty();
+                                                    goToParty(idParty);
                                                     //go to gameBoardActivity
                                                 }
                                             })
@@ -328,11 +332,12 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
         Log.d("testing app",documentId);
     }
 
-    public void goToParty()
+    public void goToParty(String documentId)
     {
         finish();
         isWindowFocused = true;
         Intent intent = new Intent(this, gameBoardActivity.class);
+        intent.putExtra("partyId", documentId);
         startActivity(intent);
     }
 
