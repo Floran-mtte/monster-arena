@@ -193,31 +193,26 @@ public class tutoGameActivity extends AppCompatActivity implements View.OnClickL
 
     public void setCardBg(int i) {
         Drawable card = null;
-        Log.d(TAG, "setCardBg: " + i);
         switch (i) {
             case 0:
                 card = getDrawable(getResources().getIdentifier(current_player_hand.get(i).assetPath, "drawable", getPackageName()));
-                Log.d(TAG, "setCardBg case 0: "+ card);
-                /*hand_user_1.setImageDrawable(card);
-                hand_user_1.setVisibility(View.VISIBLE);*/
+                hand_user_1.setImageDrawable(card);
+                hand_user_1.setVisibility(View.VISIBLE);
                 break;
             case 1:
-                card = getDrawable(getResources().getIdentifier(current_player_hand.get(i).assetPath, "drawwable", getPackageName()));
-                Log.d(TAG, "setCardBg case 1: "+ card);
-                /*hand_user_2.setImageDrawable(card);
-                hand_user_2.setVisibility(View.VISIBLE);*/
+                card = getDrawable(getResources().getIdentifier(current_player_hand.get(i).assetPath, "drawable", getPackageName()));
+                hand_user_2.setImageDrawable(card);
+                hand_user_2.setVisibility(View.VISIBLE);
                 break;
             case 2:
-                card = getDrawable(getResources().getIdentifier(current_player_hand.get(i).assetPath, "drawwable", getPackageName()));
-                Log.d(TAG, "setCardBg case 2: "+ card);
-                /*hand_user_3.setImageDrawable(card);
-                hand_user_3.setVisibility(View.VISIBLE);*/
+                card = getDrawable(getResources().getIdentifier(current_player_hand.get(i).assetPath, "drawable", getPackageName()));
+                hand_user_3.setImageDrawable(card);
+                hand_user_3.setVisibility(View.VISIBLE);
                 break;
             case 3:
-                card = getDrawable(getResources().getIdentifier(current_player_hand.get(i).assetPath, "drawwable", getPackageName()));
-                Log.d(TAG, "setCardBg case 3: "+ card);
-                /*hand_user_4.setImageDrawable(card);
-                hand_user_4.setVisibility(View.VISIBLE);*/
+                card = getDrawable(getResources().getIdentifier(current_player_hand.get(i).assetPath, "drawable", getPackageName()));
+                hand_user_4.setImageDrawable(card);
+                hand_user_4.setVisibility(View.VISIBLE);
                 break;
         }
     }
