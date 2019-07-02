@@ -6,6 +6,7 @@ import android.content.ClipDescription;
 import android.content.pm.ActivityInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.DragEvent;
@@ -14,12 +15,30 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
 public class tutoGameActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener, View.OnDragListener {
 
     ImageView hand_user_1, hand_user_2, hand_user_3, hand_user_4, hand_user_5, cardDetail, user_attack_left, user_attack_right, user_defense, dropZone = null;
     TextView user_left, user_top, user_right, opponent_left, opponent_top, opponent_right;
     FrameLayout filter;
     String label = null;
+
+    Player  player;
+    ArrayList<Card> playerCard = new ArrayList<>();
+    ArrayList<CardEntity>   playerCardEntity = new ArrayList<>();
+    ArrayList<Card> current_player_hand = new ArrayList<>();
+
+    String TAG = "tutoGameActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +50,9 @@ public class tutoGameActivity extends AppCompatActivity implements View.OnClickL
         Helper.playTheme(this, "fight");
 
         setContentView(R.layout.activity_game_board);
+
+        player = new Player(Helper.getInstance().mAuth.getUid(), 2000, 2);
+        getPlayerCard(player.getId());
 
         hand_user_1 = (ImageView) findViewById(R.id.hand_user_1);
         hand_user_2 = (ImageView) findViewById(R.id.hand_user_2);
@@ -72,6 +94,136 @@ public class tutoGameActivity extends AppCompatActivity implements View.OnClickL
         user_attack_left.setOnDragListener(this);
         user_attack_right.setOnDragListener(this);
         user_defense.setOnDragListener(this);
+    }
+
+    public void getPlayerCard(String userId)
+    {
+        DocumentReference docRef = Helper.getInstance().db.collection("User_Deck").document(userId);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+
+                        List list = new ArrayList<String>();
+                        list = (List) document.getData().get("cards");
+
+                        getDetailsCard(list, playerCard, playerCardEntity);
+
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+
+    public void getDetailsCard(List listDoc, ArrayList<Card> rawCard, ArrayList<CardEntity> entity)
+    {
+        for (int i = 0; i < listDoc.size(); i++) {
+            DocumentReference doc = (DocumentReference) listDoc.get(i);
+            doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Map<String, Object> obj = document.getData();
+
+                            Card card = new Card(
+                                    obj.get("asset_path").toString(),
+                                    obj.get("id").toString(),
+                                    Integer.parseInt(obj.get("level").toString()),
+                                    obj.get("name").toString(),
+                                    Integer.parseInt(obj.get("type_card").toString()),
+                                    obj.get("card_detail").toString()
+                            );
+
+                            rawCard.add(card);
+
+                            if(card.getCardDetail().equals("entity"))
+                            {
+                                CardEntity e = new CardEntity(
+                                        obj.get("asset_path").toString(),
+                                        Integer.parseInt(obj.get("attack").toString()),
+                                        Integer.parseInt(obj.get("defend").toString()),
+                                        obj.get("id").toString(),
+                                        Integer.parseInt(obj.get("level").toString()),
+                                        obj.get("name").toString(),
+                                        Integer.parseInt(obj.get("type_card").toString()),
+                                        obj.get("card_detail").toString()
+                                );
+
+                                entity.add(e);
+
+                            }
+                            Log.d(TAG, "onComplete: "+rawCard);
+                            if (rawCard.size() == listDoc.size()) {
+                                getHand();
+                            }
+
+
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
+                }
+            });
+        }
+    }
+
+    public void getHand() {
+        Log.d(TAG, "getHand 1: " + playerCard);
+        Collections.shuffle(playerCard);
+        Log.d(TAG, "getHand 2: " + playerCard);
+        for(int i = 0;i < 4;i++)
+        {
+
+            current_player_hand.add(playerCard.get(0));
+            playerCard.remove(0);
+            Log.d(TAG, "getHand: "+current_player_hand.get(i).assetPath);
+            //setCardBg(i);
+            if (current_player_hand.get(i).assetPath.equals("ratatoskr")) {
+                Drawable card = getDrawable(getResources().getIdentifier(current_player_hand.get(i).assetPath, "drawable", getPackageName()));
+                Log.d(TAG, "getHand card: " + card);
+            }
+        }
+    }
+
+    public void setCardBg(int i) {
+        Drawable card = null;
+        Log.d(TAG, "setCardBg: " + i);
+        switch (i) {
+            case 0:
+                card = getDrawable(getResources().getIdentifier(current_player_hand.get(i).assetPath, "drawable", getPackageName()));
+                Log.d(TAG, "setCardBg case 0: "+ card);
+                /*hand_user_1.setImageDrawable(card);
+                hand_user_1.setVisibility(View.VISIBLE);*/
+                break;
+            case 1:
+                card = getDrawable(getResources().getIdentifier(current_player_hand.get(i).assetPath, "drawwable", getPackageName()));
+                Log.d(TAG, "setCardBg case 1: "+ card);
+                /*hand_user_2.setImageDrawable(card);
+                hand_user_2.setVisibility(View.VISIBLE);*/
+                break;
+            case 2:
+                card = getDrawable(getResources().getIdentifier(current_player_hand.get(i).assetPath, "drawwable", getPackageName()));
+                Log.d(TAG, "setCardBg case 2: "+ card);
+                /*hand_user_3.setImageDrawable(card);
+                hand_user_3.setVisibility(View.VISIBLE);*/
+                break;
+            case 3:
+                card = getDrawable(getResources().getIdentifier(current_player_hand.get(i).assetPath, "drawwable", getPackageName()));
+                Log.d(TAG, "setCardBg case 3: "+ card);
+                /*hand_user_4.setImageDrawable(card);
+                hand_user_4.setVisibility(View.VISIBLE);*/
+                break;
+        }
     }
 
     @Override

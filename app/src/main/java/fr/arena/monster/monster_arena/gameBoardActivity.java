@@ -10,7 +10,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -51,11 +50,6 @@ public class gameBoardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game_board);
         String partyId = getIntent().getStringExtra("partyId");
         getParty(partyId);
-        initParty(party.getId());
-
-        Helper helper = Helper.getInstance();
-        FirebaseUser user = helper.mAuth.getCurrentUser();
-        currentPlayer = currentPlayer(user.getUid());
 
         Random r = new Random();
         int lastNumber = 999;
@@ -272,6 +266,7 @@ public class gameBoardActivity extends AppCompatActivity {
                         player1 = new Player(party.get("player_1").toString(), 2000, 2);
                         player2 = new Player(party.get("player_2").toString(), 2000,2);
 
+                        currentPlayer = currentPlayer(Helper.getInstance().mAuth.getCurrentUser().getUid());
                         getPlayer1Card(player1.getId());
                         getPlayer2Card(player2.getId());
 
@@ -325,6 +320,8 @@ public class gameBoardActivity extends AppCompatActivity {
                                 data.get("player_2").toString(),
                                 Integer.parseInt(data.get("time_game").toString())
                                 );
+
+                        initParty(party.getId());
                     } else {
                         Log.d(TAG, "No such document");
                     }

@@ -404,11 +404,12 @@
 
     <ImageView
         android:id="@+id/hand_user_1"
-        android:tag="hand_user_1"
         android:layout_width="70dp"
         android:layout_height="95dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="50dp"
+        android:tag="hand_user_1"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/hand_user_2"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -418,11 +419,12 @@
 
     <ImageView
         android:id="@+id/hand_user_2"
-        android:tag="hand_user_2"
         android:layout_width="70dp"
         android:layout_height="95dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="50dp"
+        android:tag="hand_user_2"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/hand_user_3"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -432,11 +434,12 @@
 
     <ImageView
         android:id="@+id/hand_user_3"
-        android:tag="hand_user_3"
         android:layout_width="70dp"
         android:layout_height="95dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="50dp"
+        android:tag="hand_user_3"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/hand_user_4"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -446,11 +449,12 @@
 
     <ImageView
         android:id="@+id/hand_user_4"
-        android:tag="hand_user_4"
         android:layout_width="70dp"
         android:layout_height="95dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="50dp"
+        android:tag="hand_user_4"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/hand_user_5"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -460,11 +464,12 @@
 
     <ImageView
         android:id="@+id/hand_user_5"
-        android:tag="hand_user_5"
         android:layout_width="70dp"
         android:layout_height="95dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="20dp"
+        android:tag="hand_user_5"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageView5"
         app:layout_constraintHorizontal_chainStyle="spread"
