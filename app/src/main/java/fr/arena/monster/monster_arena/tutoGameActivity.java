@@ -187,11 +187,7 @@ public class tutoGameActivity extends AppCompatActivity implements View.OnClickL
             current_player_hand.add(playerCard.get(0));
             playerCard.remove(0);
             Log.d(TAG, "getHand: "+current_player_hand.get(i).assetPath);
-            //setCardBg(i);
-            if (current_player_hand.get(i).assetPath.equals("ratatoskr")) {
-                Drawable card = getDrawable(getResources().getIdentifier(current_player_hand.get(i).assetPath, "drawable", getPackageName()));
-                Log.d(TAG, "getHand card: " + card);
-            }
+            setCardBg(i);
         }
     }
 
