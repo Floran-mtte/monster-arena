@@ -1,6 +1,6 @@
 package fr.arena.monster.monster_arena;
 
-public class Card {
+public abstract class Card {
 
     protected String assetPath;
     protected String id;
