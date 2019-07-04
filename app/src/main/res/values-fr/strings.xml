@@ -22,4 +22,5 @@
     <string name="SEARCH_OPPONENT_LABEL" translatable="true">Recherche d\'un adversaire en cours</string>
     <string name="choose_deck_title">Choisis ton premier deck</string>
     <string name="validate_choice">valider</string>
+    <string name="life_prefix">"PV : "</string>
 </resources>

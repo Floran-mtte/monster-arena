@@ -232,8 +232,8 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
                         party.put("number_round", 0);
                         party.put("created_at", ts);
                         party.put("updated_at", ts);
-                        party.put("player_1",id_opponent);
-                        party.put("player_2", user.getUid());
+                        party.put("player_1", user.getUid());
+                        party.put("player_2", id_opponent);
                         party.put("life_point_player_1", 2500);
                         party.put("life_point_player_2", 2500);
 
@@ -243,7 +243,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
                                     @Override
                                     public void onSuccess(Void aVoid) {
                                         Log.d("Added doc", "added");
-                                        goToParty(documentId);
+                                        goToParty(documentId, user.getUid(), id_opponent);
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
@@ -301,8 +301,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
                                                     Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                                                    goToParty(idParty);
-                                                    //go to gameBoardActivity
+                                                    goToParty(idParty, snapshot.getData().get("player_1").toString(), user.getUid());
                                                 }
                                             })
                                             .addOnFailureListener(new OnFailureListener() {
@@ -332,12 +331,15 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
         Log.d("testing app",documentId);
     }
 
-    public void goToParty(String documentId)
+    public void goToParty(String documentId, String player1, String player2)
     {
         finish();
         isWindowFocused = true;
         Intent intent = new Intent(this, gameBoardActivity.class);
         intent.putExtra("partyId", documentId);
+        intent.putExtra("player_1", player1);
+        intent.putExtra("player_2", player2);
+        Log.d("gameBoardActivity", "goToParty: ");
         startActivity(intent);
     }
 

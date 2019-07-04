@@ -61,6 +61,11 @@ public class Helper {
         //Helper.getInstance().mp.start();
     }
 
+    public static void playVoice(Context context,  String entity) {
+        MediaPlayer mp = MediaPlayer.create(context, context.getResources().getIdentifier("raw/"+entity, null, context.getPackageName()));
+        mp.start();
+    }
+
     public static void replayTheme() {
         Helper.getInstance().mp.start();
     }

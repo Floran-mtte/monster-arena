@@ -149,6 +149,7 @@
         android:layout_width="70dp"
         android:layout_height="95dp"
         android:layout_marginEnd="30dp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@+id/hand_opponent_2"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/verso" />
@@ -158,6 +159,7 @@
         android:layout_width="70dp"
         android:layout_height="95dp"
         android:layout_marginEnd="30dp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@+id/hand_opponent_3"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/verso" />
@@ -176,6 +178,7 @@
         android:layout_width="70dp"
         android:layout_height="95dp"
         android:layout_marginEnd="30dp"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="@+id/hand_opponent_5"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/verso" />
@@ -185,6 +188,7 @@
         android:layout_width="70dp"
         android:layout_height="95dp"
         android:layout_marginEnd="20dp"
+        android:visibility="visible"
         app:layout_constraintEnd_toStartOf="@+id/match_settings"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/verso" />
@@ -379,9 +383,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="75dp"
+        android:layout_marginTop="70dp"
         android:rotation="-20"
-        android:text="LP: 2500"
+        android:text="@string/life_prefix"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@color/darkBlue"
         android:textStyle="bold"
@@ -393,9 +397,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="75dp"
+        android:layout_marginBottom="70dp"
         android:rotation="-15"
-        android:text="LP: 2500"
+        android:text="@string/life_prefix"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@color/darkBlue"
         android:textStyle="bold"
@@ -409,6 +413,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="50dp"
         android:tag="hand_user_1"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/hand_user_2"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -422,6 +427,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="50dp"
         android:tag="hand_user_2"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/hand_user_3"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -435,6 +441,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="50dp"
         android:tag="hand_user_3"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/hand_user_4"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -448,6 +455,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="50dp"
         android:tag="hand_user_4"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/hand_user_5"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -461,11 +469,56 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="20dp"
         android:tag="hand_user_5"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageView5"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintTop_toBottomOf="@+id/left_card_user"
         app:layout_constraintVertical_bias="1.0" />
+
+    <ImageView
+        android:id="@+id/user_mana_bg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/mana_icone" />
+
+    <TextView
+        android:id="@+id/user_mana"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="2/2"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/user_mana_bg"
+        app:layout_constraintEnd_toEndOf="@+id/user_mana_bg"
+        app:layout_constraintStart_toStartOf="@+id/user_mana_bg"
+        app:layout_constraintTop_toTopOf="@+id/user_mana_bg" />
+
+    <ImageView
+        android:id="@+id/opponent_mana_bg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/mana_icone" />
+
+    <TextView
+        android:id="@+id/opponent_mana"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="2/2"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/opponent_mana_bg"
+        app:layout_constraintEnd_toEndOf="@+id/opponent_mana_bg"
+        app:layout_constraintStart_toStartOf="@+id/opponent_mana_bg"
+        app:layout_constraintTop_toTopOf="@+id/opponent_mana_bg" />
 
     <FrameLayout
         android:id="@+id/filter"
@@ -478,7 +531,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="invisible">
-
     </FrameLayout>
 
     <ImageView

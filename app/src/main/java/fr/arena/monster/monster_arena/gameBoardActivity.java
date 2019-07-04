@@ -1,14 +1,12 @@
 package fr.arena.monster.monster_arena;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.pm.ActivityInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.DragEvent;
@@ -16,25 +14,20 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.EventListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.Executor;
 
 public class gameBoardActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener, View.OnDragListener, OnTaskCompleted {
 
@@ -52,7 +45,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
     int currentPlayer;
 
     ImageView hand_user_1, hand_user_2, hand_user_3, hand_user_4, hand_user_5, cardDetail, user_attack_left, user_attack_right, user_defense, dropZone = null;
-    TextView user_left, user_top, user_right, opponent_left, opponent_top, opponent_right;
+    TextView user_left, user_top, user_right, opponent_left, opponent_top, opponent_right, user_mana, opponent_mana, user_life, opponent_life;
     FrameLayout filter;
     String label = null;
     OnTaskCompleted listener;
@@ -69,6 +62,12 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
         Helper.playTheme(this, "fight");
 
         setContentView(R.layout.activity_game_board);
+
+        user_life = (TextView) findViewById(R.id.user_life);
+        opponent_life = (TextView) findViewById(R.id.opponent_life);
+
+        user_mana = (TextView) findViewById(R.id.user_mana);
+        opponent_mana = (TextView) findViewById(R.id.opponent_mana);
 
         hand_user_1 = (ImageView) findViewById(R.id.hand_user_1);
         hand_user_2 = (ImageView) findViewById(R.id.hand_user_2);
@@ -112,7 +111,9 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
         user_defense.setOnDragListener(this);
 
         String partyId = getIntent().getStringExtra("partyId");
-        getParty(partyId);
+        String player_1 = getIntent().getStringExtra("player_1");
+        String player_2 = getIntent().getStringExtra("player_2");
+        initParty(partyId, player_1, player_2);
 
     }
 
@@ -122,19 +123,136 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
         super.onStart();
     }
 
-    public void initParty(String partyId)
-    {
-        getUsersId(partyId);
+    @SuppressLint("DefaultLocale")
+    public void initParty(String partyId, String player_1, String player_2) {
+        //getUsersId(partyId);
+        party = new Party("", "", partyId, 1, player_1, player_2, 0);
+        player1 = new Player(player_1, "john", 2500, 3);
+        player2 = new Player(player_2, "daenerys", 2500, 2);
+
+        currentPlayer = currentPlayer();
+        switch (currentPlayer) {
+            case 1:
+                user_life.setText(String.format("%s%d", user_life.getText().toString(), player1.getLifepoint()));
+                user_mana.setText(String.format("%d/%d", player1.getMana(), player1.getMana()-1));
+
+                opponent_life.setText(String.format("%s%d", opponent_life.getText().toString(), player2.getLifepoint()));
+                opponent_mana.setText(String.format("%d/%d", player2.getMana(), player2.getMana()));
+
+                //todo : show of user wich player is
+                Toast toast = Toast.makeText(getApplicationContext(), "Player 1", Toast.LENGTH_SHORT);
+                toast.show();
+
+                getPlayer1Card(player_1);
+                listener = new OnTaskCompleted() {
+                    @Override
+                    public void onTaskCompleted(Boolean isFull) {
+                        Log.d(TAG, String.valueOf(currentPlayer));
+                        if(isFull)
+                        {
+                            ImageView[] hands = new ImageView[5];
+                            ArrayList<Card> player1Hand = new ArrayList<>();
+
+                            hands[0] = hand_user_1;
+                            hands[1] = hand_user_2;
+                            hands[2] = hand_user_3;
+                            hands[3] = hand_user_4;
+                            hands[4] = hand_user_5;
+
+                            Collections.shuffle(player1Card);
+
+                            for (int i=0; i < 3; i++) {
+                                Card parent = player1Card.get(i);
+                                player1Hand.add(parent);
+                                if (parent instanceof CardEntity) {
+                                    CardEntity card = (CardEntity) parent;
+                                    Drawable path = getDrawable(getResources()
+                                            .getIdentifier(card.getAssetPath(), "drawable", getPackageName()));
+                                    hands[i].setImageDrawable(path);
+                                    hands[i].setTag(R.id.atk, card.getAttack());
+                                    hands[i].setTag(R.id.def, card.getDefend());
+                                    hands[i].setTag(R.id.cost, card.getLevel());
+                                    hands[i].setTag(R.id.name, card.getAssetPath());
+                                    hands[i].setVisibility(View.VISIBLE);
+                                }
+                            }
+                            //todo add player hand to fb
+                        }
+                    }
+                };
+                break;
+            case 2:
+                user_life.setText(String.format("%s%d", user_life.getText().toString(), player2.getLifepoint()));
+                user_mana.setText(String.format("%d/%d", player2.getMana(), player2.getMana()));
+
+                opponent_life.setText(String.format("%s%d", opponent_life.getText().toString(), player1.getLifepoint()));
+                opponent_mana.setText(String.format("%d/%d", player1.getMana(), player1.getMana()-1));
+
+                //todo : show of user wich player is
+                Toast toast2 = Toast.makeText(getApplicationContext(), "Player 2", Toast.LENGTH_SHORT);
+                toast2.show();
+
+                getPlayer2Card(player_2);
+                listener = new OnTaskCompleted() {
+                    @Override
+                    public void onTaskCompleted(Boolean isFull) {
+                        Log.d(TAG, String.valueOf(currentPlayer));
+                        if(isFull)
+                        {
+                            ImageView[] hands = new ImageView[5];
+                            ArrayList<Card> player2Hand = new ArrayList<>();
+
+                            hands[0] = hand_user_1;
+                            hands[1] = hand_user_2;
+                            hands[2] = hand_user_3;
+                            hands[3] = hand_user_4;
+                            hands[4] = hand_user_5;
+
+                            Collections.shuffle(player2Card);
+
+                            for (int i=0; i < 3; i++) {
+                                Card parent = player2Card.get(i);
+                                player2Hand.add(parent);
+                                if (parent instanceof CardEntity) {
+                                    CardEntity card = (CardEntity) parent;
+                                    Drawable path = getDrawable(getResources()
+                                            .getIdentifier(card.getAssetPath(), "drawable", getPackageName()));
+                                    hands[i].setImageDrawable(path);
+                                    hands[i].setTag(R.id.atk, card.getAttack());
+                                    hands[i].setTag(R.id.def, card.getDefend());
+                                    hands[i].setTag(R.id.cost, card.getLevel());
+                                    hands[i].setTag(R.id.name, card.getAssetPath());
+                                    hands[i].setVisibility(View.VISIBLE);
+                                }
+                            }
+                            //todo add player hand to fb
+                        }
+                    }
+                };
+                break;
+            default:
+                break;
+        }
     }
 
-    public void getPLayersCard(String player1, String player2)
-    {
-        getPlayer1Card(player1);
-        getPlayer2Card(player2);
+    public int currentPlayer() {
+        String userId = Helper.getInstance().mAuth.getUid();
+
+        Log.d(TAG, player1.getId());
+        Log.d(TAG, player2.getId());
+
+        if(userId.equals(player1.getId()))
+        {
+            return 1;
+        }
+        else if(userId.equals(player2.getId()))
+        {
+            return 2;
+        }
+        return 0;
     }
 
-    public void getPlayer1Card(String userId)
-    {
+    public void getPlayer1Card(String userId) {
         DocumentReference docRef = helper.db.collection("User_Deck").document(userId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -158,8 +276,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
         });
     }
 
-    public void getPlayer2Card(String userId)
-    {
+    public void getPlayer2Card(String userId) {
         DocumentReference docRef = helper.db.collection("User_Deck").document(userId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -185,8 +302,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
         });
     }
 
-    public void getDetailsCard(List listDoc, ArrayList<Card> playerCard)
-    {
+    public void getDetailsCard(List listDoc, ArrayList<Card> playerCard) {
         for (int i = 0; i < listDoc.size(); i++) {
             Log.d(TAG, "Test");
             DocumentReference doc = (DocumentReference) listDoc.get(i);
@@ -213,11 +329,13 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
 
                                 playerCard.add(card);
 
+                                addCardToParty(card);
+
                                 if(listDoc.size() == playerCard.size())
                                 {
                                     listener.onTaskCompleted(true);
                                 }
-                                addCardToParty(card);
+
                             }
 
 
@@ -236,8 +354,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    public void addCardToParty(Card card)
-    {
+    public void addCardToParty(Card card) {
         Map<String, Object> party_card = new HashMap<>();
         party_card.put("id", card.getId());
         party_card.put("id_party", party.getId());
@@ -263,166 +380,6 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                         Log.d(TAG, "Error writing document", e);
                     }
                 });
-    }
-
-    public void getUsersId(String partyId)
-    {
-        DocumentReference docRef = helper.db.collection("Party").document(partyId);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-
-                        Map<String, Object> party = document.getData();
-
-                        player1 = new Player(party.get("player_1").toString(), 2000, 2);
-                        player2 = new Player(party.get("player_2").toString(), 2000,2);
-
-                        Log.d(TAG, player1.getId());
-                        Log.d(TAG, player2.getId());
-
-                        currentPlayer = currentPlayer(helper.mAuth.getCurrentUser().getUid());
-
-                        getPLayersCard(player1.getId(), player2.getId());
-                        String test = String.valueOf(currentPlayer);
-                        Log.d(TAG, test);
-
-
-                        listener = new OnTaskCompleted() {
-                            @Override
-                            public void onTaskCompleted(Boolean isFull) {
-                                Log.d(TAG, String.valueOf(currentPlayer));
-                                if(isFull)
-                                {
-                                    if(currentPlayer == 1)
-                                    {
-                                        ImageView[] hands = new ImageView[5];
-
-                                        hands[0] = hand_user_1;
-                                        hands[1] = hand_user_2;
-                                        hands[2] = hand_user_3;
-                                        hands[3] = hand_user_4;
-                                        hands[4] = hand_user_5;
-
-                                        Collections.shuffle(player1Card);
-                                    }
-                                }
-                            }
-                        };
-                        //GetCardTask task1 = new GetCardTask(listener);
-                        //task1.execute(player1.getId());
-
-                        /*ImageView[] hands = new ImageView[5];
-
-                        hands[0] = hand_user_1;
-                        hands[1] = hand_user_2;
-                        hands[2] = hand_user_3;
-                        hands[3] = hand_user_4;
-                        hands[4] = hand_user_5;
-
-                        Collections.shuffle(player1Card);
-
-                        if(currentPlayer == 1)
-                        {
-                            for(int i = 0;i < 4;i++)
-                            {
-                                current_player_hand.add(i, player1Card.get(i));
-
-                                String path = "@drawable/"+player1Card.get(i).getAssetPath();
-                                Log.d(TAG,path);
-                            }
-                        }
-                        else if(currentPlayer == 2)
-                        {
-                            for(int i = 0;i < 4;i++)
-                            {
-
-                                current_player_hand.add(i, player1Card.get(i));
-                                String path = "@drawable/"+player1Card.get(i).getAssetPath();
-                                Log.d(TAG,path);
-                            }
-                        }
-
-                        else
-                        {
-                            Log.d(TAG,"passe la pck async");
-                        }*/
-
-                    } else {
-                        Log.d(TAG, "No such document");
-                    }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG,e.toString());
-            }
-        });
-    }
-
-    public int currentPlayer(String userId)
-    {
-        if(userId.equals(player1.getId()))
-        {
-            return 1;
-        }
-        else if(userId.equals(player2.getId()))
-        {
-            return 2;
-        }
-        return 0;
-    }
-
-    public void getParty(String partyId)
-    {
-        DocumentReference docRef = helper.db.collection("Party").document(partyId);
-
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-
-                        Map<String, Object> data = document.getData();
-
-                        party = new Party(
-                                data.get("created_at").toString(),
-                                data.get("updated_at").toString(),
-                                data.get("id").toString(),
-                                Integer.parseInt(data.get("number_round").toString()),
-                                data.get("player_1").toString(),
-                                data.get("player_2").toString(),
-                                Integer.parseInt(data.get("time_game").toString())
-                                );
-                        initParty(party.getId());
-                    } else {
-                        Log.d(TAG, "No such document");
-                    }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG,e.toString());
-            }
-        });
-    }
-
-    public boolean isInvokable(Card card, Player player)
-    {
-        if(card.getLevel() <= player.getMana())
-        {
-            return true;
-        }
-        return false;
     }
 
     @Override
@@ -500,6 +457,81 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
             case DragEvent.ACTION_DROP:
                 dropZone = (ImageView) v;
                 v.invalidate();
+                boolean isInvokable = true;
+                switch (label) {
+                    case "hand_user_1":
+                        isInvokable = isInvokable(Integer.parseInt(hand_user_1.getTag(R.id.cost).toString()));
+                        break;
+                    case "hand_user_2":
+                        isInvokable = isInvokable(Integer.parseInt(hand_user_2.getTag(R.id.cost).toString()));
+                        break;
+                    case "hand_user_3":
+                        isInvokable = isInvokable(Integer.parseInt(hand_user_3.getTag(R.id.cost).toString()));
+                        break;
+                    case "hand_user_4":
+                        isInvokable = isInvokable(Integer.parseInt(hand_user_4.getTag(R.id.cost).toString()));
+                        break;
+                    case "hand_user_5":
+                        isInvokable = isInvokable(Integer.parseInt(hand_user_4.getTag(R.id.cost).toString()));
+                        break;
+                }
+
+                if (!isInvokable)
+                    return false;
+
+                Drawable source;
+                ArrayList<String> stat = new ArrayList<>();
+                String pos = (String) dropZone.getTag();
+                Log.d(TAG, "onDrag: before switch");
+                switch (label) {
+                    case "hand_user_1":
+                        source = hand_user_1.getDrawable();
+                        dropZone.setImageDrawable(source);
+                        stat.add(hand_user_1.getTag(R.id.atk).toString());
+                        stat.add(hand_user_1.getTag(R.id.def).toString());
+                        manaDecrease(Integer.parseInt(hand_user_1.getTag(R.id.cost).toString()));
+                        hand_user_1.setVisibility(View.INVISIBLE);
+                        Helper.playVoice(this, hand_user_1.getTag(R.id.name).toString());
+                        break;
+                    case "hand_user_2":
+                        source = hand_user_2.getDrawable();
+                        dropZone.setImageDrawable(source);
+                        stat.add(hand_user_2.getTag(R.id.atk).toString());
+                        stat.add(hand_user_2.getTag(R.id.def).toString());
+                        manaDecrease(Integer.parseInt(hand_user_2.getTag(R.id.cost).toString()));
+                        hand_user_2.setVisibility(View.INVISIBLE);
+                        Helper.playVoice(this, hand_user_2.getTag(R.id.name).toString());
+                        break;
+                    case "hand_user_3":
+                        source = hand_user_3.getDrawable();
+                        dropZone.setImageDrawable(source);
+                        stat.add(hand_user_3.getTag(R.id.atk).toString());
+                        stat.add(hand_user_3.getTag(R.id.def).toString());
+                        manaDecrease(Integer.parseInt(hand_user_3.getTag(R.id.cost).toString()));
+                        hand_user_3.setVisibility(View.INVISIBLE);
+                        Helper.playVoice(this, hand_user_3.getTag(R.id.name).toString());
+                        break;
+                    case "hand_user_4":
+                        source = hand_user_4.getDrawable();
+                        dropZone.setImageDrawable(source);
+                        stat.add(hand_user_4.getTag(R.id.atk).toString());
+                        stat.add(hand_user_4.getTag(R.id.def).toString());
+                        manaDecrease(Integer.parseInt(hand_user_4.getTag(R.id.cost).toString()));
+                        hand_user_4.setVisibility(View.INVISIBLE);
+                        Helper.playVoice(this, hand_user_4.getTag(R.id.name).toString());
+                        break;
+                    case "hand_user_5":
+                        source = hand_user_5.getDrawable();
+                        dropZone.setImageDrawable(source);
+                        stat.add(hand_user_5.getTag(R.id.atk).toString());
+                        stat.add(hand_user_5.getTag(R.id.def).toString());
+                        manaDecrease(Integer.parseInt(hand_user_5.getTag(R.id.cost).toString()));
+                        hand_user_5.setVisibility(View.INVISIBLE);
+                        Helper.playVoice(this, hand_user_5.getTag(R.id.name).toString());
+                        break;
+                }
+                setStat(stat, pos);
+
                 return true;
 
             case DragEvent.ACTION_DRAG_ENDED:
@@ -507,42 +539,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                     if (label == null)
                         return true;
                     Log.d("dragNDropEvent: ", label);
-                    Drawable source;
-                    String stat;
-                    stat = (String) dropZone.getTag();
-                    switch (label) {
-                        case "hand_user_1":
-                            source = hand_user_1.getDrawable();
-                            dropZone.setImageDrawable(source);
-                            stat = (String) dropZone.getTag();
-                            hand_user_1.setVisibility(View.INVISIBLE);
-                            break;
-                        case "hand_user_2":
-                            source = hand_user_2.getDrawable();
-                            dropZone.setImageDrawable(source);
-                            stat = (String) dropZone.getTag();
-                            hand_user_2.setVisibility(View.INVISIBLE);
-                            break;
-                        case "hand_user_3":
-                            source = hand_user_3.getDrawable();
-                            dropZone.setImageDrawable(source);
-                            stat = (String) dropZone.getTag();
-                            hand_user_3.setVisibility(View.INVISIBLE);
-                            break;
-                        case "hand_user_4":
-                            source = hand_user_4.getDrawable();
-                            dropZone.setImageDrawable(source);
-                            stat = (String) dropZone.getTag();
-                            hand_user_4.setVisibility(View.INVISIBLE);
-                            break;
-                        case "hand_user_5":
-                            source = hand_user_5.getDrawable();
-                            dropZone.setImageDrawable(source);
-                            stat = (String) dropZone.getTag();
-                            hand_user_5.setVisibility(View.INVISIBLE);
-                            break;
-                    }
-                    setStat(stat);
+
 
                 }
                 return true;
@@ -552,19 +549,50 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
+    public boolean isInvokable(int cost) {
+        Player player;
+        if (currentPlayer == 1)
+            player = player1;
+        else
+            player = player2;
+
+        if (cost <= player.getMana())
+        {
+
+            return true;
+        }
+        return false;
+    }
+
+    @SuppressLint("DefaultLocale")
+    public void manaDecrease(int cost) {
+        Player player;
+        if (currentPlayer == 1) {
+            player = player1;
+        } else {
+            player = player2;
+        }
+        Log.d(TAG, "cost: "+cost);
+        Log.d(TAG, "player mana: "+player.getMana());
+        Log.d(TAG, "player mana - cost: "+ (player.getMana()-cost));
+        user_mana.setText(Integer.toString((player.getMana()-cost))+"/"+Integer.toString(player.getMana()));
+        int mana = player.getMana()-cost;
+        player.setMana(mana);
+    }
+
     @SuppressLint("SetTextI18n")
-    public void setStat(String stat) {
-        switch (stat) {
+    public void setStat(ArrayList<String> stat, String pos) {
+        switch (pos) {
             case "left":
-                user_left.setText("atk: 2800");
+                user_left.setText("atk : " + stat.get(0));
                 user_left.setVisibility(View.VISIBLE);
                 break;
             case "top":
-                user_top.setText("def: 1700");
+                user_top.setText("def : " + stat.get(1));
                 user_top.setVisibility(View.VISIBLE);
                 break;
             case "right":
-                user_right.setText("atk: 2800");
+                user_right.setText("atk : " + stat.get(0));
                 user_right.setVisibility(View.VISIBLE);
                 break;
         }

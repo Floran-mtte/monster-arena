@@ -26,4 +26,5 @@
     <string name="SEARCH_OPPONENT_LABEL" translatable="true">Searching for opponent</string>
     <string name="choose_deck_title">Choose your first deck</string>
     <string name="validate_choice">validate</string>
+    <string name="life_prefix">LP :</string>
 </resources>
