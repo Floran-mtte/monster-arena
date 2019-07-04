@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -133,6 +134,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
         currentPlayer = currentPlayer();
         switch (currentPlayer) {
             case 1:
+                setPlayer1Info();
                 user_life.setText(String.format("%s%d", user_life.getText().toString(), player1.getLifepoint()));
                 user_mana.setText(String.format("%d/%d", player1.getMana(), player1.getMana()-1));
 
@@ -182,6 +184,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                 };
                 break;
             case 2:
+                setPlayer2Info();
                 user_life.setText(String.format("%s%d", user_life.getText().toString(), player2.getLifepoint()));
                 user_mana.setText(String.format("%d/%d", player2.getMana(), player2.getMana()));
 
@@ -250,6 +253,36 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
             return 2;
         }
         return 0;
+    }
+
+    public void setPlayer1Info() {
+        Map<String, Object> partyContainer = new HashMap<>();
+        Map<String, Object> player1Info = new HashMap<>();
+        player1Info.put("lp", 2500);
+        player1Info.put("mana", 3);
+        partyContainer.put("player1Info", player1Info);
+        Helper.getInstance().db.collection("Party").document(party.getId())
+                .set(partyContainer, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>(){
+            @Override
+            public void onSuccess(Void aVoid) {
+
+            }
+        });
+    }
+
+    public void setPlayer2Info() {
+        Map<String, Object> partyContainer = new HashMap<>();
+        Map<String, Object> player2Info = new HashMap<>();
+        player2Info.put("lp", 2500);
+        player2Info.put("mana", 2);
+        partyContainer.put("player2Info", player2Info);
+        Helper.getInstance().db.collection("Party").document(party.getId())
+                .set(partyContainer, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>(){
+            @Override
+            public void onSuccess(Void aVoid) {
+
+            }
+        });
     }
 
     public void getPlayer1Card(String userId) {
