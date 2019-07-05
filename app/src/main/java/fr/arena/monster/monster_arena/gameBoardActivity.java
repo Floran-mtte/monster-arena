@@ -44,6 +44,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
     Helper helper = Helper.getInstance();
     String TAG = "gameBoardActivity";
     int currentPlayer;
+    String playerTurn;
 
     ImageView hand_user_1, hand_user_2, hand_user_3, hand_user_4, hand_user_5, cardDetail, user_attack_left, user_attack_right, user_defense, dropZone = null;
     TextView user_left, user_top, user_right, opponent_left, opponent_top, opponent_right, user_mana, opponent_mana, user_life, opponent_life;
@@ -114,6 +115,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
         String partyId = getIntent().getStringExtra("partyId");
         String player_1 = getIntent().getStringExtra("player_1");
         String player_2 = getIntent().getStringExtra("player_2");
+        playerTurn = getIntent().getStringExtra("current_player");
         initParty(partyId, player_1, player_2);
 
     }
@@ -499,6 +501,11 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public boolean onLongClick(View v) {
+        if (!playerTurn.equals(Helper.getInstance().mAuth.getUid())) {
+            Toast toast = Toast.makeText(getApplicationContext(), "is not your turn", Toast.LENGTH_SHORT);
+            toast.show();
+            return false;
+        }
         View.DragShadowBuilder mShadow = new View.DragShadowBuilder(v);
         ClipData.Item item = new ClipData.Item(v.getTag().toString());
         String[] mimeTypes = {ClipDescription.MIMETYPE_TEXT_PLAIN};

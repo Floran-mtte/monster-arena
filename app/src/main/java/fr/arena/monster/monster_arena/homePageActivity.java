@@ -238,7 +238,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        goToParty(documentId, user.getUid(), id_opponent);
+                                        goToParty(documentId, user.getUid(), id_opponent, user.getUid());
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
@@ -287,7 +287,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void aVoid1) {
-                                                        goToParty(idParty, snapshot.getData().get("player_1").toString(), user.getUid(), registration);
+                                                        goToParty(idParty, snapshot.getData().get("player_1").toString(), user.getUid(), snapshot.getData().get("current_player").toString(), registration);
                                                     }
                                                 })
                                                 .addOnFailureListener(new OnFailureListener() {
@@ -314,7 +314,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
                 });
     }
 
-    public void goToParty(String documentId, String player1, String player2)
+    public void goToParty(String documentId, String player1, String player2, String current_player)
     {
         finish();
         isWindowFocused = true;
@@ -322,10 +322,11 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
         intent.putExtra("partyId", documentId);
         intent.putExtra("player_1", player1);
         intent.putExtra("player_2", player2);
+        intent.putExtra("current_player", current_player);
         startActivity(intent);
     }
 
-    public void goToParty(String documentId, String player1, String player2, ListenerRegistration registration)
+    public void goToParty(String documentId, String player1, String player2, String current_player, ListenerRegistration registration)
     {
         finish();
         registration.remove();
@@ -334,6 +335,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
         intent.putExtra("partyId", documentId);
         intent.putExtra("player_1", player1);
         intent.putExtra("player_2", player2);
+        intent.putExtra("current_player", current_player);
         startActivity(intent);
     }
 }
