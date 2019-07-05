@@ -229,6 +229,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                                     hands[i].setTag(R.id.def, card.getDefend());
                                     hands[i].setTag(R.id.cost, card.getLevel());
                                     hands[i].setTag(R.id.name, card.getAssetPath());
+                                    hands[i].setTag(R.id.index, Integer.toString(i));
                                     hands[i].setVisibility(View.VISIBLE);
                                 }
                             }
@@ -573,6 +574,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                         manaDecrease(Integer.parseInt(hand_user_1.getTag(R.id.cost).toString()));
                         hand_user_1.setVisibility(View.INVISIBLE);
                         Helper.playVoice(this, hand_user_1.getTag(R.id.name).toString());
+                        sendPlayerBoard(dropZone, Integer.parseInt(hand_user_1.getTag(R.id.atk).toString()));
                         break;
                     case "hand_user_2":
                         source = hand_user_2.getDrawable();
@@ -659,6 +661,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
         user_mana.setText(Integer.toString((player.getMana()-cost))+"/"+Integer.toString(player.getMana()));
         int mana = player.getMana()-cost;
         player.setMana(mana);
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -677,6 +680,54 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                 user_right.setVisibility(View.VISIBLE);
                 break;
         }
+    }
+
+    public void sendPlayerBoard(ImageView dropZone, int index) {
+        String pos = null;
+        switch (dropZone.getId()) {
+            case R.id.left_card_user_attack:
+                pos = "left";
+                break;
+            case R.id.right_card_user_attack:
+                pos = "right";
+                break;
+            case R.id.up_card_user_defense:
+                pos = "top";
+                break;
+        }
+
+        Map<String, Object> partyContainer = new HashMap<>();
+        Map<String, Object> cardInfo = new HashMap<>();
+        if (currentPlayer == 1) {
+            Card parent = player1Card.get(index);
+            ArrayList board = new ArrayList();
+            if (parent instanceof CardEntity)
+                cardInfo.put("card",(CardEntity) parent);
+            cardInfo.put("pos", pos);
+            board.add(cardInfo);
+            Map<String, Object> player1Info = new HashMap<>();
+            player1Info.put("board", board);
+            partyContainer.put("player1Info", player1Info);
+        } else {
+            Card parent = player2Card.get(index);
+            ArrayList board = new ArrayList();
+            if (parent instanceof CardEntity)
+                cardInfo.put("card",(CardEntity) parent);
+            cardInfo.put("pos", pos);
+            board.add(cardInfo);
+            Map<String, Object> player2Info = new HashMap<>();
+            player2Info.put("board", board);
+            partyContainer.put("player2Info", player2Info);
+        }
+
+        Helper.getInstance().db.collection("Party").document(party.getId())
+                .set(partyContainer, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>(){
+            @Override
+            public void onSuccess(Void aVoid) {
+
+            }
+        });
+
     }
 
     @Override

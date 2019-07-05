@@ -4,4 +4,5 @@
     <item type="id" name="def"/>
     <item type="id" name="cost"/>
     <item type="id" name="name"/>
+    <item type="id" name="index"/>
 </resources>
