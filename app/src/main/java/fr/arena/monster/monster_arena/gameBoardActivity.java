@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
@@ -51,6 +52,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
     FrameLayout filter;
     String label = null;
     OnTaskCompleted listener;
+    ListenerRegistration registration;
 
     private Task<Void> allTask;
     @Override
@@ -117,7 +119,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
         String player_2 = getIntent().getStringExtra("player_2");
         playerTurn = getIntent().getStringExtra("current_player");
         initParty(partyId, player_1, player_2);
-
+        watchOtherMove();
     }
 
     @Override
@@ -177,6 +179,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                                     hands[i].setTag(R.id.def, card.getDefend());
                                     hands[i].setTag(R.id.cost, card.getLevel());
                                     hands[i].setTag(R.id.name, card.getAssetPath());
+                                    hands[i].setTag(R.id.index, Integer.toString(i));
                                     hands[i].setVisibility(View.VISIBLE);
                                 }
                             }
@@ -574,7 +577,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                         manaDecrease(Integer.parseInt(hand_user_1.getTag(R.id.cost).toString()));
                         hand_user_1.setVisibility(View.INVISIBLE);
                         Helper.playVoice(this, hand_user_1.getTag(R.id.name).toString());
-                        sendPlayerBoard(dropZone, Integer.parseInt(hand_user_1.getTag(R.id.atk).toString()));
+                        sendPlayerBoard(dropZone, Integer.parseInt(hand_user_1.getTag(R.id.index).toString()));
                         break;
                     case "hand_user_2":
                         source = hand_user_2.getDrawable();
@@ -584,6 +587,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                         manaDecrease(Integer.parseInt(hand_user_2.getTag(R.id.cost).toString()));
                         hand_user_2.setVisibility(View.INVISIBLE);
                         Helper.playVoice(this, hand_user_2.getTag(R.id.name).toString());
+                        sendPlayerBoard(dropZone, Integer.parseInt(hand_user_2.getTag(R.id.index).toString()));
                         break;
                     case "hand_user_3":
                         source = hand_user_3.getDrawable();
@@ -593,6 +597,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                         manaDecrease(Integer.parseInt(hand_user_3.getTag(R.id.cost).toString()));
                         hand_user_3.setVisibility(View.INVISIBLE);
                         Helper.playVoice(this, hand_user_3.getTag(R.id.name).toString());
+                        sendPlayerBoard(dropZone, Integer.parseInt(hand_user_3.getTag(R.id.index).toString()));
                         break;
                     case "hand_user_4":
                         source = hand_user_4.getDrawable();
@@ -602,6 +607,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                         manaDecrease(Integer.parseInt(hand_user_4.getTag(R.id.cost).toString()));
                         hand_user_4.setVisibility(View.INVISIBLE);
                         Helper.playVoice(this, hand_user_4.getTag(R.id.name).toString());
+                        sendPlayerBoard(dropZone, Integer.parseInt(hand_user_4.getTag(R.id.index).toString()));
                         break;
                     case "hand_user_5":
                         source = hand_user_5.getDrawable();
@@ -611,6 +617,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                         manaDecrease(Integer.parseInt(hand_user_5.getTag(R.id.cost).toString()));
                         hand_user_5.setVisibility(View.INVISIBLE);
                         Helper.playVoice(this, hand_user_5.getTag(R.id.name).toString());
+                        sendPlayerBoard(dropZone, Integer.parseInt(hand_user_5.getTag(R.id.index).toString()));
                         break;
                 }
                 setStat(stat, pos);
@@ -685,13 +692,13 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
     public void sendPlayerBoard(ImageView dropZone, int index) {
         String pos = null;
         switch (dropZone.getId()) {
-            case R.id.left_card_user_attack:
+            case R.id.left_card_user:
                 pos = "left";
                 break;
-            case R.id.right_card_user_attack:
+            case R.id.right_card_user:
                 pos = "right";
                 break;
-            case R.id.up_card_user_defense:
+            case R.id.up_card_user:
                 pos = "top";
                 break;
         }
@@ -733,5 +740,28 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onTaskCompleted(Boolean isFull) {
 
+    }
+
+    public void watchOtherMove() {
+        DocumentReference query = Helper.getInstance().db.collection("Party").document(party.getId());
+        registration = query.addSnapshotListener(
+                (snapshot, e) -> {
+                    if (e != null)
+                    {
+                        Log.w(TAG, "Listen failed.", e);
+                        return;
+                    }
+
+                    if (snapshot != null && snapshot.exists())
+                    {
+
+                        Log.d(TAG, "watchOtherMove: "+snapshot);
+
+                    }
+                    else
+                    {
+                        Log.d("passe","else");
+                    }
+                });
     }
 }
