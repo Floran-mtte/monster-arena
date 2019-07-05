@@ -231,8 +231,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
                         party.put("updated_at", ts);
                         party.put("player_1", user.getUid());
                         party.put("player_2", id_opponent);
-                        party.put("life_point_player_1", 2500);
-                        party.put("life_point_player_2", 2500);
+                        party.put("current_player", user.getUid());
 
                         Helper.getInstance().db.collection("Party").document(documentId)
                                 .set(party, SetOptions.merge())
