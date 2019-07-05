@@ -288,7 +288,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void aVoid1) {
-                                                        goToParty(idParty, snapshot.getData().get("player_1").toString(), user.getUid());
+                                                        goToParty(idParty, snapshot.getData().get("player_1").toString(), user.getUid(), registration);
                                                     }
                                                 })
                                                 .addOnFailureListener(new OnFailureListener() {
@@ -316,6 +316,17 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public void goToParty(String documentId, String player1, String player2)
+    {
+        finish();
+        isWindowFocused = true;
+        Intent intent = new Intent(this, gameBoardActivity.class);
+        intent.putExtra("partyId", documentId);
+        intent.putExtra("player_1", player1);
+        intent.putExtra("player_2", player2);
+        startActivity(intent);
+    }
+
+    public void goToParty(String documentId, String player1, String player2, ListenerRegistration registration)
     {
         finish();
         registration.remove();
