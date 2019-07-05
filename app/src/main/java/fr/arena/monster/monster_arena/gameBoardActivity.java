@@ -40,14 +40,14 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
     ArrayList<Card>         player1Card = new ArrayList<>();
     ArrayList<Card>         player2Card = new ArrayList<>();
 
-    ArrayList<Card> current_player_hand = new ArrayList<>();
+    Map<String, Object> current_player_hand;
 
     Helper helper = Helper.getInstance();
     String TAG = "gameBoardActivity";
     int currentPlayer;
     String playerTurn;
 
-    ImageView hand_user_1, hand_user_2, hand_user_3, hand_user_4, hand_user_5, cardDetail, user_attack_left, user_attack_right, user_defense, dropZone = null;
+    ImageView hand_user_1, hand_user_2, hand_user_3, hand_user_4, hand_user_5, cardDetail, user_attack_left, user_attack_right, user_defense, opponent_attack_left, opponent_attack_right, opponent_defense, dropZone = null;
     TextView user_left, user_top, user_right, opponent_left, opponent_top, opponent_right, user_mana, opponent_mana, user_life, opponent_life;
     FrameLayout filter;
     String label = null;
@@ -85,6 +85,10 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
         user_attack_left = (ImageView) findViewById(R.id.left_card_user);
         user_attack_right = (ImageView) findViewById(R.id.right_card_user);
         user_defense = (ImageView) findViewById(R.id.up_card_user);
+
+        opponent_attack_left = (ImageView) findViewById(R.id.left_card_opponent);
+        opponent_attack_right = (ImageView) findViewById(R.id.right_card_opponent);
+        opponent_defense = (ImageView) findViewById(R.id.up_card_opponent);
 
         user_left = (TextView) findViewById(R.id.left_card_user_attack);
         user_top = (TextView) findViewById(R.id.up_card_user_defense);
@@ -157,7 +161,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                         if(isFull)
                         {
                             ImageView[] hands = new ImageView[5];
-                            ArrayList<Card> player1Hand = new ArrayList<>();
+                            Map<String, Object> player1Hand = new HashMap<>();
 
                             hands[0] = hand_user_1;
                             hands[1] = hand_user_2;
@@ -169,7 +173,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
 
                             for (int i=0; i < 3; i++) {
                                 Card parent = player1Card.get(i);
-                                player1Hand.add(parent);
+                                player1Hand.put("hand"+(i+1), parent);
                                 if (parent instanceof CardEntity) {
                                     CardEntity card = (CardEntity) parent;
                                     Drawable path = getDrawable(getResources()
@@ -183,8 +187,8 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                                     hands[i].setVisibility(View.VISIBLE);
                                 }
                             }
-                            //todo add player hand to fb
-                            addCardToParty(player1Hand);
+                            current_player_hand = player1Hand;
+                            addCardToParty(current_player_hand);
                         }
                     }
                 };
@@ -209,7 +213,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                         if(isFull)
                         {
                             ImageView[] hands = new ImageView[5];
-                            ArrayList<Card> player2Hand = new ArrayList<>();
+                            Map<String, Object> player2Hand = new HashMap<>();
 
                             hands[0] = hand_user_1;
                             hands[1] = hand_user_2;
@@ -221,7 +225,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
 
                             for (int i=0; i < 3; i++) {
                                 Card parent = player2Card.get(i);
-                                player2Hand.add(parent);
+                                player2Hand.put("hand"+(i+1), parent);
                                 if (parent instanceof CardEntity) {
                                     CardEntity card = (CardEntity) parent;
                                     Drawable path = getDrawable(getResources()
@@ -237,7 +241,8 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                                 }
                             }
                             //todo add player hand to fb
-                            addCardToParty(player2Hand);
+                            current_player_hand = player2Hand;
+                            addCardToParty(current_player_hand);
                         }
                     }
                 };
@@ -396,53 +401,26 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    public void addCardToParty(ArrayList<Card> playerCard) {
+    public void addCardToParty(Map<String, Object> playerCard) {
 
-        ArrayList playerDeck = new ArrayList();
-        for (int i = 0; i < playerCard.size(); i++) {
-            Card parent = playerCard.get(i);
-            if (parent instanceof CardEntity) {
-                playerDeck.add((CardEntity) parent);
+        /*ArrayList playerDeck = new ArrayList();
+        for (Map.Entry<String, Object> parent : playerCard.entrySet()) {
+            if (parent.getValue() instanceof CardEntity) {
+                playerDeck.add((CardEntity) parent.getValue());
             }
-        }
+        }*/
         Map<String, Object> party_container = new HashMap<>();
         if (currentPlayer == 1) {
             Map<String, Object> player1Info = new HashMap<>();
-            player1Info.put("hands", playerDeck);
+            player1Info.put("hand", current_player_hand);
             party_container.put("player1Info", player1Info);
             addHandToDb(party_container);
         } else {
             Map<String, Object> player2Info = new HashMap<>();
-            player2Info.put("hands", playerDeck);
+            player2Info.put("hand", current_player_hand);
             party_container.put("player2Info", player2Info);
             addHandToDb(party_container);
         }
-
-        /*Map<String, Object> party_card = new HashMap<>();
-        party_card.put("id", card.getId());
-        party_card.put("id_party", party.getId());
-        party_card.put("active", true);
-        party_card.put("card_detail", card.getCardDetail());
-
-        if (card instanceof CardEntity) {
-            party_card.put("attack",((CardEntity) card).getAttack());
-            party_card.put("defend",((CardEntity) card).getDefend());
-        }
-
-        helper.db.collection("Party_Card").document()
-                .set(party_card)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Error writing document", e);
-                    }
-                });*/
     }
 
     public void addHandToDb(Map<String, Object> party_container) {
@@ -577,7 +555,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                         manaDecrease(Integer.parseInt(hand_user_1.getTag(R.id.cost).toString()));
                         hand_user_1.setVisibility(View.INVISIBLE);
                         Helper.playVoice(this, hand_user_1.getTag(R.id.name).toString());
-                        sendPlayerBoard(dropZone, Integer.parseInt(hand_user_1.getTag(R.id.index).toString()));
+                        sendPlayerBoard(dropZone, Integer.parseInt(hand_user_1.getTag(R.id.index).toString()), "hand1");
                         break;
                     case "hand_user_2":
                         source = hand_user_2.getDrawable();
@@ -587,7 +565,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                         manaDecrease(Integer.parseInt(hand_user_2.getTag(R.id.cost).toString()));
                         hand_user_2.setVisibility(View.INVISIBLE);
                         Helper.playVoice(this, hand_user_2.getTag(R.id.name).toString());
-                        sendPlayerBoard(dropZone, Integer.parseInt(hand_user_2.getTag(R.id.index).toString()));
+                        sendPlayerBoard(dropZone, Integer.parseInt(hand_user_2.getTag(R.id.index).toString()), "hand2");
                         break;
                     case "hand_user_3":
                         source = hand_user_3.getDrawable();
@@ -597,7 +575,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                         manaDecrease(Integer.parseInt(hand_user_3.getTag(R.id.cost).toString()));
                         hand_user_3.setVisibility(View.INVISIBLE);
                         Helper.playVoice(this, hand_user_3.getTag(R.id.name).toString());
-                        sendPlayerBoard(dropZone, Integer.parseInt(hand_user_3.getTag(R.id.index).toString()));
+                        sendPlayerBoard(dropZone, Integer.parseInt(hand_user_3.getTag(R.id.index).toString()), "hand3");
                         break;
                     case "hand_user_4":
                         source = hand_user_4.getDrawable();
@@ -607,7 +585,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                         manaDecrease(Integer.parseInt(hand_user_4.getTag(R.id.cost).toString()));
                         hand_user_4.setVisibility(View.INVISIBLE);
                         Helper.playVoice(this, hand_user_4.getTag(R.id.name).toString());
-                        sendPlayerBoard(dropZone, Integer.parseInt(hand_user_4.getTag(R.id.index).toString()));
+                        sendPlayerBoard(dropZone, Integer.parseInt(hand_user_4.getTag(R.id.index).toString()), "hand4");
                         break;
                     case "hand_user_5":
                         source = hand_user_5.getDrawable();
@@ -617,7 +595,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                         manaDecrease(Integer.parseInt(hand_user_5.getTag(R.id.cost).toString()));
                         hand_user_5.setVisibility(View.INVISIBLE);
                         Helper.playVoice(this, hand_user_5.getTag(R.id.name).toString());
-                        sendPlayerBoard(dropZone, Integer.parseInt(hand_user_5.getTag(R.id.index).toString()));
+                        sendPlayerBoard(dropZone, Integer.parseInt(hand_user_5.getTag(R.id.index).toString()), "hand5");
                         break;
                 }
                 setStat(stat, pos);
@@ -689,7 +667,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    public void sendPlayerBoard(ImageView dropZone, int index) {
+    public void sendPlayerBoard(ImageView dropZone, int index, String handIndex) {
         String pos = null;
         switch (dropZone.getId()) {
             case R.id.left_card_user:
@@ -714,6 +692,9 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
             board.add(cardInfo);
             Map<String, Object> player1Info = new HashMap<>();
             player1Info.put("board", board);
+            current_player_hand.remove(handIndex);
+            Log.d(TAG, "sendPlayerBoard: "+current_player_hand);
+            player1Info.put("hand", current_player_hand);
             partyContainer.put("player1Info", player1Info);
         } else {
             Card parent = player2Card.get(index);
@@ -724,6 +705,9 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
             board.add(cardInfo);
             Map<String, Object> player2Info = new HashMap<>();
             player2Info.put("board", board);
+            current_player_hand.remove(handIndex);
+            Log.d(TAG, "sendPlayerBoard: "+current_player_hand);
+            player2Info.put("hand", current_player_hand);
             partyContainer.put("player2Info", player2Info);
         }
 
@@ -754,8 +738,19 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
 
                     if (snapshot != null && snapshot.exists())
                     {
-
-                        Log.d(TAG, "watchOtherMove: "+snapshot);
+                        if (currentPlayer == 1) {
+                            if (snapshot.getData().get("player2Info") != null) {
+                                Map<String, Object> player2Info = (Map<String, Object>) snapshot.getData().get("player2Info");
+                                if (player2Info.get("board") != null)
+                                    Log.d(TAG, "watchOtherMove: " + player2Info.get("board"));
+                            }
+                        } else {
+                            if (snapshot.getData().get("player1Info") != null) {
+                                Map<String, Object> player1Info = (Map<String, Object>) snapshot.getData().get("player1Info");
+                                if (player1Info.get("board") != null)
+                                    setAdvBoard((ArrayList) player1Info.get("board"));
+                            }
+                        }
 
                     }
                     else
@@ -763,5 +758,26 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                         Log.d("passe","else");
                     }
                 });
+    }
+
+    public void setAdvBoard(ArrayList board) {
+        Map<String, Object> row = new HashMap<>();
+        for (int i=0; i < board.size(); i++){
+            row = (Map<String, Object>) board.get(i);
+            Map<String, Object> card = ( Map<String, Object>) row.get("card");
+            Drawable source = getDrawable(getResources().getIdentifier(card.get("assetPath").toString(), "drawable", getPackageName()));
+
+            switch (row.get("pos").toString()) {
+                case "left":
+                    opponent_attack_left.setImageDrawable(source);
+                    break;
+                case "right":
+                    opponent_attack_right.setImageDrawable(source);
+                    break;
+                case "top":
+                    opponent_defense.setImageDrawable(source);
+                    break;
+            }
+        }
     }
 }
