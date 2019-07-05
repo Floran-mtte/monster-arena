@@ -226,7 +226,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
 
                         party.put("id", documentId);
                         party.put("time_game", 0);
-                        party.put("number_round", 0);
+                        party.put("number_round", 1);
                         party.put("created_at", ts);
                         party.put("updated_at", ts);
                         party.put("player_1", user.getUid());
