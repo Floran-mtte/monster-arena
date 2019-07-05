@@ -179,6 +179,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                                 }
                             }
                             //todo add player hand to fb
+                            addCardToParty(player1Hand);
                         }
                     }
                 };
@@ -230,6 +231,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                                 }
                             }
                             //todo add player hand to fb
+                            addCardToParty(player2Hand);
                         }
                     }
                 };
@@ -363,7 +365,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
 
                                 playerCard.add(card);
 
-                                addCardToParty(card);
+                                //addCardToParty(card);
 
                                 if(listDoc.size() == playerCard.size())
                                 {
@@ -388,8 +390,29 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    public void addCardToParty(Card card) {
-        Map<String, Object> party_card = new HashMap<>();
+    public void addCardToParty(ArrayList<Card> playerCard) {
+
+        ArrayList playerDeck = new ArrayList();
+        for (int i = 0; i < playerCard.size(); i++) {
+            Card parent = playerCard.get(i);
+            if (parent instanceof CardEntity) {
+                playerDeck.add((CardEntity) parent);
+            }
+        }
+        Map<String, Object> party_container = new HashMap<>();
+        if (currentPlayer == 1) {
+            Map<String, Object> player1Info = new HashMap<>();
+            player1Info.put("hands", playerDeck);
+            party_container.put("player1Info", player1Info);
+            addHandToDb(party_container);
+        } else {
+            Map<String, Object> player2Info = new HashMap<>();
+            player2Info.put("hands", playerDeck);
+            party_container.put("player1Info", player2Info);
+            addHandToDb(party_container);
+        }
+
+        /*Map<String, Object> party_card = new HashMap<>();
         party_card.put("id", card.getId());
         party_card.put("id_party", party.getId());
         party_card.put("active", true);
@@ -402,6 +425,23 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
 
         helper.db.collection("Party_Card").document()
                 .set(party_card)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Error writing document", e);
+                    }
+                });*/
+    }
+
+    public void addHandToDb(Map<String, Object> party_container) {
+        helper.db.collection("Party").document(party.getId())
+                .set(party_container, SetOptions.merge())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
