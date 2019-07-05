@@ -408,7 +408,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
         } else {
             Map<String, Object> player2Info = new HashMap<>();
             player2Info.put("hands", playerDeck);
-            party_container.put("player1Info", player2Info);
+            party_container.put("player2Info", player2Info);
             addHandToDb(party_container);
         }
 
