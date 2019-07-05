@@ -220,6 +220,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                                     CardEntity card = (CardEntity) parent;
                                     Drawable path = getDrawable(getResources()
                                             .getIdentifier(card.getAssetPath(), "drawable", getPackageName()));
+                                    Log.d(TAG, card.getAssetPath());
                                     hands[i].setImageDrawable(path);
                                     hands[i].setTag(R.id.atk, card.getAttack());
                                     hands[i].setTag(R.id.def, card.getDefend());
