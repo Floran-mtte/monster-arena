@@ -1,22 +1,29 @@
 package fr.arena.monster.monster_arena;
 
+import android.util.Log;
+
+import com.google.android.gms.tasks.OnSuccessListener;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class Player {
 
     private String id;
-    private String playerName;
+    private String playerName = "john";
     private int lifepoint;
     private int mana;
+    private Map<String, Object> hand = null;
+    private Map<String, Object> board = null;
 
-    public Player(String id, String playerName, int lifepoint, int mana)
-    {
+    public Player(String id, String playerName, int lifepoint, int mana) {
         setId(id);
         setPlayerName(playerName);
         setLifepoint(lifepoint);
         setMana(mana);
     }
 
-    public Player(String id, int lifepoint, int mana)
-    {
+    public Player(String id, int lifepoint, int mana) {
         setId(id);
         setPlayerName(playerName);
         setLifepoint(lifepoint);
@@ -53,5 +60,81 @@ public class Player {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Map<String, Object> getHand() {
+        return hand;
+    }
+
+    public void setHand(Map<String, Object> hand) {
+        this.hand = hand;
+    }
+
+    public Map<String, Object> getBoard() {
+        return board;
+    }
+
+    public void setBoard(Map<String, Object> board) {
+        this.board = board;
+    }
+
+    public void setPlayerInfo(String partyId, int currentPlayer) {
+        Map<String, Object> party = new HashMap<>();
+
+        if (currentPlayer == 1) {
+            Map<String, Object> player1Info = new HashMap<>();
+            player1Info.put("name", this.getPlayerName());
+            player1Info.put("life", this.getLifepoint());
+            player1Info.put("mana", this.getMana());
+            player1Info.put("hand", this.getHand());
+            player1Info.put("board", this.getBoard());
+            Helper.getInstance().db.collection("Party").document(partyId)
+                .update("player1Info", player1Info)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                    }
+                });
+        } else {
+            Map<String, Object> player2Info = new HashMap<>();
+            player2Info.put("name", this.getPlayerName());
+            player2Info.put("life", this.getLifepoint());
+            player2Info.put("mana", this.getMana());
+            player2Info.put("hand", this.getHand());
+            player2Info.put("board", this.getBoard());
+            Helper.getInstance().db.collection("Party").document(partyId)
+                .update("player2Info", player2Info)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                    }
+                });
+        }
+
+    }
+
+    public void updatePlayer(Map<String, Object> playerInfo) {
+        Log.d("updatePlayer: ", playerInfo.toString());
+        for (Map.Entry<String, Object> entry : playerInfo.entrySet()) {
+            switch (entry.getKey()) {
+                case "life":
+                    setLifepoint(Integer.parseInt(entry.getValue().toString()));
+                    break;
+                case "mana":
+                    setMana(Integer.parseInt(entry.getValue().toString()));
+                    break;
+                case "name":
+                    setPlayerName(entry.getValue().toString());
+                    break;
+                case "hand":
+                    setHand((Map<String, Object>) entry.getValue());
+                    break;
+                case "board":
+                    setBoard((Map<String, Object>) entry.getValue());
+                    break;
+            }
+        }
     }
 }

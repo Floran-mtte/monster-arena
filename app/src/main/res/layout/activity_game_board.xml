@@ -169,6 +169,7 @@
         android:layout_width="70dp"
         android:layout_height="95dp"
         android:layout_marginEnd="30dp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@+id/hand_opponent_4"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/verso" />
@@ -178,7 +179,7 @@
         android:layout_width="70dp"
         android:layout_height="95dp"
         android:layout_marginEnd="30dp"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@+id/hand_opponent_5"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/verso" />
@@ -188,7 +189,7 @@
         android:layout_width="70dp"
         android:layout_height="95dp"
         android:layout_marginEnd="20dp"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintEnd_toStartOf="@+id/match_settings"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/verso" />
