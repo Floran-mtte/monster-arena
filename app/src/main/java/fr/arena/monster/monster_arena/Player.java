@@ -132,7 +132,8 @@ public class Player {
                     setHand((Map<String, Object>) entry.getValue());
                     break;
                 case "board":
-                    setBoard((Map<String, Object>) entry.getValue());
+                    if (this.getBoard() != entry.getValue())
+                        setBoard((Map<String, Object>) entry.getValue());
                     break;
             }
         }

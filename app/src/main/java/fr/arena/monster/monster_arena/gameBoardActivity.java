@@ -739,11 +739,13 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
 
                     if (snapshot != null && snapshot.exists())
                     {
+                        if (playerTurn != snapshot.getData().get("current_player").toString())
+                            playerTurn = snapshot.getData().get("current_player").toString();
                         if (currentPlayer == 1) {
                             if (snapshot.getData().get("player2Info") != null) {
-                                /*Map<String, Object> player2Info = (Map<String, Object>) snapshot.getData().get("player2Info");
-                                if (player2Info.get("board") != null)
-                                    setAdvBoard((Map<String, Object>) player2Info.get("board"), player2);*/
+                                Map<String, Object> playerInfo = (Map<String, Object>) snapshot.getData().get("player2Info");
+                                player2.updatePlayer(playerInfo);
+                                updateOpponent(player2);
                             }
                         } else {
                             if (snapshot.getData().get("player1Info") != null) {
@@ -770,8 +772,8 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
         else
             mana = player.getMana() + "/" + (party.getNumberRound()+1);
         opponent_mana.setText(mana);
-        //todo : show nb card in opponent hand
-        setAdvHand(player.getHand());
+        if (player.getHand() != null)
+            setAdvHand(player.getHand());
         if (player.getBoard() != null)
             setAdvBoard(player.getBoard());
     }
@@ -834,26 +836,37 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
             String atk;
             switch (row.get("pos").toString()) {
                 case "left":
-                    opponent_attack_left.setImageDrawable(source);
-                    atk = "atk : "+card.get("attack");
-                    opponent_left.setText(atk);
-                    opponent_left.setVisibility(View.VISIBLE);
+                    Log.d(TAG, "setAdvBoard: "+opponent_attack_left.getTag(R.id.name)+" = "+card.get("assetPath"));
+                    if (opponent_attack_left.getTag(R.id.name) == null || !opponent_attack_left.getTag(R.id.name).equals(card.get("assetPath").toString())) {
+                        opponent_attack_left.setImageDrawable(source);
+                        opponent_attack_left.setTag(R.id.name, card.get("assetPath").toString());
+                        atk = "atk : " + card.get("attack");
+                        opponent_left.setText(atk);
+                        opponent_left.setVisibility(View.VISIBLE);
+                        Helper.playVoice(this, card.get("assetPath").toString());
+                    }
                     break;
                 case "right":
-                    opponent_attack_right.setImageDrawable(source);
-                    atk = "atk : "+card.get("attack");
-                    opponent_right.setText(atk);
-                    opponent_right.setVisibility(View.VISIBLE);
-
+                    if (opponent_attack_right.getTag(R.id.name) == null || !opponent_attack_right.getTag(R.id.name).equals(card.get("assetPath"))) {
+                        opponent_attack_right.setImageDrawable(source);
+                        opponent_attack_right.setTag(R.id.name, card.get("assetPath"));
+                        atk = "atk : " + card.get("attack");
+                        opponent_right.setText(atk);
+                        opponent_right.setVisibility(View.VISIBLE);
+                        Helper.playVoice(this, card.get("assetPath").toString());
+                    }
                     break;
                 case "top":
-                    opponent_defense.setImageDrawable(source);
-                    String def = "def : "+card.get("defend");
-                    opponent_top.setText(def);
-                    opponent_top.setVisibility(View.VISIBLE);
+                    if (opponent_defense.getTag(R.id.name) == null || !opponent_defense.getTag(R.id.name).equals(card.get("assetPath"))) {
+                        opponent_defense.setImageDrawable(source);
+                        opponent_defense.setTag(R.id.name, card.get("assetPath"));
+                        String def = "def : " + card.get("defend");
+                        opponent_top.setText(def);
+                        opponent_top.setVisibility(View.VISIBLE);
+                        Helper.playVoice(this, card.get("assetPath").toString());
+                    }
                     break;
             }
-            Helper.playVoice(this, card.get("assetPath").toString());
         }
     }
 }
