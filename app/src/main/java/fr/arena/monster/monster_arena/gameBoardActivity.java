@@ -142,9 +142,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
 
         Log.d(TAG,"id = "+playerTurn);
         Log.d(TAG,"id user ="+helper.mAuth.getUid());
-
-        startTimer();
-
+        
         watchOtherMove();
     }
 
@@ -515,13 +513,16 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
 
     public void updatePlayerTurn()
     {
+        Log.d(TAG,"current player = "+currentPlayer);
         if(currentPlayer == 1)
         {
             playerTurn = player2.getId();
+            Log.d(TAG,"player 2 info"+player2.getId());
         }
         else if (currentPlayer == 2)
         {
             playerTurn = player1.getId();
+            Log.d(TAG,"player 1 info"+player1.getId());
         }
 
         Map<String, Object> turn = new HashMap<>();
@@ -530,6 +531,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                 .set(turn, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>(){
             @Override
             public void onSuccess(Void aVoid) {
+                Log.d(TAG,"dans le onSuccess");
                 startTimer();
             }
         });
@@ -784,12 +786,14 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                             playerTurn = snapshot.getData().get("current_player").toString();
                         if (currentPlayer == 1) {
                             if (snapshot.getData().get("player2Info") != null) {
+                                startTimer();
                                 Map<String, Object> playerInfo = (Map<String, Object>) snapshot.getData().get("player2Info");
                                 player2.updatePlayer(playerInfo);
                                 updateOpponent(player2);
                             }
                         } else if (currentPlayer == 2){
                             if (snapshot.getData().get("player1Info") != null) {
+                                startTimer();
                                 Map<String, Object> playerInfo = (Map<String, Object>) snapshot.getData().get("player1Info");
                                 player1.updatePlayer(playerInfo);
                                 updateOpponent(player1);
@@ -914,6 +918,9 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
 
     public void startTimer()
     {
+        Log.d(TAG,"Passe la");
+        Log.d(TAG,"playerTurn : "+playerTurn);
+        Log.d(TAG,"getUid : "+helper.mAuth.getUid());
         if(playerTurn.equals(helper.mAuth.getUid()))
         {
             Log.d(TAG,"dans le if");
