@@ -142,7 +142,8 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
 
         Log.d(TAG,"id = "+playerTurn);
         Log.d(TAG,"id user ="+helper.mAuth.getUid());
-        
+
+        startTimer();
         watchOtherMove();
     }
 
@@ -782,21 +783,22 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
 
                     if (snapshot != null && snapshot.exists())
                     {
-                        if (playerTurn != snapshot.getData().get("current_player").toString())
+                        if (playerTurn != snapshot.getData().get("current_player").toString()) {
                             playerTurn = snapshot.getData().get("current_player").toString();
+                            startTimer();
+                        }
+
                         if (currentPlayer == 1) {
                             if (snapshot.getData().get("player2Info") != null) {
                                 startTimer();
                                 Map<String, Object> playerInfo = (Map<String, Object>) snapshot.getData().get("player2Info");
                                 player2.updatePlayer(playerInfo);
-                                updateOpponent(player2);
                             }
                         } else if (currentPlayer == 2){
                             if (snapshot.getData().get("player1Info") != null) {
                                 startTimer();
                                 Map<String, Object> playerInfo = (Map<String, Object>) snapshot.getData().get("player1Info");
                                 player1.updatePlayer(playerInfo);
-                                updateOpponent(player1);
                             }
                         }
 
@@ -912,7 +914,6 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                     }
                     break;
             }
-            Helper.playVoice(this, card.get("assetPath").toString());
         }
     }
 
@@ -921,6 +922,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
         Log.d(TAG,"Passe la");
         Log.d(TAG,"playerTurn : "+playerTurn);
         Log.d(TAG,"getUid : "+helper.mAuth.getUid());
+        counter = 30;
         if(playerTurn.equals(helper.mAuth.getUid()))
         {
             Log.d(TAG,"dans le if");
