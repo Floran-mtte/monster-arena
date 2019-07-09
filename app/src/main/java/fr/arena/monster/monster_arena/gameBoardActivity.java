@@ -531,8 +531,10 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
 
 
         party.setNumberRound(party.getNumberRound() + 1);
+
         Map<String, Object> turn = new HashMap<>();
         turn.put("current_player", playerTurn);
+        turn.put("number_round", party.getNumberRound());
         Helper.getInstance().db.collection("Party").document(party.getId())
                 .set(turn, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>(){
             @Override
@@ -788,8 +790,14 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                     if (snapshot != null && snapshot.exists())
                     {
 
+                        if(party.getNumberRound() != Integer.parseInt(snapshot.getData().get("number_round").toString()))
+                        {
+                            party.setNumberRound(Integer.parseInt(snapshot.getData().get("number_round").toString()));
+                        }
+
                         if (playerTurn != snapshot.getData().get("current_player").toString()) {
                             playerTurn = snapshot.getData().get("current_player").toString();
+                            Log.d(TAG,"round" + String.valueOf(party.getNumberRound()));
                             if(party.getNumberRound() != 1) {
                                 startTimer();
                             }
