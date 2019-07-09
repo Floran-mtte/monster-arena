@@ -6,6 +6,7 @@ import android.content.ClipDescription;
 import android.content.pm.ActivityInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -24,6 +25,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.SetOptions;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,10 +48,11 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
     Helper helper = Helper.getInstance();
     String TAG = "gameBoardActivity";
     int currentPlayer;
+    int counter = 30;
     String playerTurn;
 
-    ImageView hand_user_1, hand_user_2, hand_user_3, hand_user_4, hand_user_5, cardDetail, user_attack_left, user_attack_right, user_defense, opponent_attack_left, opponent_attack_right, opponent_defense, hand_opponent_1, hand_opponent_2, hand_opponent_3, hand_opponent_4, hand_opponent_5, dropZone = null;
-    TextView user_left, user_top, user_right, opponent_left, opponent_top, opponent_right, user_mana, opponent_mana, user_life, opponent_life;
+    ImageView hand_user_1, hand_user_2, hand_user_3, hand_user_4, hand_user_5, cardDetail, user_attack_left, user_attack_right, user_defense, opponent_attack_left, opponent_attack_right, opponent_defense, hand_opponent_1, hand_opponent_2, hand_opponent_3, hand_opponent_4, hand_opponent_5, dropZone = null, end_tour_button;
+    TextView user_left, user_top, user_right, opponent_left, opponent_top, opponent_right, user_mana, opponent_mana, user_life, opponent_life, timer;
     FrameLayout filter;
     String label = null;
     OnTaskCompleted listener;
@@ -91,6 +95,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
 
         opponent_life = (TextView) findViewById(R.id.opponent_life);
         opponent_mana = (TextView) findViewById(R.id.opponent_mana);
+        timer = (TextView) findViewById(R.id.timer);
 
         hand_opponent_1 = (ImageView) findViewById(R.id.hand_opponent_1);
         hand_opponent_2 = (ImageView) findViewById(R.id.hand_opponent_2);
@@ -101,6 +106,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
         opponent_attack_left = (ImageView) findViewById(R.id.left_card_opponent);
         opponent_attack_right = (ImageView) findViewById(R.id.right_card_opponent);
         opponent_defense = (ImageView) findViewById(R.id.up_card_opponent);
+        end_tour_button = (ImageView) findViewById(R.id.end_tour_button);
 
         opponent_left = (TextView) findViewById(R.id.left_card_opponent_attack);
         opponent_top = (TextView) findViewById(R.id.up_card_opponent_defense);
@@ -126,11 +132,19 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
         user_attack_right.setOnDragListener(this);
         user_defense.setOnDragListener(this);
 
+        end_tour_button.setOnClickListener(this);
+
         String partyId = getIntent().getStringExtra("partyId");
         String player_1 = getIntent().getStringExtra("player_1");
         String player_2 = getIntent().getStringExtra("player_2");
         playerTurn = getIntent().getStringExtra("current_player");
         initParty(partyId, player_1, player_2);
+
+        Log.d(TAG,"id = "+playerTurn);
+        Log.d(TAG,"id user ="+helper.mAuth.getUid());
+
+        startTimer();
+
         watchOtherMove();
     }
 
@@ -490,9 +504,36 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                 filter.setVisibility(View.INVISIBLE);
                 cardDetail.setVisibility(View.INVISIBLE);
                 break;
+            case R.id.end_tour_button:
+                if(playerTurn.equals(helper.mAuth.getUid()))
+                {
+                    updatePlayerTurn();
+                }
+                break;
         }
     }
 
+    public void updatePlayerTurn()
+    {
+        if(currentPlayer == 1)
+        {
+            playerTurn = player2.getId();
+        }
+        else if (currentPlayer == 2)
+        {
+            playerTurn = player1.getId();
+        }
+
+        Map<String, Object> turn = new HashMap<>();
+        turn.put("current_player", playerTurn);
+        Helper.getInstance().db.collection("Party").document(party.getId())
+                .set(turn, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>(){
+            @Override
+            public void onSuccess(Void aVoid) {
+                startTimer();
+            }
+        });
+    }
     @Override
     public boolean onLongClick(View v) {
         if (!playerTurn.equals(Helper.getInstance().mAuth.getUid())) {
@@ -745,7 +786,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                                 if (player2Info.get("board") != null)
                                     setAdvBoard((Map<String, Object>) player2Info.get("board"), player2);*/
                             }
-                        } else {
+                        } else if (currentPlayer == 2){
                             if (snapshot.getData().get("player1Info") != null) {
                                 Map<String, Object> playerInfo = (Map<String, Object>) snapshot.getData().get("player1Info");
                                 player1.updatePlayer(playerInfo);
@@ -853,7 +894,28 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                     opponent_top.setVisibility(View.VISIBLE);
                     break;
             }
-            Helper.playVoice(this, card.get("assetPath").toString());
+            //Helper.playVoice(this, card.get("assetPath").toString());
         }
     }
+
+    public void startTimer()
+    {
+        if(playerTurn.equals(helper.mAuth.getUid()))
+        {
+            Log.d(TAG,"dans le if");
+            new CountDownTimer(30000, 1000){
+                public void onTick(long millisUntilFinished){
+                    Log.d(TAG,"dans le onTick");
+                    timer.setText(String.valueOf(counter));
+                    counter--;
+                }
+                public  void onFinish(){
+                    Log.d(TAG,"dans le onFinish");
+                    timer.setText(String.valueOf(30));
+                    updatePlayerTurn();
+                }
+            }.start();
+        }
+    }
+
 }
