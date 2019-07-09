@@ -529,13 +529,15 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
             Log.d(TAG,"player 1 info"+player1.getId());
         }
 
+
+        party.setNumberRound(party.getNumberRound() + 1);
         Map<String, Object> turn = new HashMap<>();
         turn.put("current_player", playerTurn);
         Helper.getInstance().db.collection("Party").document(party.getId())
                 .set(turn, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>(){
             @Override
             public void onSuccess(Void aVoid) {
-                Log.d(TAG,"dans le onSuccess");
+
             }
         });
     }
@@ -785,24 +787,23 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
 
                     if (snapshot != null && snapshot.exists())
                     {
+
                         if (playerTurn != snapshot.getData().get("current_player").toString()) {
                             playerTurn = snapshot.getData().get("current_player").toString();
                             if(party.getNumberRound() != 1) {
                                 startTimer();
                             }
-                            party.setNumberRound(party.getNumberRound() + 1);
+                            Log.d(TAG, "round : "+party.getNumberRound());
 
                         }
 
                         if (currentPlayer == 1) {
                             if (snapshot.getData().get("player2Info") != null) {
-                                startTimer();
                                 Map<String, Object> playerInfo = (Map<String, Object>) snapshot.getData().get("player2Info");
                                 player2.updatePlayer(playerInfo);
                             }
                         } else if (currentPlayer == 2){
                             if (snapshot.getData().get("player1Info") != null) {
-                                startTimer();
                                 Map<String, Object> playerInfo = (Map<String, Object>) snapshot.getData().get("player1Info");
                                 player1.updatePlayer(playerInfo);
                             }
