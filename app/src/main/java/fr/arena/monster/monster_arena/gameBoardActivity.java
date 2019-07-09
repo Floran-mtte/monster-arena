@@ -51,6 +51,8 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
     int counter = 30;
     String playerTurn;
 
+    CountDownTimer clock;
+
     ImageView hand_user_1, hand_user_2, hand_user_3, hand_user_4, hand_user_5, cardDetail, user_attack_left, user_attack_right, user_defense, opponent_attack_left, opponent_attack_right, opponent_defense, hand_opponent_1, hand_opponent_2, hand_opponent_3, hand_opponent_4, hand_opponent_5, dropZone = null, end_tour_button;
     TextView user_left, user_top, user_right, opponent_left, opponent_top, opponent_right, user_mana, opponent_mana, user_life, opponent_life, timer;
     FrameLayout filter;
@@ -517,6 +519,9 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
 
     public void updatePlayerTurn()
     {
+        clock.cancel();
+        counter = 30;
+        timer.setText(String.valueOf(counter));
         Log.d(TAG,"current player = "+currentPlayer);
         if(currentPlayer == 1)
         {
@@ -532,9 +537,28 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
 
         party.setNumberRound(party.getNumberRound() + 1);
 
+        Map<String, Object> playerInfo = new HashMap<>();
         Map<String, Object> turn = new HashMap<>();
         turn.put("current_player", playerTurn);
         turn.put("number_round", party.getNumberRound());
+
+        if(currentPlayer == 1)
+        {
+            player1.setMana(party.getNumberRound()+1);
+            playerInfo.put("mana",player1.getMana());
+            turn.put("player1Info",playerInfo);
+            user_mana.setText(String.format("%d/%d", player1.getMana(), player1.getMana()));
+        }
+        else if(currentPlayer == 2)
+        {
+            player2.setMana(party.getNumberRound());
+            playerInfo.put("mana",player2.getMana());
+            turn.put("player2Info",playerInfo);
+            manaDecrease(player2.getMana());
+            opponent_mana.setText(String.format("%d/%d", player2.getMana(), player2.getMana()));
+        }
+
+
         Helper.getInstance().db.collection("Party").document(party.getId())
                 .set(turn, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>(){
             @Override
@@ -941,7 +965,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
         if(playerTurn.equals(helper.mAuth.getUid()))
         {
             Log.d(TAG,"dans le if");
-            new CountDownTimer(30000, 1000){
+            clock = new CountDownTimer(30000, 1000){
                 public void onTick(long millisUntilFinished){
                     Log.d(TAG,"dans le onTick");
                     timer.setText(String.valueOf(counter));
