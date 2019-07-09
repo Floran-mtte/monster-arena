@@ -787,7 +787,11 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                     {
                         if (playerTurn != snapshot.getData().get("current_player").toString()) {
                             playerTurn = snapshot.getData().get("current_player").toString();
-                            startTimer();
+                            if(party.getNumberRound() != 1) {
+                                startTimer();
+                            }
+                            party.setNumberRound(party.getNumberRound() + 1);
+
                         }
 
                         if (currentPlayer == 1) {
