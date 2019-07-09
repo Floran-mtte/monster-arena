@@ -143,7 +143,10 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
         Log.d(TAG,"id = "+playerTurn);
         Log.d(TAG,"id user ="+helper.mAuth.getUid());
 
-        startTimer();
+        if(party.getNumberRound() == 1 && currentPlayer == 1)
+        {
+            startTimer();
+        }
         watchOtherMove();
     }
 
@@ -533,7 +536,6 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onSuccess(Void aVoid) {
                 Log.d(TAG,"dans le onSuccess");
-                startTimer();
             }
         });
     }
