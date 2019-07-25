@@ -49,6 +49,8 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
     String TAG = "gameBoardActivity";
     int currentPlayer;
     int counter = 30;
+    int manaPLayer1;
+    int manaPLayer2;
     String playerTurn;
 
     CountDownTimer clock;
@@ -162,8 +164,11 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
     public void initParty(String partyId, String player_1, String player_2) {
         //getUsersId(partyId);
         party = new Party("", "", partyId, 1, player_1, player_2, 0);
-        player1 = new Player(player_1, "john", 2500, 3);
-        player2 = new Player(player_2, "daenerys", 2500, 2);
+        player1 = new Player(player_1, "john", 2500, 3,2);
+        player2 = new Player(player_2, "daenerys", 2500, 2,2);
+        manaPLayer1 = player1.getMana() -1;
+        manaPLayer2 = player2.getMana();
+
 
         currentPlayer = currentPlayer();
         switch (currentPlayer) {
@@ -544,18 +549,23 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
 
         if(currentPlayer == 1)
         {
-            player1.setMana(party.getNumberRound()+1);
+            manaPLayer1++;
+            player1.setMana(manaPLayer1);
+            playerInfo.put("manaMax",player1.getMana());
             playerInfo.put("mana",player1.getMana());
             turn.put("player1Info",playerInfo);
-            user_mana.setText(String.format("%d/%d", player1.getMana(), player1.getMana()));
+            user_mana.setText(String.format("%d/%d", player1.getMana(), manaPLayer1));
         }
         else if(currentPlayer == 2)
         {
-            player2.setMana(party.getNumberRound());
+            manaPLayer2++;
+            player2.setMana(manaPLayer2);
+            playerInfo.put("manaMax",player2.getMana());
             playerInfo.put("mana",player2.getMana());
             turn.put("player2Info",playerInfo);
-            manaDecrease(player2.getMana());
-            opponent_mana.setText(String.format("%d/%d", player2.getMana(), player2.getMana()));
+            Log.d(TAG,"Mana player 2 => "+player2.getMana());
+            Log.d(TAG,"Mana max player 2 => "+manaPLayer2);
+            user_mana.setText(String.format("%d/%d", player2.getMana(), manaPLayer2));
         }
 
 
@@ -820,9 +830,11 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                         }
 
                         if (playerTurn != snapshot.getData().get("current_player").toString()) {
+                            Log.d("turnTAG","player turn change");
                             playerTurn = snapshot.getData().get("current_player").toString();
                             Log.d(TAG,"round" + String.valueOf(party.getNumberRound()));
                             if(party.getNumberRound() != 1) {
+                                pickCard(currentPlayer);
                                 startTimer();
                             }
                             Log.d(TAG, "round : "+party.getNumberRound());
@@ -833,11 +845,13 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                             if (snapshot.getData().get("player2Info") != null) {
                                 Map<String, Object> playerInfo = (Map<String, Object>) snapshot.getData().get("player2Info");
                                 player2.updatePlayer(playerInfo);
+                                opponent_mana.setText(String.format("%d/%d",player2.getMana(),player2.getManaMax()));
                             }
                         } else if (currentPlayer == 2){
                             if (snapshot.getData().get("player1Info") != null) {
                                 Map<String, Object> playerInfo = (Map<String, Object>) snapshot.getData().get("player1Info");
                                 player1.updatePlayer(playerInfo);
+                                opponent_mana.setText(String.format("%d/%d",player1.getMana(),player1.getManaMax()));
                             }
                         }
 
@@ -958,7 +972,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
 
     public void startTimer()
     {
-        Log.d(TAG,"Passe la");
+        Log.d(TAG,"Dans le start timer");
         Log.d(TAG,"playerTurn : "+playerTurn);
         Log.d(TAG,"getUid : "+helper.mAuth.getUid());
         counter = 30;
@@ -979,5 +993,63 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
             }.start();
         }
     }
+
+    public void pickCard(int currentPlayer)
+    {
+
+        if(currentPlayer == 1)
+        {
+            if(playerTurn == player1.getId())
+            {
+                Log.d(TAG,"Dans le current player");
+                ImageView[] hands = new ImageView[5];
+                hands[0] = hand_user_1;
+                hands[1] = hand_user_2;
+                hands[2] = hand_user_3;
+                hands[3] = hand_user_4;
+                hands[4] = hand_user_5;
+
+                Boolean emptyHand = false;
+                int pos = 0;
+
+                for (int i = 0; i < hands.length;i++)
+                {
+                    if(hands[i].getVisibility() == View.INVISIBLE)
+                    {
+                        emptyHand = true;
+                        pos = i;
+                        break;
+                    }
+                }
+
+                Log.d(TAG, "index : "+pos);
+                if(emptyHand)
+                {
+                    Log.d(TAG,"Dans le emptyHand");
+                    Collections.shuffle(player1Card);
+                    Card parent = player1Card.get(0);
+                    if (parent instanceof CardEntity) {
+                        CardEntity card = (CardEntity) parent;
+                        Drawable path = getDrawable(getResources()
+                                .getIdentifier(card.getAssetPath(), "drawable", getPackageName()));
+                        hands[pos].setImageDrawable(path);
+                        hands[pos].setTag(R.id.atk, card.getAttack());
+                        hands[pos].setTag(R.id.def, card.getDefend());
+                        hands[pos].setTag(R.id.cost, card.getLevel());
+                        hands[pos].setTag(R.id.name, card.getAssetPath());
+                        hands[pos].setTag(R.id.index, Integer.toString(pos));
+                        hands[pos].setVisibility(View.VISIBLE);
+                    }
+                }
+
+            }
+        }
+        else if(currentPlayer == 2)
+        {
+
+        }
+    }
+
+
 
 }
