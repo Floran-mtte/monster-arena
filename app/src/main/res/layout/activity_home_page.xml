@@ -5,12 +5,53 @@
     android:id="@+id/constraint_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="20dp"
-    android:paddingTop="30dp"
-    android:paddingRight="20dp"
-    android:paddingBottom="30dp"
     android:background="@color/darkBlue"
+    android:paddingLeft="30dp"
+    android:paddingTop="20dp"
+    android:paddingRight="30dp"
+    android:paddingBottom="20dp"
     tools:context=".homePageActivity">
+
+    <Button
+        android:id="@+id/pack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/button_shape_gold"
+        android:fontFamily="@font/roboto_bold"
+        android:text="@string/pack_btn"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/pack_nb"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="35dp"
+        android:background="@drawable/red_circle"
+        android:clickable="false"
+        android:fontFamily="@font/roboto_regular"
+        android:text="0"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/pack"
+        app:layout_constraintStart_toStartOf="@+id/pack"
+        app:layout_constraintTop_toTopOf="@+id/pack" />
+
+    <Button
+        android:id="@+id/shop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_shape_gold"
+        android:fontFamily="@font/roboto_bold"
+        android:paddingHorizontal="18dp"
+        android:paddingVertical="12dp"
+        android:text="@string/store_button_text"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView3"
@@ -31,64 +72,33 @@
         android:layout_width="117dp"
         android:layout_height="121dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/shop_button"
+        app:layout_constraintBottom_toTopOf="@+id/pack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/shop"
         app:srcCompat="@drawable/play_button" />
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="0dp"
-        android:layout_height="74dp"
+        android:id="@+id/param"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo" />
+        app:srcCompat="@drawable/parameters" />
 
     <Button
-        android:id="@+id/edit_deck_button"
+        android:id="@+id/collection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_weight="1"
-        android:background="@drawable/button_shape_red"
-        android:text="@string/edit_deck_button_text"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/play_button"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <Button
-        android:id="@+id/settings_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_weight="1"
-        android:background="@drawable/button_shape_red"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:text="@string/settings_button_text"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/play_button"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <Button
-        android:id="@+id/shop_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_weight="1"
-        android:background="@drawable/button_shape_red"
-        android:text="@string/store_button_text"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/settings_button"
-        app:layout_constraintStart_toEndOf="@+id/edit_deck_button" />
+        android:background="@drawable/button_shape_gold"
+        android:fontFamily="@font/roboto_bold"
+        android:paddingHorizontal="23dp"
+        android:paddingVertical="11dp"
+        android:text="@string/collection_btn"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintBottom_toBottomOf="@+id/pack"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <FrameLayout
         android:id="@+id/filter_layout"
@@ -98,8 +108,10 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.366"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.075">
 
     </FrameLayout>
 
@@ -120,23 +132,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/filter_layout"
-        app:layout_constraintVertical_bias="0.638" />
+        app:layout_constraintTop_toTopOf="@+id/guideline4" />
 
     <ProgressBar
         android:id="@+id/loader"
         style="?android:attr/progressBarStyle"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:indeterminateDrawable="@drawable/progress_icon"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/shop_button"
+        app:layout_constraintBottom_toBottomOf="@+id/play_button"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toTopOf="@+id/play_button"
+        app:layout_constraintVertical_bias="0.41000003" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline3"

@@ -7,8 +7,7 @@
     <string name="sign_in_confirm_pass_label" translatable="true">Confirm password</string>
     <string name="play_button_text">Play</string>
     <string name="settings_button_text">Setting</string>
-    <string name="edit_deck_button_text">My Deck</string>
-    <string name="store_button_text">Store</string>
+    <string name="store_button_text">Shop</string>
     <string name="sign_up_username">Username</string>
     <string name="sign_up_no_username">Please enter an username</string>
     <string name="sing_up_error_email">Please enter a valid email</string>
@@ -27,4 +26,7 @@
     <string name="choose_deck_title">Choose your first deck</string>
     <string name="validate_choice">validate</string>
     <string name="life_prefix" translatable="true">LP :</string>
+    <string name="pack_btn" translatable="false">Packs</string>
+    <string name="collection_btn">My collection</string>
+    <string name="page_prefix" translatable="false">page</string>
 </resources>

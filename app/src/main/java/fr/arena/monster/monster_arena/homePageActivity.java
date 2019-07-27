@@ -40,7 +40,9 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
     Button editDeck;
     ImageView playButton;
     Button shopButton;
-    Button settingButton;
+    ImageView settingButton;
+    Button packButton;
+    Button pack_nb;
     String TAG = "HomePageActivity";
     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     FrameLayout filter;
@@ -70,9 +72,11 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
 
         setContentView(R.layout.activity_home_page);
 
-        shopButton = (Button) findViewById(R.id.shop_button);
-        settingButton = (Button) findViewById(R.id.settings_button);
-        editDeck = (Button) findViewById(R.id.edit_deck_button);
+        shopButton = (Button) findViewById(R.id.shop);
+        settingButton = (ImageView) findViewById(R.id.param);
+        editDeck = (Button) findViewById(R.id.collection);
+        packButton = (Button) findViewById(R.id.pack);
+        pack_nb = (Button) findViewById(R.id.pack_nb);
         playButton = (ImageView) findViewById(R.id.play_button);
         playButton.setOnClickListener(this);
         editDeck.setOnClickListener(this);
@@ -124,14 +128,14 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
                 configView();
                 searchParty();
                 break;
-            case R.id.edit_deck_button:
-                //Intent intent = new Intent(this, homePageActivity.class);
-                //startActivity(intent);
+            case R.id.collection:
+                Intent intent = new Intent(this, EditDeckActivity.class);
+                startActivity(intent);
                 break;
-            case R.id.shop_button:
+            /*case R.id.shop_button:
                 break;
             case R.id.settings_button:
-                break;
+                break;*/
         }
     }
 
@@ -145,6 +149,8 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
         editDeck.setEnabled(false);
         shopButton.setEnabled(false);
         settingButton.setEnabled(false);
+        packButton.setEnabled(false);
+        pack_nb.setEnabled(false);
     }
 
     public void searchParty()
