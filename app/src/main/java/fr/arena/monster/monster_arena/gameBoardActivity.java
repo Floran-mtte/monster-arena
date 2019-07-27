@@ -49,7 +49,11 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
     String TAG = "gameBoardActivity";
     int currentPlayer;
     int counter = 30;
+    int manaPLayer1;
+    int manaPLayer2;
     String playerTurn;
+
+    CountDownTimer clock;
 
     ImageView hand_user_1, hand_user_2, hand_user_3, hand_user_4, hand_user_5, cardDetail, user_attack_left, user_attack_right, user_defense, opponent_attack_left, opponent_attack_right, opponent_defense, hand_opponent_1, hand_opponent_2, hand_opponent_3, hand_opponent_4, hand_opponent_5, dropZone = null, end_tour_button;
     TextView user_left, user_top, user_right, opponent_left, opponent_top, opponent_right, user_mana, opponent_mana, user_life, opponent_life, timer;
@@ -143,8 +147,10 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
         Log.d(TAG,"id = "+playerTurn);
         Log.d(TAG,"id user ="+helper.mAuth.getUid());
 
-        startTimer();
-
+        if(party.getNumberRound() == 1 && currentPlayer == 1)
+        {
+            startTimer();
+        }
         watchOtherMove();
     }
 
@@ -158,8 +164,11 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
     public void initParty(String partyId, String player_1, String player_2) {
         //getUsersId(partyId);
         party = new Party("", "", partyId, 1, player_1, player_2, 0);
-        player1 = new Player(player_1, "john", 2500, 3);
-        player2 = new Player(player_2, "daenerys", 2500, 2);
+        player1 = new Player(player_1, "john", 2500, 3,2);
+        player2 = new Player(player_2, "daenerys", 2500, 2,2);
+        manaPLayer1 = player1.getMana() -1;
+        manaPLayer2 = player2.getMana();
+
 
         currentPlayer = currentPlayer();
         switch (currentPlayer) {
@@ -515,22 +524,56 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
 
     public void updatePlayerTurn()
     {
+        clock.cancel();
+        counter = 30;
+        timer.setText(String.valueOf(counter));
+        Log.d(TAG,"current player = "+currentPlayer);
         if(currentPlayer == 1)
         {
             playerTurn = player2.getId();
+            Log.d(TAG,"player 2 info"+player2.getId());
         }
         else if (currentPlayer == 2)
         {
             playerTurn = player1.getId();
+            Log.d(TAG,"player 1 info"+player1.getId());
         }
 
+
+        party.setNumberRound(party.getNumberRound() + 1);
+
+        Map<String, Object> playerInfo = new HashMap<>();
         Map<String, Object> turn = new HashMap<>();
         turn.put("current_player", playerTurn);
+        turn.put("number_round", party.getNumberRound());
+
+        if(currentPlayer == 1)
+        {
+            manaPLayer1++;
+            player1.setMana(manaPLayer1);
+            playerInfo.put("manaMax",player1.getMana());
+            playerInfo.put("mana",player1.getMana());
+            turn.put("player1Info",playerInfo);
+            user_mana.setText(String.format("%d/%d", player1.getMana(), manaPLayer1));
+        }
+        else if(currentPlayer == 2)
+        {
+            manaPLayer2++;
+            player2.setMana(manaPLayer2);
+            playerInfo.put("manaMax",player2.getMana());
+            playerInfo.put("mana",player2.getMana());
+            turn.put("player2Info",playerInfo);
+            Log.d(TAG,"Mana player 2 => "+player2.getMana());
+            Log.d(TAG,"Mana max player 2 => "+manaPLayer2);
+            user_mana.setText(String.format("%d/%d", player2.getMana(), manaPLayer2));
+        }
+
+
         Helper.getInstance().db.collection("Party").document(party.getId())
                 .set(turn, SetOptions.merge()).addOnSuccessListener(new OnSuccessListener<Void>(){
             @Override
             public void onSuccess(Void aVoid) {
-                startTimer();
+
             }
         });
     }
@@ -780,17 +823,35 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
 
                     if (snapshot != null && snapshot.exists())
                     {
+
+                        if(party.getNumberRound() != Integer.parseInt(snapshot.getData().get("number_round").toString()))
+                        {
+                            party.setNumberRound(Integer.parseInt(snapshot.getData().get("number_round").toString()));
+                        }
+
+                        if (playerTurn != snapshot.getData().get("current_player").toString()) {
+                            Log.d("turnTAG","player turn change");
+                            playerTurn = snapshot.getData().get("current_player").toString();
+                            Log.d(TAG,"round" + String.valueOf(party.getNumberRound()));
+                            if(party.getNumberRound() != 1) {
+                                pickCard(currentPlayer);
+                                startTimer();
+                            }
+                            Log.d(TAG, "round : "+party.getNumberRound());
+
+                        }
+
                         if (currentPlayer == 1) {
                             if (snapshot.getData().get("player2Info") != null) {
-                                /*Map<String, Object> player2Info = (Map<String, Object>) snapshot.getData().get("player2Info");
-                                if (player2Info.get("board") != null)
-                                    setAdvBoard((Map<String, Object>) player2Info.get("board"), player2);*/
+                                Map<String, Object> playerInfo = (Map<String, Object>) snapshot.getData().get("player2Info");
+                                player2.updatePlayer(playerInfo);
+                                opponent_mana.setText(String.format("%d/%d",player2.getMana(),player2.getManaMax()));
                             }
                         } else if (currentPlayer == 2){
                             if (snapshot.getData().get("player1Info") != null) {
                                 Map<String, Object> playerInfo = (Map<String, Object>) snapshot.getData().get("player1Info");
                                 player1.updatePlayer(playerInfo);
-                                updateOpponent(player1);
+                                opponent_mana.setText(String.format("%d/%d",player1.getMana(),player1.getManaMax()));
                             }
                         }
 
@@ -811,8 +872,8 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
         else
             mana = player.getMana() + "/" + (party.getNumberRound()+1);
         opponent_mana.setText(mana);
-        //todo : show nb card in opponent hand
-        setAdvHand(player.getHand());
+        if (player.getHand() != null)
+            setAdvHand(player.getHand());
         if (player.getBoard() != null)
             setAdvBoard(player.getBoard());
     }
@@ -875,35 +936,50 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
             String atk;
             switch (row.get("pos").toString()) {
                 case "left":
-                    opponent_attack_left.setImageDrawable(source);
-                    atk = "atk : "+card.get("attack");
-                    opponent_left.setText(atk);
-                    opponent_left.setVisibility(View.VISIBLE);
+                    Log.d(TAG, "setAdvBoard: "+opponent_attack_left.getTag(R.id.name)+" = "+card.get("assetPath"));
+                    if (opponent_attack_left.getTag(R.id.name) == null || !opponent_attack_left.getTag(R.id.name).equals(card.get("assetPath").toString())) {
+                        opponent_attack_left.setImageDrawable(source);
+                        opponent_attack_left.setTag(R.id.name, card.get("assetPath").toString());
+                        atk = "atk : " + card.get("attack");
+                        opponent_left.setText(atk);
+                        opponent_left.setVisibility(View.VISIBLE);
+                        Helper.playVoice(this, card.get("assetPath").toString());
+                    }
                     break;
                 case "right":
-                    opponent_attack_right.setImageDrawable(source);
-                    atk = "atk : "+card.get("attack");
-                    opponent_right.setText(atk);
-                    opponent_right.setVisibility(View.VISIBLE);
-
+                    if (opponent_attack_right.getTag(R.id.name) == null || !opponent_attack_right.getTag(R.id.name).equals(card.get("assetPath"))) {
+                        opponent_attack_right.setImageDrawable(source);
+                        opponent_attack_right.setTag(R.id.name, card.get("assetPath"));
+                        atk = "atk : " + card.get("attack");
+                        opponent_right.setText(atk);
+                        opponent_right.setVisibility(View.VISIBLE);
+                        Helper.playVoice(this, card.get("assetPath").toString());
+                    }
                     break;
                 case "top":
-                    opponent_defense.setImageDrawable(source);
-                    String def = "def : "+card.get("defend");
-                    opponent_top.setText(def);
-                    opponent_top.setVisibility(View.VISIBLE);
+                    if (opponent_defense.getTag(R.id.name) == null || !opponent_defense.getTag(R.id.name).equals(card.get("assetPath"))) {
+                        opponent_defense.setImageDrawable(source);
+                        opponent_defense.setTag(R.id.name, card.get("assetPath"));
+                        String def = "def : " + card.get("defend");
+                        opponent_top.setText(def);
+                        opponent_top.setVisibility(View.VISIBLE);
+                        Helper.playVoice(this, card.get("assetPath").toString());
+                    }
                     break;
             }
-            //Helper.playVoice(this, card.get("assetPath").toString());
         }
     }
 
     public void startTimer()
     {
+        Log.d(TAG,"Dans le start timer");
+        Log.d(TAG,"playerTurn : "+playerTurn);
+        Log.d(TAG,"getUid : "+helper.mAuth.getUid());
+        counter = 30;
         if(playerTurn.equals(helper.mAuth.getUid()))
         {
             Log.d(TAG,"dans le if");
-            new CountDownTimer(30000, 1000){
+            clock = new CountDownTimer(30000, 1000){
                 public void onTick(long millisUntilFinished){
                     Log.d(TAG,"dans le onTick");
                     timer.setText(String.valueOf(counter));
@@ -917,5 +993,63 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
             }.start();
         }
     }
+
+    public void pickCard(int currentPlayer)
+    {
+
+        if(currentPlayer == 1)
+        {
+            if(playerTurn == player1.getId())
+            {
+                Log.d(TAG,"Dans le current player");
+                ImageView[] hands = new ImageView[5];
+                hands[0] = hand_user_1;
+                hands[1] = hand_user_2;
+                hands[2] = hand_user_3;
+                hands[3] = hand_user_4;
+                hands[4] = hand_user_5;
+
+                Boolean emptyHand = false;
+                int pos = 0;
+
+                for (int i = 0; i < hands.length;i++)
+                {
+                    if(hands[i].getVisibility() == View.INVISIBLE)
+                    {
+                        emptyHand = true;
+                        pos = i;
+                        break;
+                    }
+                }
+
+                Log.d(TAG, "index : "+pos);
+                if(emptyHand)
+                {
+                    Log.d(TAG,"Dans le emptyHand");
+                    Collections.shuffle(player1Card);
+                    Card parent = player1Card.get(0);
+                    if (parent instanceof CardEntity) {
+                        CardEntity card = (CardEntity) parent;
+                        Drawable path = getDrawable(getResources()
+                                .getIdentifier(card.getAssetPath(), "drawable", getPackageName()));
+                        hands[pos].setImageDrawable(path);
+                        hands[pos].setTag(R.id.atk, card.getAttack());
+                        hands[pos].setTag(R.id.def, card.getDefend());
+                        hands[pos].setTag(R.id.cost, card.getLevel());
+                        hands[pos].setTag(R.id.name, card.getAssetPath());
+                        hands[pos].setTag(R.id.index, Integer.toString(pos));
+                        hands[pos].setVisibility(View.VISIBLE);
+                    }
+                }
+
+            }
+        }
+        else if(currentPlayer == 2)
+        {
+
+        }
+    }
+
+
 
 }

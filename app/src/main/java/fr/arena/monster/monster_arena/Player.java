@@ -13,14 +13,16 @@ public class Player {
     private String playerName = "john";
     private int lifepoint;
     private int mana;
+    private int manaMax;
     private Map<String, Object> hand = null;
     private Map<String, Object> board = null;
 
-    public Player(String id, String playerName, int lifepoint, int mana) {
+    public Player(String id, String playerName, int lifepoint, int mana, int manaMax) {
         setId(id);
         setPlayerName(playerName);
         setLifepoint(lifepoint);
         setMana(mana);
+        setManaMax(manaMax);
     }
 
     public Player(String id, int lifepoint, int mana) {
@@ -86,6 +88,7 @@ public class Player {
             player1Info.put("name", this.getPlayerName());
             player1Info.put("life", this.getLifepoint());
             player1Info.put("mana", this.getMana());
+            player1Info.put("manaMax", this.getManaMax());
             player1Info.put("hand", this.getHand());
             player1Info.put("board", this.getBoard());
             Helper.getInstance().db.collection("Party").document(partyId)
@@ -101,6 +104,7 @@ public class Player {
             player2Info.put("name", this.getPlayerName());
             player2Info.put("life", this.getLifepoint());
             player2Info.put("mana", this.getMana());
+            player2Info.put("manaMax", this.getManaMax());
             player2Info.put("hand", this.getHand());
             player2Info.put("board", this.getBoard());
             Helper.getInstance().db.collection("Party").document(partyId)
@@ -125,6 +129,8 @@ public class Player {
                 case "mana":
                     setMana(Integer.parseInt(entry.getValue().toString()));
                     break;
+                case "manaMax":
+                    setManaMax(Integer.parseInt(entry.getValue().toString()));
                 case "name":
                     setPlayerName(entry.getValue().toString());
                     break;
@@ -132,9 +138,18 @@ public class Player {
                     setHand((Map<String, Object>) entry.getValue());
                     break;
                 case "board":
-                    setBoard((Map<String, Object>) entry.getValue());
+                    if (this.getBoard() != entry.getValue())
+                        setBoard((Map<String, Object>) entry.getValue());
                     break;
             }
         }
+    }
+
+    public int getManaMax() {
+        return manaMax;
+    }
+
+    public void setManaMax(int manaMax) {
+        this.manaMax = manaMax;
     }
 }
