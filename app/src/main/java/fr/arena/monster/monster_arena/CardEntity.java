@@ -12,6 +12,13 @@ public class CardEntity extends Card {
         setDefend(defend);
     }
 
+    public CardEntity(int defend, int attack, int level, String name, String id) {
+        super(name, level, id);
+
+        setAttack(attack);
+        setDefend(defend);
+    }
+
     public int getDefend() {
         return defend;
     }
