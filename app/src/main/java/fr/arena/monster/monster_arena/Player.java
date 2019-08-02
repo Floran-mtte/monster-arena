@@ -145,6 +145,17 @@ public class Player {
         }
     }
 
+    public boolean deleteCardFromBoard(String pos) {
+        try {
+            this.getBoard().remove("board-"+pos);
+            return true;
+        }
+        catch (Exception e) {
+            Log.d("battle", e.getMessage());
+            return false;
+        }
+    }
+
     public int getManaMax() {
         return manaMax;
     }

@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -23,11 +22,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.SetOptions;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -43,8 +40,8 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
     ArrayList<Card>         player1Card = new ArrayList<>();
     ArrayList<Card>         player2Card = new ArrayList<>();
 
-    GameBoardPlayer player1_board;
-    GameBoardPlayer player2_board;
+    Map<String, CardEntity> player1_board = new HashMap<>();
+    Map<String, CardEntity> player2_board = new HashMap<>();
 
     Map<String, Object> current_player_hand;
 
@@ -52,6 +49,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
     String TAG = "gameBoardActivity";
     int currentPlayer, counter = 3, manaPLayer1, manaPLayer2;
     CardEntity clickedCard;
+    CardEntity opponentCard;
     String playerTurn;
 
     boolean attackMode = false;
@@ -148,6 +146,10 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
         opponent_right.setOnClickListener(this);
         opponent_top.setOnClickListener(this);
 
+        opponent_attack_left.setOnClickListener(this);
+        opponent_attack_right.setOnClickListener(this);
+        opponent_defense.setOnClickListener(this);
+
         end_tour_button.setOnClickListener(this);
 
         String partyId = getIntent().getStringExtra("partyId");
@@ -194,8 +196,6 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                 opponent_mana.setText(String.format("%d/%d", player2.getMana(), player2.getMana()));
 
                 //todo : show of user wich player is
-                Toast toast = Toast.makeText(getApplicationContext(), "Player 1", Toast.LENGTH_SHORT);
-                toast.show();
 
                 getPlayer1Card(player_1);
                 listener = new OnTaskCompleted() {
@@ -249,8 +249,6 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                 opponent_mana.setText(String.format("%d/%d", player1.getMana(), player1.getMana()-1));
 
                 //todo : show of user wich player is
-                Toast toast2 = Toast.makeText(getApplicationContext(), "Player 2", Toast.LENGTH_SHORT);
-                toast2.show();
 
                 getPlayer2Card(player_2);
                 listener = new OnTaskCompleted() {
@@ -279,6 +277,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                                             .getIdentifier(card.getAssetPath(), "drawable", getPackageName()));
                                     Log.d(TAG, card.getAssetPath());
                                     hands[i].setImageDrawable(path);
+                                    hands[i].setTag(R.id.id, card.getId());
                                     hands[i].setTag(R.id.atk, card.getAttack());
                                     hands[i].setTag(R.id.def, card.getDefend());
                                     hands[i].setTag(R.id.cost, card.getLevel());
@@ -527,65 +526,22 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                 cardDetail.setVisibility(View.INVISIBLE);
                 break;
             case R.id.left_card_opponent:
-                if(attackMode) {
-                    attackMode = false;
-                    if(currentPlayer == 1) {
-
-                        CardEntity opponentCard = player2_board.getLeftCardBoard();
-                        int difference = clickedCard.getAttack() - opponentCard.getAttack();
-                        boolean exist = false;
-                        if(difference > 0) {
-                            String id = opponentCard.getId();
-                            int i = 0;
-                            while(i < this.player2Card.size()) {
-                                if(this.player2Card.get(i).getId().equals(id)){
-                                    exist = true;
-                                    break;
-                                }
-                                i++;
-                            }
-
-                            if(exist) {
-                                player2Card.remove(i);
-                                Drawable path = getDrawable(getResources()
-                                        .getIdentifier("card_section", "drawable", getPackageName()));
-                                user_attack_left.setImageDrawable(path);
-                                player2.setLifepoint(player2.getLifepoint() - difference);
-                            } else {
-                                Log.d(TAG,"Error card not found");
-                            }
-
-                        }
-                        else if(difference < 0) {
-
-                        }
-                        else if(difference == 0) {
-
-                        }
-                    }
-                }
+                fight("left");
                 break;
             case R.id.right_card_opponent:
-
+                fight("right");
                 break;
             case R.id.up_card_opponent:
-
+                fight("top");
                 break;
             case R.id.left_card_user:
-
-                if(currentPlayer == 1) {
-                    clickedCard = player1_board.getLeftCardBoard();
-                }
-                else if(currentPlayer == 2) {
-                    clickedCard = player2_board.getLeftCardBoard();
-                }
-                attackMode = true;
+                setClickedCard("left");
                 break;
             case R.id.right_card_user:
-
+                setClickedCard("right");
                 break;
             case R.id.up_card_user:
-
+                setClickedCard("top");
                 break;
             case R.id.end_tour_button:
                 if(playerTurn.equals(helper.mAuth.getUid()))
@@ -593,6 +549,148 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                     updatePlayerTurn();
                 }
                 break;
+        }
+    }
+
+    public void setClickedCard(String pos) {
+        attackMode = true;
+        Log.d("battle", "dans le click user");
+        if(currentPlayer == 1) {
+
+            Map<String, Object> board = player1.getBoard();
+
+            Map<String, Object> row;
+
+            for (Map.Entry<String, Object> entry : board.entrySet()) {
+                row = (Map<String, Object>) entry.getValue();
+                if(row.get("pos").toString().equals(pos)) {
+                    Map<String, Object> card = ( Map<String, Object>) row.get("card");
+                    clickedCard = new CardEntity(
+                            card.get("assetPath").toString(),
+                            Integer.parseInt(card.get("defend").toString()),
+                            Integer.parseInt(card.get("attack").toString()),
+                            card.get("id").toString(),
+                            Integer.parseInt(card.get("level").toString()),
+                            card.get("name").toString(),
+                            1,
+                            ""
+                    );
+                }
+            }
+
+        }
+        else if(currentPlayer == 2) {
+
+            Map<String, Object> board = player2.getBoard();
+
+            Map<String, Object> row;
+
+            for (Map.Entry<String, Object> entry : board.entrySet()) {
+                row = (Map<String, Object>) entry.getValue();
+                if(row.get("pos").toString().equals(pos)) {
+                    Map<String, Object> card = ( Map<String, Object>) row.get("card");
+                    clickedCard = new CardEntity(
+                            card.get("assetPath").toString(),
+                            Integer.parseInt(card.get("defend").toString()),
+                            Integer.parseInt(card.get("attack").toString()),
+                            card.get("id").toString(),
+                            Integer.parseInt(card.get("level").toString()),
+                            card.get("name").toString(),
+                            1,
+                            ""
+                    );
+                }
+            }
+
+        }
+    }
+
+    public void fight(String pos) {
+        Log.d("battle","dans le click opponent");
+        if(attackMode) {
+            attackMode = false;
+            if(currentPlayer == 1) {
+                Map<String, Object> board = player2.getBoard();
+                Log.d("battle",board.toString());
+                Map<String, Object> row;
+
+                for (Map.Entry<String, Object> entry : board.entrySet()) {
+                    row = (Map<String, Object>) entry.getValue();
+                    if(row.get("pos").toString().equals(pos)) {
+                        Map<String, Object> card = ( Map<String, Object>) row.get("card");
+                        int difference = clickedCard.getAttack() - Integer.parseInt(card.get("attack").toString());
+                        Log.d("battle","diff : "+difference);
+                        boolean exist = false;
+                        if(difference > 0) {
+                            Log.d("battle","dans le diff > 0");
+
+
+                            player2.deleteCardFromBoard(pos);
+
+                            Drawable path = getDrawable(getResources().getIdentifier("card_section", "drawable", getPackageName()));
+                            switch (pos) {
+                                case "left":
+                                    opponent_attack_left.setImageDrawable(path);
+                                    opponent_attack_left.setTag(null);
+                                    opponent_left.setText("");
+                                    opponent_left.setVisibility(View.INVISIBLE);
+                                    break;
+                                case "right":
+                                    opponent_attack_right.setImageDrawable(path);
+                                    opponent_attack_right.setTag(null);
+                                    opponent_right.setText("");
+                                    opponent_right.setVisibility(View.INVISIBLE);
+                                    break;
+                                case "top":
+                                    opponent_defense.setImageDrawable(path);
+                                    opponent_defense.setTag(null);
+                                    opponent_top.setText("");
+                                    opponent_top.setVisibility(View.INVISIBLE);
+                                    break;
+                            }
+
+
+                            player2.setLifepoint(player2.getLifepoint() - difference);
+                            opponent_life.setText(player2.getLifepoint()+"");
+                            player2.setPlayerInfo(party.getId(), 2);
+                            setAdvBoard(player2.getBoard());
+
+                        }
+                        else if(difference < 0) {
+                            Log.d("battle","dans le diff < 0");
+
+                            //todo remove in firebase the card
+
+                            Drawable path = getDrawable(getResources().getIdentifier("card_section", "drawable", getPackageName()));
+                            user_attack_left.setImageDrawable(path);
+                            user_attack_left.setTag(null);
+                            user_left.setText("");
+
+                            player1.setLifepoint(player1.getLifepoint() + difference);
+                            opponent_life.setText(player1.getLifepoint()+"");
+                            player1.setPlayerInfo(party.getId(), 1);
+                        }
+                        else {
+                            Log.d("battle","dans le diff = 0");
+
+                            //todo remove in firebase the card
+
+                            Drawable path = getDrawable(getResources().getIdentifier("card_section", "drawable", getPackageName()));
+                            user_attack_left.setImageDrawable(path);
+                            user_attack_left.setTag(null);
+                            user_left.setText("");
+
+                            opponent_attack_left.setImageDrawable(path);
+                            opponent_attack_left.setTag(null);
+                            opponent_left.setText("");
+
+                            player1.setPlayerInfo(party.getId(), 1);
+                            player2.setPlayerInfo(party.getId(), 2);
+                        }
+                    }
+                }
+
+            }
         }
     }
 
@@ -666,8 +764,6 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
     @Override
     public boolean onLongClick(View v) {
         if (!playerTurn.equals(Helper.getInstance().mAuth.getUid())) {
-            Toast toast = Toast.makeText(getApplicationContext(), "is not your turn", Toast.LENGTH_SHORT);
-            toast.show();
             return false;
         }
         View.DragShadowBuilder mShadow = new View.DragShadowBuilder(v);
@@ -676,40 +772,6 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
         ClipData data = new ClipData(v.getTag().toString(), mimeTypes, item);
         v.startDragAndDrop(data, mShadow, null, 0);
         return false;
-    }
-
-    public void setCardBoard(ImageView hand_user, String pos) {
-
-        CardEntity card = new CardEntity(Integer.parseInt(hand_user.getTag(R.id.atk).toString()),
-                Integer.parseInt(hand_user.getTag(R.id.def).toString()),
-                Integer.parseInt(hand_user.getTag(R.id.name).toString()),
-                hand_user.getTag(R.id.cost).toString(),
-                hand_user.getTag(R.id.id).toString());
-
-        if(pos.equals("left")){
-            if(currentPlayer == 1) {
-                player1_board.setLeftCard(card);
-            }
-            else {
-                player2_board.setLeftCard(card);
-            }
-        }
-        else if(pos.equals("up")) {
-            if(currentPlayer == 1) {
-                player1_board.setUpCard(card);
-            }
-            else {
-                player2_board.setUpCard(card);
-            }
-        }
-        else if(pos.equals("right")) {
-            if(currentPlayer == 1) {
-                player1_board.setRightCard(card);
-            }
-            else {
-                player2_board.setRightCard(card);
-            }
-        }
     }
 
     @Override
@@ -765,16 +827,15 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                     return false;
 
 
-                String pos = (String) dropZone.getTag();
                 Drawable source;
                 ArrayList<String> stat = new ArrayList<>();
+                String pos = (String) dropZone.getTag();
                 switch (label) {
                     case "hand_user_1":
                         source = hand_user_1.getDrawable();
                         dropZone.setImageDrawable(source);
                         stat.add(hand_user_1.getTag(R.id.atk).toString());
                         stat.add(hand_user_1.getTag(R.id.def).toString());
-                        setCardBoard(hand_user_1, pos);
                         manaDecrease(Integer.parseInt(hand_user_1.getTag(R.id.cost).toString()));
                         hand_user_1.setVisibility(View.INVISIBLE);
                         Helper.playVoice(this, hand_user_1.getTag(R.id.name).toString());
@@ -785,7 +846,6 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                         dropZone.setImageDrawable(source);
                         stat.add(hand_user_2.getTag(R.id.atk).toString());
                         stat.add(hand_user_2.getTag(R.id.def).toString());
-                        setCardBoard(hand_user_2, pos);
                         manaDecrease(Integer.parseInt(hand_user_2.getTag(R.id.cost).toString()));
                         hand_user_2.setVisibility(View.INVISIBLE);
                         Helper.playVoice(this, hand_user_2.getTag(R.id.name).toString());
@@ -796,7 +856,6 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                         dropZone.setImageDrawable(source);
                         stat.add(hand_user_3.getTag(R.id.atk).toString());
                         stat.add(hand_user_3.getTag(R.id.def).toString());
-                        setCardBoard(hand_user_2, pos);
                         manaDecrease(Integer.parseInt(hand_user_3.getTag(R.id.cost).toString()));
                         hand_user_3.setVisibility(View.INVISIBLE);
                         Helper.playVoice(this, hand_user_3.getTag(R.id.name).toString());
@@ -807,18 +866,16 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                         dropZone.setImageDrawable(source);
                         stat.add(hand_user_4.getTag(R.id.atk).toString());
                         stat.add(hand_user_4.getTag(R.id.def).toString());
-                        setCardBoard(hand_user_2, pos);
                         manaDecrease(Integer.parseInt(hand_user_4.getTag(R.id.cost).toString()));
                         hand_user_4.setVisibility(View.INVISIBLE);
                         Helper.playVoice(this, hand_user_4.getTag(R.id.name).toString());
-                        sendPlayerBoard(dropZone, Integer.parseInt(hand_user_4.getTag(R.id.index).toString()), "hand4");
+                        sendPlayerBoard(dropZone, Integer.parseInt(hand_user_4.getTag(R.id.id).toString()), "hand4");
                         break;
                     case "hand_user_5":
                         source = hand_user_5.getDrawable();
                         dropZone.setImageDrawable(source);
                         stat.add(hand_user_5.getTag(R.id.atk).toString());
                         stat.add(hand_user_5.getTag(R.id.def).toString());
-                        setCardBoard(hand_user_2, pos);
                         manaDecrease(Integer.parseInt(hand_user_5.getTag(R.id.cost).toString()));
                         hand_user_5.setVisibility(View.INVISIBLE);
                         Helper.playVoice(this, hand_user_5.getTag(R.id.name).toString());
@@ -923,7 +980,16 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
         Map<String, Object> cardInfo = new HashMap<>();
         if (currentPlayer == 1) {
             Card parent = player1Card.get(index);
-            Map<String, Object> board = new HashMap<>();
+            Map<String, Object> board = null;
+            if(player1.getBoard() != null) {
+                if(player1.getBoard().size() != 0) {
+                    board = player1.getBoard();
+                }
+            }
+            else {
+                board = new HashMap<>();
+            }
+
             if (parent instanceof CardEntity)
                 cardInfo.put("card",(CardEntity) parent);
             cardInfo.put("pos", pos);
@@ -935,7 +1001,15 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
             player1.setPlayerInfo(party.getId(), 1);
         } else {
             Card parent = player2Card.get(index);
-            Map<String, Object> board = new HashMap<>();
+            Map<String, Object> board = null;
+            if(player2.getBoard() != null) {
+                if(player2.getBoard().size() != 0) {
+                    board = player2.getBoard();
+                }
+            }
+            else {
+                board = new HashMap<>();
+            }
             if (parent instanceof CardEntity)
                 cardInfo.put("card",(CardEntity) parent);
             cardInfo.put("pos", pos);
@@ -967,8 +1041,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                     if (snapshot != null && snapshot.exists())
                     {
 
-                        if(party.getNumberRound() != Integer.parseInt(snapshot.getData().get("number_round").toString()))
-                        {
+                        if(party.getNumberRound() != Integer.parseInt(snapshot.getData().get("number_round").toString())) {
                             party.setNumberRound(Integer.parseInt(snapshot.getData().get("number_round").toString()));
                         }
 
@@ -983,13 +1056,24 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                         }
 
                         if (currentPlayer == 1) {
+                            if(snapshot.getData().get("player1Info") != null) {
+                                Map<String, Object> playerInfo = (Map<String, Object>) snapshot.getData().get("player1Info");
+                                player1.updatePlayer(playerInfo);
+                            }
                             if (snapshot.getData().get("player2Info") != null) {
                                 Map<String, Object> playerInfo = (Map<String, Object>) snapshot.getData().get("player2Info");
                                 player2.updatePlayer(playerInfo);
                                 opponent_mana.setText(String.format("%d/%d",player2.getMana(),player2.getManaMax()));
                                 updateOpponent(player2);
                             }
-                        } else if (currentPlayer == 2){
+                        } else if (currentPlayer == 2) {
+                            if(snapshot.getData().get("player2Info") != null) {
+                                Map<String, Object> playerInfo = (Map<String, Object>) snapshot.getData().get("player2Info");
+                                player2.updatePlayer(playerInfo);
+                                user_life.setText(player2.getLifepoint()+"");
+                                updateBoard(player2.getBoard());
+                            }
+
                             if (snapshot.getData().get("player1Info") != null) {
                                 Map<String, Object> playerInfo = (Map<String, Object>) snapshot.getData().get("player1Info");
                                 player1.updatePlayer(playerInfo);
@@ -1004,6 +1088,87 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                         Log.d("passe","else");
                     }
                 });
+    }
+
+    public void updateBoard(Map<String, Object> board) {
+        Map<String, Object> row;
+
+        if(board != null) {
+            Log.d("battle","board non vide");
+            try {
+                Log.d("battle","size"+board.size());
+            }
+            catch (Exception e) {
+                Log.d("battle","Erreur board to string");
+            }
+
+            if(board.size() != 0) {
+                for (Map.Entry<String, Object> entry : board.entrySet()) {
+
+                    row = (Map<String, Object>) entry.getValue();
+                    Map<String, Object> card = ( Map<String, Object>) row.get("card");
+                    Log.d("battle",card.get("assetPath").toString());
+                    Drawable source = getDrawable(getResources()
+                            .getIdentifier(card.get("assetPath").toString(), "drawable", getPackageName()));
+                    String atk;
+                    switch (row.get("pos").toString()) {
+                        case "left":
+                            Log.d(TAG, "updateBoard: "+user_attack_left.getTag(R.id.name)+" = "+card.get("assetPath"));
+                            if (user_attack_left.getTag(R.id.name) == null || !user_attack_left.getTag(R.id.name).equals(card.get("assetPath").toString())) {
+                                user_attack_left.setImageDrawable(source);
+                                user_attack_left.setTag(R.id.name, card.get("assetPath").toString());
+                                atk = "atk : " + card.get("attack");
+                                user_left.setText(atk);
+                                user_left.setVisibility(View.VISIBLE);
+                            }
+                            break;
+                        case "right":
+                            if (user_attack_right.getTag(R.id.name) == null || !user_attack_right.getTag(R.id.name).equals(card.get("assetPath"))) {
+                                user_attack_right.setImageDrawable(source);
+                                user_attack_right.setTag(R.id.name, card.get("assetPath"));
+                                atk = "atk : " + card.get("attack");
+                                user_right.setText(atk);
+                                user_right.setVisibility(View.VISIBLE);
+                            }
+                            break;
+                        case "top":
+                            if (user_defense.getTag(R.id.name) == null || !user_defense.getTag(R.id.name).equals(card.get("assetPath"))) {
+                                user_defense.setImageDrawable(source);
+                                user_defense.setTag(R.id.name, card.get("assetPath"));
+                                String def = "def : " + card.get("defend");
+                                user_top.setText(def);
+                                user_top.setVisibility(View.VISIBLE);
+                            }
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                Drawable path = getDrawable(getResources().getIdentifier("card_section", "drawable", getPackageName()));
+                user_attack_left.setImageDrawable(path);
+                opponent_attack_left.setTag(null);
+                user_left.setText("");
+                user_left.setVisibility(View.INVISIBLE);
+
+
+                user_attack_right.setImageDrawable(path);
+                opponent_attack_right.setTag(null);
+                user_right.setText("");
+                user_right.setVisibility(View.INVISIBLE);
+
+                user_defense.setImageDrawable(path);
+                user_defense.setTag(null);
+                user_top.setText("");
+                user_top.setVisibility(View.INVISIBLE);
+
+            }
+
+        }
+        else {
+            Log.d("battle","board vide");
+        }
+
     }
 
     public void updateOpponent(Player player) {
@@ -1171,12 +1336,10 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                   Card parent = null;
                   if(currentPlayer == 1)
                   {
-                      Collections.shuffle(player1Card);
                       parent = player1Card.get(0);
                   }
                   else if(currentPlayer == 2)
                   {
-                      Collections.shuffle(player2Card);
                       parent = player2Card.get(0);
                   }
 

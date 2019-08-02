@@ -20,13 +20,6 @@ public abstract class Card {
         setCardDetail(cardDetail);
     }
 
-    public Card(String name, int level, String id)
-    {
-        setId(id);
-        setLevel(level);
-        setName(name);
-    }
-
     public String getAssetPath() {
         return assetPath;
     }
