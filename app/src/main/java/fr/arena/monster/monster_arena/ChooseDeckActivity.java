@@ -28,6 +28,7 @@ public class ChooseDeckActivity extends AppCompatActivity implements View.OnClic
     private ImageView olympie, ragnarok, armana;
     private Button validate;
     private String deck;
+    private String TAG = "ChooseDeckActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,12 +84,12 @@ public class ChooseDeckActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
-    public void goToFight() {
+    public void goToHome() {
         SharedPreferences.Editor editor = getSharedPreferences("App", MODE_PRIVATE).edit();
         editor.putInt("tuto", 1);
         editor.apply();
         finish();
-        Intent intent = new Intent(this, tutoGameActivity.class);
+        Intent intent = new Intent(this, homePageActivity.class);
         startActivity(intent);
     }
 
@@ -159,7 +160,7 @@ public class ChooseDeckActivity extends AppCompatActivity implements View.OnClic
                 .set(deck).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                goToFight();
+                getDetailsCard((List) deck);
             }
         })
                 .addOnFailureListener(new OnFailureListener() {
@@ -168,5 +169,59 @@ public class ChooseDeckActivity extends AppCompatActivity implements View.OnClic
                         Log.w("fail", "Error writing document", e);
                     }
                 });
+    }
+
+    public void getDetailsCard(List cardList) {
+        ArrayList deck = new ArrayList();
+        for (int i = 0; i < cardList.size(); i++) {
+            Log.d(TAG, "Test");
+            DocumentReference doc = (DocumentReference) cardList.get(i);
+            doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Map<String, Object> obj = document.getData();
+
+                            if(obj.get("card_detail").equals("entity"))
+                            {
+                                CardEntity card = new CardEntity(
+                                        obj.get("asset_path").toString(),
+                                        Integer.parseInt(obj.get("defend").toString()),
+                                        Integer.parseInt(obj.get("attack").toString()),
+                                        obj.get("id").toString(),
+                                        Integer.parseInt(obj.get("level").toString()),
+                                        obj.get("name").toString(),
+                                        Integer.parseInt(obj.get("type_card").toString()),
+                                        obj.get("card_detail").toString()
+                                );
+
+                                deck.add(card);
+                                //addCardToParty(card);
+
+                                if(cardList.size() == deck.size())
+                                {
+                                    Helper.getInstance().user.setDeck(deck);
+                                    Helper.getInstance().user.setCollection(deck);
+                                    goToHome();
+                                }
+
+                            }
+
+
+                            Log.d(TAG, obj.get("name").toString());
+
+
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
+                }
+            });
+
+        }
     }
 }

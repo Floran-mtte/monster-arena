@@ -22,9 +22,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.SetOptions;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -223,7 +223,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                                     Drawable path = getDrawable(getResources()
                                             .getIdentifier(card.getAssetPath(), "drawable", getPackageName()));
                                     hands[i].setImageDrawable(path);
-                                    hands[i].setTag(R.id.id, card.getId());
+                                    hands[i].setTag(R.id.key, card.getId());
                                     hands[i].setTag(R.id.atk, card.getAttack());
                                     hands[i].setTag(R.id.def, card.getDefend());
                                     hands[i].setTag(R.id.cost, card.getLevel());
@@ -277,7 +277,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                                             .getIdentifier(card.getAssetPath(), "drawable", getPackageName()));
                                     Log.d(TAG, card.getAssetPath());
                                     hands[i].setImageDrawable(path);
-                                    hands[i].setTag(R.id.id, card.getId());
+                                    hands[i].setTag(R.id.key, card.getId());
                                     hands[i].setTag(R.id.atk, card.getAttack());
                                     hands[i].setTag(R.id.def, card.getDefend());
                                     hands[i].setTag(R.id.cost, card.getLevel());
@@ -869,7 +869,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                         manaDecrease(Integer.parseInt(hand_user_4.getTag(R.id.cost).toString()));
                         hand_user_4.setVisibility(View.INVISIBLE);
                         Helper.playVoice(this, hand_user_4.getTag(R.id.name).toString());
-                        sendPlayerBoard(dropZone, Integer.parseInt(hand_user_4.getTag(R.id.id).toString()), "hand4");
+                        sendPlayerBoard(dropZone, Integer.parseInt(hand_user_4.getTag(R.id.key).toString()), "hand4");
                         break;
                     case "hand_user_5":
                         source = hand_user_5.getDrawable();
@@ -1349,7 +1349,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                       CardEntity card = (CardEntity) parent;
                       Drawable path = getDrawable(getResources().getIdentifier(card.getAssetPath(), "drawable", getPackageName()));
                       hands[pos].setImageDrawable(path);
-                      hands[pos].setTag(R.id.id, card.getId());
+                      hands[pos].setTag(R.id.key, card.getId());
                       hands[pos].setTag(R.id.atk, card.getAttack());
                       hands[pos].setTag(R.id.def, card.getDefend());
                       hands[pos].setTag(R.id.cost, card.getLevel());

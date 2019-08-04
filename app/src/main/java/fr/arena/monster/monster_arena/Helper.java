@@ -18,6 +18,7 @@ public class Helper {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     MediaPlayer mp;
     String lastSound = "";
+    User user = new User();
 
     public static boolean getEmail(String email) {
         Log.i("check email", email);
