@@ -139,6 +139,7 @@ public class Player {
                     break;
                 case "board":
                     if (this.getBoard() != entry.getValue())
+                        Log.d("fight","dans le setBoard");
                         setBoard((Map<String, Object>) entry.getValue());
                     break;
             }
@@ -151,7 +152,7 @@ public class Player {
             return true;
         }
         catch (Exception e) {
-            Log.d("battle", e.getMessage());
+            Log.d("battle", "trying to remove from  player board but failed cause : "+e.getMessage());
             return false;
         }
     }
