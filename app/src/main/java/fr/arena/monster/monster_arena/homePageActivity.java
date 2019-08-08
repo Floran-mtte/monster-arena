@@ -24,7 +24,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -90,10 +89,6 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
     protected void onStart() {
         applicationWillEnterForeground();
         super.onStart();
-        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                .setPersistenceEnabled(false)
-                .build();
-        Helper.getInstance().db.setFirestoreSettings(settings);
     }
 
     private void applicationWillEnterForeground() {

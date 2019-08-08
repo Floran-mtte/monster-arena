@@ -33,9 +33,13 @@ import com.google.firebase.firestore.SetOptions;
 import java.util.HashMap;
 import java.util.Map;*/
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -43,7 +47,22 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class tutoGameActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -81,7 +100,7 @@ public class tutoGameActivity extends AppCompatActivity implements View.OnClickL
 
         setContentView(R.layout.activity_home_page);
 
-        /*shopButton = (Button) findViewById(R.id.shop);
+        shopButton = (Button) findViewById(R.id.shop);
         settingButton = (ImageView) findViewById(R.id.param);
         editDeck = (Button) findViewById(R.id.collection);
         packButton = (Button) findViewById(R.id.pack);
@@ -91,26 +110,17 @@ public class tutoGameActivity extends AppCompatActivity implements View.OnClickL
         editDeck.setOnClickListener(this);
         filter = findViewById(R.id.filter_layout);
         textView = findViewById(R.id.textView2);
-        loader = findViewById(R.id.loader);*/
+        loader = findViewById(R.id.loader);
 
     }
 
-    @Override
-    public void onClick(View v) {
-
-    }
-
-    /*public static boolean isAppWentToBg = false;
+   public static boolean isAppWentToBg = false;
 
     public static boolean isWindowFocused = false;
 
-    protected void onStart() {
+     protected void onStart() {
         applicationWillEnterForeground();
         super.onStart();
-        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                .setPersistenceEnabled(false)
-                .build();
-        Helper.getInstance().db.setFirestoreSettings(settings);
     }
 
     private void applicationWillEnterForeground() {
@@ -146,10 +156,10 @@ public class tutoGameActivity extends AppCompatActivity implements View.OnClickL
                 Intent intent = new Intent(this, EditDeckActivity.class);
                 startActivity(intent);
                 break;
-            *//*case R.id.shop_button:
+            /*case R.id.shop_button:
+                break;*/
+            case R.id.param:
                 break;
-            case R.id.settings_button:
-                break;*//*
         }
     }
 
@@ -357,5 +367,5 @@ public class tutoGameActivity extends AppCompatActivity implements View.OnClickL
         intent.putExtra("player_2", player2);
         intent.putExtra("current_player", current_player);
         startActivity(intent);
-    }*/
+    }
 }

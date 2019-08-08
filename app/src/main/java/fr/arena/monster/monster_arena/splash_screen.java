@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
+
 public class splash_screen extends AppCompatActivity {
 
     int progress = 0;
@@ -76,6 +78,10 @@ public class splash_screen extends AppCompatActivity {
     }
 
     public void whoRedirect() {
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(false)
+                .build();
+        Helper.getInstance().db.setFirestoreSettings(settings);
         SharedPreferences prefs = getSharedPreferences("App", MODE_PRIVATE);
         Boolean connected = prefs.getBoolean("isLogged", false);
         Integer tuto = prefs.getInt("tuto", 1);
