@@ -29,4 +29,10 @@
     <string name="pack_btn" translatable="false">Packs</string>
     <string name="collection_btn">My collection</string>
     <string name="page_prefix" translatable="false">page</string>
+    <string name="victory_title">You win</string>
+    <string name="defeat_title">You lose</string>
+    <string name="back_home_btn">Go home</string>
+    <string name="blank" translatable="false"></string>
+    <string name="timer_default" translatable="false">30</string>
+    <string name="mana_default" translatable="false">2/2</string>
 </resources>

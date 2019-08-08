@@ -23,4 +23,7 @@
     <string name="validate_choice">valider</string>
     <string name="life_prefix" translatable="true">"PV : "</string>
     <string name="collection_btn">Ma collection</string>
+    <string name="victory_title">Vous avez gagné</string>
+    <string name="defeat_title">Vous avez perdu</string>
+    <string name="back_home_btn">Revenir à l\'acceuil</string>
 </resources>

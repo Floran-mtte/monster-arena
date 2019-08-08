@@ -3,7 +3,6 @@ package fr.arena.monster.monster_arena;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnSuccessListener;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +15,7 @@ public class Player {
     private int manaMax;
     private Map<String, Object> hand = null;
     private Map<String, Object> board = null;
+    private Map<Integer, Object> discarding = null;
 
     public Player(String id, String playerName, int lifepoint, int mana, int manaMax) {
         setId(id);
@@ -23,13 +23,6 @@ public class Player {
         setLifepoint(lifepoint);
         setMana(mana);
         setManaMax(manaMax);
-    }
-
-    public Player(String id, int lifepoint, int mana) {
-        setId(id);
-        setPlayerName(playerName);
-        setLifepoint(lifepoint);
-        setMana(mana);
     }
 
     public String getPlayerName() {
@@ -80,6 +73,14 @@ public class Player {
         this.board = board;
     }
 
+    public Map<Integer, Object> getDiscarding() {
+        return discarding;
+    }
+
+    public void setDiscarding(Map<Integer, Object> discarding) {
+        this.discarding = discarding;
+    }
+
     public void setPlayerInfo(String partyId, int currentPlayer) {
         Map<String, Object> party = new HashMap<>();
 
@@ -91,6 +92,7 @@ public class Player {
             player1Info.put("manaMax", this.getManaMax());
             player1Info.put("hand", this.getHand());
             player1Info.put("board", this.getBoard());
+            player1Info.put("discarding",this.getDiscarding());
             Helper.getInstance().db.collection("Party").document(partyId)
                 .update("player1Info", player1Info)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -107,6 +109,7 @@ public class Player {
             player2Info.put("manaMax", this.getManaMax());
             player2Info.put("hand", this.getHand());
             player2Info.put("board", this.getBoard());
+            player2Info.put("discarding",this.getDiscarding());
             Helper.getInstance().db.collection("Party").document(partyId)
                 .update("player2Info", player2Info)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -145,13 +148,18 @@ public class Player {
         }
     }
 
-    public boolean deleteCardFromBoard(String pos) {
+    public boolean deleteCardFromBoard(String pos, int index) {
         try {
+            int size = 0;
+            if(this.discarding.size() > 0) {
+                size = discarding.size()+1;
+            }
+            this.discarding.put(size,index);
             this.getBoard().remove("board-"+pos);
             return true;
         }
         catch (Exception e) {
-            Log.d("battle", e.getMessage());
+            Log.d("battle", "trying to remove from  player board but failed cause : "+e.getMessage());
             return false;
         }
     }

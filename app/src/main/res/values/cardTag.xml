@@ -6,4 +6,5 @@
     <item type="id" name="cost"/>
     <item type="id" name="name"/>
     <item type="id" name="index"/>
+    <item type="id" name="fight"/>
 </resources>
