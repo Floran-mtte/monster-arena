@@ -78,15 +78,12 @@ public class splash_screen extends AppCompatActivity {
     public void whoRedirect() {
         SharedPreferences prefs = getSharedPreferences("App", MODE_PRIVATE);
         Boolean connected = prefs.getBoolean("isLogged", false);
-        Integer tuto = prefs.getInt("tuto", 2);
+        Integer tuto = prefs.getInt("tuto", 1);
 
         if (connected) {
             switch (tuto) {
                 case 0:
                     goToChoice();
-                    break;
-                case 1:
-                    goToFight();
                     break;
                 default:
                     goToHome();

@@ -88,14 +88,14 @@ public class ChooseDeckActivity extends AppCompatActivity implements View.OnClic
         SharedPreferences.Editor editor = getSharedPreferences("App", MODE_PRIVATE).edit();
         editor.putInt("tuto", 1);
         editor.apply();
-        finish();
-        Intent intent = new Intent(this, homePageActivity.class);
+        /*finish();*/
+        Intent intent = new Intent(this, tutoGameActivity.class);
         startActivity(intent);
     }
 
     public void getDeck() {
         DocumentReference fb_deck = null;
-        Log.d("deck", deck);
+        Log.d(TAG, deck);
         switch (deck) {
             case "olympie":
                 fb_deck = Helper.getInstance().db.collection("Deck_default").document("CY0frDL46cbJMiqSINdf");
@@ -160,7 +160,7 @@ public class ChooseDeckActivity extends AppCompatActivity implements View.OnClic
                 .set(deck).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                getDetailsCard((List) deck);
+                getDetailsCard((ArrayList) deck.get("cards"));
             }
         })
                 .addOnFailureListener(new OnFailureListener() {
@@ -171,10 +171,10 @@ public class ChooseDeckActivity extends AppCompatActivity implements View.OnClic
                 });
     }
 
-    public void getDetailsCard(List cardList) {
+    public void getDetailsCard(ArrayList cardList) {
         ArrayList deck = new ArrayList();
         for (int i = 0; i < cardList.size(); i++) {
-            Log.d(TAG, "Test");
+            Log.d(TAG, cardList.get(i).toString());
             DocumentReference doc = (DocumentReference) cardList.get(i);
             doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
@@ -197,21 +197,19 @@ public class ChooseDeckActivity extends AppCompatActivity implements View.OnClic
                                         obj.get("card_detail").toString()
                                 );
 
+
+
+                                Log.d(TAG, obj.get("name").toString());
+
                                 deck.add(card);
-                                //addCardToParty(card);
 
                                 if(cardList.size() == deck.size())
                                 {
-                                    Helper.getInstance().user.setDeck(deck);
-                                    Helper.getInstance().user.setCollection(deck);
-                                    goToHome();
+                                    Log.d(TAG, "onComplete: s");
+                                    saveIt(deck);
                                 }
 
                             }
-
-
-                            Log.d(TAG, obj.get("name").toString());
-
 
                         } else {
                             Log.d(TAG, "No such document");
@@ -223,5 +221,11 @@ public class ChooseDeckActivity extends AppCompatActivity implements View.OnClic
             });
 
         }
+    }
+
+    public void saveIt(ArrayList deck) {
+        Helper.getInstance().user.setDeck(deck);
+        Helper.getInstance().user.setCollection(deck);
+        goToHome();
     }
 }

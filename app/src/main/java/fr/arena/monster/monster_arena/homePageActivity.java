@@ -19,8 +19,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -44,26 +42,25 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
     Button packButton;
     Button pack_nb;
     String TAG = "HomePageActivity";
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    //FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     FrameLayout filter;
     TextView textView;
     ProgressBar loader;
-    private FirebaseAuth mAuth;
     ListenerRegistration registration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        try
+        /*try
         {
             this.getSupportActionBar().hide();
         } catch (NullPointerException e)
         {
 
-        }
+        }*/
 
-        mAuth = FirebaseAuth.getInstance();
+        //mAuth = FirebaseAuth.getInstance();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -72,7 +69,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
 
         setContentView(R.layout.activity_home_page);
 
-        shopButton = (Button) findViewById(R.id.shop);
+        /*shopButton = (Button) findViewById(R.id.shop);
         settingButton = (ImageView) findViewById(R.id.param);
         editDeck = (Button) findViewById(R.id.collection);
         packButton = (Button) findViewById(R.id.pack);
@@ -82,7 +79,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
         editDeck.setOnClickListener(this);
         filter = findViewById(R.id.filter_layout);
         textView = findViewById(R.id.textView2);
-        loader = findViewById(R.id.loader);
+        loader = findViewById(R.id.loader);*/
 
     }
 
@@ -168,7 +165,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
                         String ts = tsLong.toString();
 
                         Map<String, Object> party = new HashMap<>();
-                        party.put("id_user",user.getUid());
+                        party.put("id_user",Helper.getInstance().mAuth.getCurrentUser().getUid());
                         party.put("timestamp", ts);
                         party.put("id_opponent","");
 
@@ -235,16 +232,16 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
                         party.put("number_round", 1);
                         party.put("created_at", ts);
                         party.put("updated_at", ts);
-                        party.put("player_1", user.getUid());
+                        party.put("player_1", Helper.getInstance().mAuth.getCurrentUser().getUid());
                         party.put("player_2", id_opponent);
-                        party.put("current_player", user.getUid());
+                        party.put("current_player", Helper.getInstance().mAuth.getCurrentUser().getUid());
 
                         Helper.getInstance().db.collection("Party").document(documentId)
                                 .set(party, SetOptions.merge())
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        goToParty(documentId, user.getUid(), id_opponent, user.getUid());
+                                        goToParty(documentId, Helper.getInstance().mAuth.getCurrentUser().getUid(), id_opponent, Helper.getInstance().mAuth.getCurrentUser().getUid());
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
@@ -268,7 +265,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
     public void joinParty(String documentId)
     {
         Map<String, Object> party = new HashMap<>();
-        party.put("id_opponent",user.getUid());
+        party.put("id_opponent",Helper.getInstance().mAuth.getCurrentUser().getUid());
         Helper.getInstance().db.collection("SearchParty").document(documentId)
                 .set(party, SetOptions.merge())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -293,7 +290,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void aVoid1) {
-                                                        goToParty(idParty, snapshot.getData().get("player_1").toString(), user.getUid(), snapshot.getData().get("current_player").toString(), registration);
+                                                        goToParty(idParty, snapshot.getData().get("player_1").toString(), Helper.getInstance().mAuth.getCurrentUser().getUid(), snapshot.getData().get("current_player").toString(), registration);
                                                     }
                                                 })
                                                 .addOnFailureListener(new OnFailureListener() {

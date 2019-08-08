@@ -3,12 +3,16 @@ package fr.arena.monster.monster_arena;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import java.util.ArrayList;
 
 public class EditDeckActivity extends AppCompatActivity implements View.OnClickListener {
     Button bookmark, bookmark_quantity, bookmark1, bookmark_quantity1, bookmark2, bookmark_quantity2;
     int current_bookmark = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +36,10 @@ public class EditDeckActivity extends AppCompatActivity implements View.OnClickL
         bookmark1.setOnClickListener(this);
         bookmark2.setOnClickListener(this);
 
+        ArrayList collection = Helper.getInstance().user.getCollection();
+        if (collection.size() == 0)
+            Log.d("toto", "onCreate: ");
+            //todo : get collection
     }
 
     @Override
