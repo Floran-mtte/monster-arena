@@ -11,6 +11,7 @@ public abstract class Card {
     protected boolean active;
     protected boolean onGround;
     protected boolean inHand;
+    int index;
 
 
 
@@ -97,5 +98,13 @@ public abstract class Card {
 
     public void setInHand(boolean inHand) {
         this.inHand = inHand;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 }
