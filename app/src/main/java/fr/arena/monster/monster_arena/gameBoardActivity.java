@@ -1392,7 +1392,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                                     defeat_layout.setVisibility(View.VISIBLE);
                                     filter.setVisibility(View.VISIBLE);
                                     registration.remove();
-                                    Helper.playVoice(this, "win");
+                                    Helper.playVoice(this, "victory");
                                 }
                                 else {
                                     player1.updatePlayer(playerInfo);
@@ -1427,6 +1427,8 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                                     victory_layout.setVisibility(View.VISIBLE);
                                     filter.setVisibility(View.VISIBLE);
                                     registration.remove();
+                                    Helper.playVoice(this, "lose");
+
                                 }
                                 player2.updatePlayer(playerInfo);
                                 opponent_mana.setText(String.format("%d/%d",player2.getMana(),player2.getManaMax()));
@@ -1438,8 +1440,10 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                                 if(Integer.parseInt(playerInfo.get("life").toString()) <= 0) {
                                     clock.cancel();
                                     registration.remove();
+                                    prize.setText("25");
                                     defeat_layout.setVisibility(View.VISIBLE);
                                     filter.setVisibility(View.VISIBLE);
+                                    Helper.playVoice(this, "victory");
                                 }
                                 player2.updatePlayer(playerInfo);
                                 if(playerInfo.get("discarding") != null) {
@@ -1462,9 +1466,10 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                                 Map<String, Object> playerInfo = (Map<String, Object>) snapshot.getData().get("player1Info");
                                 if(Integer.parseInt(playerInfo.get("life").toString()) <= 0) {
                                     clock.cancel();
-                                    prize.setText("200");
+                                    prize.setText("25");
                                     victory_layout.setVisibility(View.VISIBLE);
                                     filter.setVisibility(View.VISIBLE);
+                                    Helper.playVoice(this, "victory");
                                 }
 
                                 player1.updatePlayer(playerInfo);
