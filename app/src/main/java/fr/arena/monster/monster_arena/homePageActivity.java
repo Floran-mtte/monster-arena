@@ -51,15 +51,14 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        /*try
+        try
         {
             this.getSupportActionBar().hide();
         } catch (NullPointerException e)
         {
 
-        }*/
+        }
 
-        //mAuth = FirebaseAuth.getInstance();
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -68,7 +67,7 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
 
         setContentView(R.layout.activity_home_page);
 
-        /*shopButton = (Button) findViewById(R.id.shop);
+        shopButton = (Button) findViewById(R.id.shop);
         settingButton = (ImageView) findViewById(R.id.param);
         editDeck = (Button) findViewById(R.id.collection);
         packButton = (Button) findViewById(R.id.pack);
@@ -76,9 +75,10 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
         playButton = (ImageView) findViewById(R.id.play_button);
         playButton.setOnClickListener(this);
         editDeck.setOnClickListener(this);
+        packButton.setOnClickListener(this);
         filter = findViewById(R.id.filter_layout);
         textView = findViewById(R.id.textView2);
-        loader = findViewById(R.id.loader);*/
+        loader = findViewById(R.id.loader);
 
     }
 
@@ -123,6 +123,9 @@ public class homePageActivity extends AppCompatActivity implements View.OnClickL
             case R.id.collection:
                 Intent intent = new Intent(this, EditDeckActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.pack:
+                pack_nb.setTranslationZ(100);
                 break;
             /*case R.id.shop_button:
                 break;

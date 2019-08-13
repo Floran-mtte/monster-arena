@@ -144,13 +144,6 @@ public class splash_screen extends AppCompatActivity {
         finish();
     }
 
-    public void goToFight() {
-        Intent intent = new Intent(this, tutoGameActivity.class);
-        startActivity(intent);
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-        finish();
-    }
-
     private void hideSystemUI() {
         // Enables regular immersive mode.
         // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.

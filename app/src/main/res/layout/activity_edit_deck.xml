@@ -109,4 +109,54 @@
         app:layout_constraintTop_toTopOf="@+id/bookmark2"
         app:layout_constraintVertical_bias="0.262" />
 
+    <ImageView
+        android:id="@+id/card_section1"
+        android:layout_width="115dp"
+        android:layout_height="164dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="140dp"
+        android:translationZ="3000dp"
+        app:layout_constraintStart_toStartOf="@+id/book"
+        app:layout_constraintTop_toTopOf="@+id/book"
+        app:srcCompat="@drawable/zeus" />
+
+    <ImageView
+        android:id="@+id/card_section2"
+        android:layout_width="115dp"
+        android:layout_height="164dp"
+        android:layout_marginTop="140dp"
+        android:layout_marginEnd="60dp"
+        android:translationZ="3000dp"
+        app:layout_constraintEnd_toEndOf="@+id/book"
+        app:layout_constraintTop_toTopOf="@+id/book"
+        app:srcCompat="@drawable/zeus" />
+
+    <ImageView
+        android:id="@+id/card_section3"
+        android:layout_width="115dp"
+        android:layout_height="164dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:translationZ="3000dp"
+        app:layout_constraintBottom_toBottomOf="@+id/book"
+        app:layout_constraintStart_toStartOf="@+id/book"
+        app:layout_constraintTop_toBottomOf="@+id/card_section1"
+        app:layout_constraintVertical_bias="0.358"
+        app:srcCompat="@drawable/zeus" />
+
+    <ImageView
+        android:id="@+id/card_section4"
+        android:layout_width="115dp"
+        android:layout_height="164dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginBottom="8dp"
+        android:translationZ="3000dp"
+        app:layout_constraintBottom_toBottomOf="@+id/book"
+        app:layout_constraintEnd_toEndOf="@+id/book"
+        app:layout_constraintTop_toBottomOf="@+id/card_section2"
+        app:layout_constraintVertical_bias="0.358"
+        app:srcCompat="@drawable/zeus" />
+
 </android.support.constraint.ConstraintLayout>

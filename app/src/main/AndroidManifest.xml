@@ -14,7 +14,6 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
         <activity android:name=".ChooseDeckActivity" />
         <activity android:name=".gameBoardActivity" />
-        <activity android:name=".tutoGameActivity" />
         <activity android:name=".EditDeckActivity" />
         <activity android:name=".splash_screen">
             <intent-filter>
