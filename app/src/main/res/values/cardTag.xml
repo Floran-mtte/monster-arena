@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <item type="id" name="id"/>
     <item type="id" name="atk"/>
     <item type="id" name="def"/>
     <item type="id" name="cost"/>
     <item type="id" name="name"/>
     <item type="id" name="index"/>
+    <item type="id" name="fight"/>
 </resources>

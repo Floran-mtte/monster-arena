@@ -5,8 +5,7 @@
     <string name="sign_in_confirm_pass_label" translatable="true">Confirmation de mot de passe</string>
     <string name="play_button_text" translatable="true">Jouer</string>
     <string name="settings_button_text" translatable="true">Paramètres</string>
-    <string name="edit_deck_button_text" translatable="true">Mon deck</string>
-    <string name="store_button_text" translatable="true">Magasin</string>
+    <string name="store_button_text" translatable="true">Boutique</string>
     <string name="sign_up_username" translatable="true">Pseudo</string>
     <string name="sign_up_no_username" translatable="true">Entre un pseudo</string>
     <string name="sing_up_error_email" translatable="true">Entre un email valide</string>
@@ -23,4 +22,8 @@
     <string name="choose_deck_title">Choisis ton premier deck</string>
     <string name="validate_choice">valider</string>
     <string name="life_prefix" translatable="true">"PV : "</string>
+    <string name="collection_btn">Ma collection</string>
+    <string name="victory_title">Vous avez gagné</string>
+    <string name="defeat_title">Vous avez perdu</string>
+    <string name="back_home_btn">Revenir à l\'acceuil</string>
 </resources>

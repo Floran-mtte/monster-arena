@@ -5,6 +5,7 @@ public class CardEntity extends Card {
     protected int defend;
     protected int attack;
 
+
     public CardEntity(String assetPath, int defend, int attack, String id, int level, String name, int type_card, String cardDetail) {
         super(assetPath, id, level, name, type_card, cardDetail);
 
@@ -27,4 +28,6 @@ public class CardEntity extends Card {
     public void setAttack(int attack) {
         this.attack = attack;
     }
+
+
 }
