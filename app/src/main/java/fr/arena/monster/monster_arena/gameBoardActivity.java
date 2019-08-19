@@ -713,22 +713,33 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
                                 Map<String, Object> board_opponent = player2.getBoard();
                                 Map<String, Object> board_left = (Map<String,Object>) board_opponent.get("board-left");
                                 Map<String, Object> opponent_card = (Map<String,Object>) board_left.get("card");
-
-                                CardEntity new_card = new CardEntity(
-                                        opponent_card.get("asset_path").toString(),
+                                Log.d("spell_card_control","opp card :"+opponent_card.toString());
+                               CardEntity new_card = new CardEntity(
+                                        opponent_card.get("assetPath").toString(),
                                         Integer.parseInt(opponent_card.get("defend").toString()),
                                         Integer.parseInt(opponent_card.get("attack").toString()),
                                         opponent_card.get("id").toString(),
                                         Integer.parseInt(opponent_card.get("level").toString()),
                                         opponent_card.get("name").toString(),
                                         Integer.parseInt(opponent_card.get("type_card").toString()),
-                                        opponent_card.get("card_detail").toString());
+                                        opponent_card.get("cardDetail").toString());
                                 player1Card.add(new_card);
-
-                                
 
                                 player2.deleteCardFromBoard("left");
                                 player2.setPlayerInfo(party.getId(), 2);
+
+                                String assetPath = new_card.getAssetPath();
+                                Drawable path = getDrawable(getResources().getIdentifier(assetPath, "drawable", getPackageName()));
+                                dropPosUser.setImageDrawable(path);
+                                ArrayList<String> stat = new ArrayList<>();
+                                String attack = Integer.toString(new_card.getAttack());
+                                String defend = Integer.toString(new_card.getDefend());
+                                stat.add(attack);
+                                stat.add(defend);
+                                Log.d("spell_card_control",new_card.getName());
+                                Helper.playVoice(this, new_card.getAssetPath());
+                                setStat(stat, dropPosUser);
+                                sendPlayerBoard(dropPosUser, player1Card.size()-1, "null");
 
                             }
                             else if(currentPlayer == 2) {
