@@ -11,10 +11,24 @@ public abstract class Card {
     protected boolean active;
     protected boolean onGround;
     protected boolean inHand;
+    protected String ref_familly;
 
 
 
     public Card(String assetPath, String id, int level, String name, int type_card, String cardDetail)
+    {
+        setAssetPath(assetPath);
+        setId(id);
+        setLevel(level);
+        setName(name);
+        setType_card(type_card);
+        setCardDetail(cardDetail);
+        setActive(true);
+        setInHand(false);
+        setOnGround(false);
+    }
+
+    public Card(String assetPath, String id, int level, String name, int type_card, String cardDetail, String ref_familly)
     {
         setAssetPath(assetPath);
         setId(id);
@@ -98,4 +112,8 @@ public abstract class Card {
     public void setInHand(boolean inHand) {
         this.inHand = inHand;
     }
+
+    public void setRef_familly(String ref_familly) { this.ref_familly = ref_familly; }
+
+    public String getRef_familly() { return this.ref_familly; }
 }

@@ -2,19 +2,24 @@ package fr.arena.monster.monster_arena;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 
@@ -23,6 +28,9 @@ public class EditDeckActivity extends AppCompatActivity implements View.OnClickL
     ImageView card_section1, card_section2, card_section3, card_section4;
     int current_bookmark = 0;
     String TAG = "EditDeckActivity";
+    ArrayList<Card> collection_card = new ArrayList<>();
+    ArrayList<Card> deck = new ArrayList<>();
+    ArrayList object_ref = new ArrayList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,6 +143,7 @@ public class EditDeckActivity extends AppCompatActivity implements View.OnClickL
 
                 if (snapshot != null && snapshot.exists()) {
                     List<String> cardRefs = Helper.convertObjectToListofString(snapshot.getData().get("cards"));
+                    object_ref = (ArrayList) snapshot.getData().get("cards");
                     getCard(cardRefs);
                 }
             }
@@ -146,18 +155,85 @@ public class EditDeckActivity extends AppCompatActivity implements View.OnClickL
     public void getCard(List cardsRef) {
         Collections.sort(cardsRef);
         Log.d(TAG, "after sort: " + cardsRef.size());
-
+        ArrayList cards = new ArrayList();
+        ArrayList repet = new ArrayList();
         String old_ref = "";
+        ArrayList tmp = new ArrayList();
+
         for (int i=0; i < cardsRef.size(); i++) {
             String ref = cardsRef.get(i).toString();
-            Log.d(TAG, "getCard: "+ i + ref);
-            Log.d(TAG, "getCard: " + old_ref);
             if (old_ref.isEmpty() || !old_ref.equals(ref)) {
-                Log.d(TAG, "getCard: not same");
+                DocumentReference doc = null;
+                for (int j=0; j < object_ref.size(); j++) {
+                    Object obj = object_ref.get(j);
+                    if (ref.equals(obj.toString())) {
+                        doc = (DocumentReference) obj;
+                    }
+                }
+                Log.d(TAG, "getCard: "+doc);
+                cards.add(doc);
+                if (!old_ref.isEmpty()) {
+                    repet.add(tmp);
+                    tmp = new ArrayList();
+                }
+                tmp.add(0, doc);
+                tmp.add(1, 0);
+
             } else {
-                Log.d(TAG, "getCard: same");
+                ArrayList cpy = new ArrayList();
+                cpy.add(tmp.get(0));
+                int rp = (Integer) tmp.get(1);
+                cpy.add(rp + 1);
+                tmp = cpy;
+                //collection_card.get(collection_card.size()-1)
             }
             old_ref = ref;
         }
+        object_ref = repet;
+        getDetailsCard(cards);
+    }
+
+    public void getDetailsCard(ArrayList cards) {
+        for (int i=0; i < cards.size(); i++) {
+            DocumentReference doc = (DocumentReference) cards.get(i);
+            doc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Map<String, Object> obj = document.getData();
+
+                            if (obj.get("card_detail").equals("entity")) {
+                                CardEntity card = new CardEntity(
+                                        obj.get("asset_path").toString(),
+                                        Integer.parseInt(obj.get("defend").toString()),
+                                        Integer.parseInt(obj.get("attack").toString()),
+                                        obj.get("id").toString(),
+                                        Integer.parseInt(obj.get("level").toString()),
+                                        obj.get("name").toString(),
+                                        Integer.parseInt(obj.get("type_card").toString()),
+                                        obj.get("card_detail").toString(),
+                                        obj.get("familly").toString()
+                                );
+                                collection_card.add(card);
+                                if (collection_card.size() == cards.size()) {
+                                    showCard();
+                                }
+                            }
+                            Log.d(TAG, obj.get("name").toString());
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
+                }
+            });
+        }
+    }
+
+    public void showCard() {
+        Log.d(TAG, "showCard: "+collection_card.size());
     }
 }
