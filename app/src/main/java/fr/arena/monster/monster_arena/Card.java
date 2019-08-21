@@ -39,6 +39,7 @@ public abstract class Card {
         setActive(true);
         setInHand(false);
         setOnGround(false);
+        setRef_familly(ref_familly);
     }
 
     public String getAssetPath() {

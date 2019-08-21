@@ -1,6 +1,7 @@
 package fr.arena.monster.monster_arena;
 
 import android.content.pm.ActivityInfo;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -170,7 +172,7 @@ public class EditDeckActivity extends AppCompatActivity implements View.OnClickL
                         doc = (DocumentReference) obj;
                     }
                 }
-                Log.d(TAG, "getCard: "+doc);
+
                 cards.add(doc);
                 if (!old_ref.isEmpty()) {
                     repet.add(tmp);
@@ -185,7 +187,6 @@ public class EditDeckActivity extends AppCompatActivity implements View.OnClickL
                 int rp = (Integer) tmp.get(1);
                 cpy.add(rp + 1);
                 tmp = cpy;
-                //collection_card.get(collection_card.size()-1)
             }
             old_ref = ref;
         }
@@ -203,7 +204,6 @@ public class EditDeckActivity extends AppCompatActivity implements View.OnClickL
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
                             Map<String, Object> obj = document.getData();
-
                             if (obj.get("card_detail").equals("entity")) {
                                 CardEntity card = new CardEntity(
                                         obj.get("asset_path").toString(),
@@ -218,10 +218,9 @@ public class EditDeckActivity extends AppCompatActivity implements View.OnClickL
                                 );
                                 collection_card.add(card);
                                 if (collection_card.size() == cards.size()) {
-                                    showCard();
+                                    sortByFamilly();
                                 }
                             }
-                            Log.d(TAG, obj.get("name").toString());
                         } else {
                             Log.d(TAG, "No such document");
                         }
@@ -233,7 +232,48 @@ public class EditDeckActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    public void showCard() {
-        Log.d(TAG, "showCard: "+collection_card.size());
+    public void sortByFamilly() {
+        Log.d(TAG, "sortByFamilly: "+collection_card);
+        Collections.sort(collection_card, new Comparator<Card>() {
+            @Override
+            public int compare(Card o1, Card o2) {
+                if (o1 instanceof CardEntity && o2 instanceof CardEntity) {
+                    CardEntity entity1 = (CardEntity) o1;
+                    CardEntity entity2 = (CardEntity) o2;
+                    return entity1.getRef_familly().compareTo(entity2.getRef_familly());
+                }
+                return 0;
+            }
+        });
+        Log.d(TAG, "sortByFamilly: "+collection_card);
+        Log.d(TAG, "sortByFamilly: "+collection_card.get(0).getAssetPath());
+        showCard(0, 4);
+    }
+
+    public void showCard(int index, int max) {
+        for (int i=index; i < max; i++) {
+            if (i == collection_card.size())
+                break;
+
+            Card parent = collection_card.get(i);
+            if (parent instanceof CardEntity) {
+                CardEntity card = (CardEntity) parent;
+                showGod(i, index, card);
+            }
+        }
+    }
+
+    public void showGod(int i, int index, CardEntity card) {
+        Drawable path = getDrawable(getResources()
+                .getIdentifier(card.getAssetPath(), "drawable", getPackageName()));
+        if (i == index) {
+            card_section1.setImageDrawable(path);
+        } else if (i == index + 1) {
+            card_section2.setImageDrawable(path);
+        } else if (i == index + 2) {
+            card_section3.setImageDrawable(path);
+        } else {
+            card_section4.setImageDrawable(path);
+        }
     }
 }
