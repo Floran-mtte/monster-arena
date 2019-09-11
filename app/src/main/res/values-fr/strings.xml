@@ -26,4 +26,5 @@
     <string name="victory_title">Vous avez gagné</string>
     <string name="defeat_title">Vous avez perdu</string>
     <string name="back_home_btn">Revenir à l\'acceuil</string>
+    <string name="revive_action_btn">Réanimer</string>
 </resources>
