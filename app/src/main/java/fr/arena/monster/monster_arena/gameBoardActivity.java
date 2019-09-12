@@ -2563,7 +2563,7 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
     public void pickCard(String playerTurn)
     {
         for(int i = 0; i < player2Card.size();i++) {
-            CardEntity parent = (CardEntity) player2Card.get(i);
+            Card parent = (Card) player2Card.get(i);
             Log.d("watch_pick_debug","name :" + parent.getName());
             Log.d("watch_pick_debug","id :" + parent.getId());
             Log.d("watch_pick_debug","isActive :" + parent.isActive());
