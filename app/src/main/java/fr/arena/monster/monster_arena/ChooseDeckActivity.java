@@ -85,10 +85,10 @@ public class ChooseDeckActivity extends AppCompatActivity implements View.OnClic
 
     public void goToFight() {
         SharedPreferences.Editor editor = getSharedPreferences("App", MODE_PRIVATE).edit();
-        editor.putInt("tuto", 1);
+        editor.putInt("tuto", 2);
         editor.apply();
         finish();
-        Intent intent = new Intent(this, tutoGameActivity.class);
+        Intent intent = new Intent(this, homePageActivity.class);
         startActivity(intent);
     }
 

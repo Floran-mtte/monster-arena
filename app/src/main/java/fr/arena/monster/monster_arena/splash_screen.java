@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
+
 public class splash_screen extends AppCompatActivity {
 
     int progress = 0;
@@ -53,6 +55,10 @@ public class splash_screen extends AppCompatActivity {
     protected void onStart() {
         applicationWillEnterForeground();
         super.onStart();
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(false)
+                .build();
+        Helper.getInstance().db.setFirestoreSettings(settings);
     }
 
     private void applicationWillEnterForeground() {
@@ -84,9 +90,6 @@ public class splash_screen extends AppCompatActivity {
             switch (tuto) {
                 case 0:
                     goToChoice();
-                    break;
-                case 1:
-                    goToFight();
                     break;
                 default:
                     goToHome();
