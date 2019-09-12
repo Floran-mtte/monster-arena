@@ -18,7 +18,6 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -28,7 +27,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.SetOptions;
-import com.google.firebase.firestore.model.value.ObjectValue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -251,8 +249,8 @@ public class gameBoardActivity extends AppCompatActivity implements View.OnClick
     public void initParty(String partyId, String player_1, String player_2) {
         //getUsersId(partyId);
         party = new Party("", "", partyId, 1, player_1, player_2, 0);
-        player1 = new Player(player_1, "john", 2500, 3,2);
-        player2 = new Player(player_2, "daenerys", 2500, 2,2);
+        player1 = new Player(player_1, "john", 4000, 3,2);
+        player2 = new Player(player_2, "daenerys", 4000, 2,2);
         manaPLayer1 = player1.getMana() -1;
         manaPLayer2 = player2.getMana();
 

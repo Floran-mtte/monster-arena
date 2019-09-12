@@ -77,7 +77,6 @@ public class ChooseDeckActivity extends AppCompatActivity implements View.OnClic
                 deck = "armana";
                 break;
             case R.id.validate:
-
                 getDeck();
                 break;
         }
@@ -85,7 +84,7 @@ public class ChooseDeckActivity extends AppCompatActivity implements View.OnClic
 
     public void goToFight() {
         SharedPreferences.Editor editor = getSharedPreferences("App", MODE_PRIVATE).edit();
-        editor.putInt("tuto", 2);
+        editor.putInt("tuto", 1);
         editor.apply();
         finish();
         Intent intent = new Intent(this, homePageActivity.class);
