@@ -58,7 +58,7 @@ public class Helper {
             Helper.getInstance().mp = MediaPlayer.create(context, R.raw.intro);
         }
         Helper.getInstance().mp.setLooping(true);
-        //Helper.getInstance().mp.start();
+        Helper.getInstance().mp.start();
     }
 
     public static void playVoice(Context context,  String entity) {
