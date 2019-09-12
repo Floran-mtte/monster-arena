@@ -15,7 +15,7 @@ public class Player {
     private int manaMax;
     private Map<String, Object> hand = null;
     private Map<String, Object> board = null;
-    private Map<Integer, Object> discarding = null;
+    private Map<String, Object> discarding = null;
 
     public Player(String id, String playerName, int lifepoint, int mana, int manaMax) {
         setId(id);
@@ -73,11 +73,11 @@ public class Player {
         this.board = board;
     }
 
-    public Map<Integer, Object> getDiscarding() {
+    public Map<String, Object> getDiscarding() {
         return discarding;
     }
 
-    public void setDiscarding(Map<Integer, Object> discarding) {
+    public void setDiscarding(Map<String, Object> discarding) {
         this.discarding = discarding;
     }
 
@@ -144,17 +144,31 @@ public class Player {
                     if (this.getBoard() != entry.getValue())
                         setBoard((Map<String, Object>) entry.getValue());
                     break;
+                case "discarding":
+                    if(this.getDiscarding() != entry.getValue())
+                        setDiscarding((Map<String, Object>) entry.getValue());
+                    break;
             }
         }
     }
 
-    public boolean deleteCardFromBoard(String pos, int index) {
+    public void addToDiscard(int index) {
+        int size = 0;
+        if(this.getDiscarding() != null && this.getDiscarding().size() > 0) {
+            size = discarding.size()+1;
+        }
+        if(size == 0) {
+            Log.d("discard_test","dans le size 0");
+            this.discarding = new HashMap<>();
+            this.discarding.put("card_"+size, index);
+        }
+        else {
+            this.getDiscarding().put("card_"+size, index);
+        }
+    }
+
+    public boolean deleteCardFromBoard(String pos) {
         try {
-            int size = 0;
-            if(this.discarding.size() > 0) {
-                size = discarding.size()+1;
-            }
-            this.discarding.put(size,index);
             this.getBoard().remove("board-"+pos);
             return true;
         }

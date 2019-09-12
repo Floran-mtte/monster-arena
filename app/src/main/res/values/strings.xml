@@ -35,4 +35,5 @@
     <string name="blank" translatable="false"></string>
     <string name="timer_default" translatable="false">30</string>
     <string name="mana_default" translatable="false">2/2</string>
+    <string name="revive_action_btn">Revive</string>
 </resources>

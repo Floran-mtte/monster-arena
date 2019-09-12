@@ -12,6 +12,7 @@ public abstract class Card {
     protected boolean onGround;
     protected boolean inHand;
     protected String ref_familly;
+    int index;
 
 
 
@@ -117,4 +118,12 @@ public abstract class Card {
     public void setRef_familly(String ref_familly) { this.ref_familly = ref_familly; }
 
     public String getRef_familly() { return this.ref_familly; }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
 }

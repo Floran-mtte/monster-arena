@@ -7,4 +7,6 @@
     <item type="id" name="name"/>
     <item type="id" name="index"/>
     <item type="id" name="fight"/>
+    <item type="id" name="effect"/>
+    <item type="id" name="typeCard"/>
 </resources>

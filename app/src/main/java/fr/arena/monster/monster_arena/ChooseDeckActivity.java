@@ -159,7 +159,7 @@ public class ChooseDeckActivity extends AppCompatActivity implements View.OnClic
                 .set(deck).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                getDetailsCard((ArrayList) deck.get("cards"));
+                goToHome();
             }
         })
                 .addOnFailureListener(new OnFailureListener() {
